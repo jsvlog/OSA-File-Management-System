@@ -16,7 +16,7 @@
             <ListBoxItem Content="Category 1" Margin="5,20,0,0"/>
             <ListBoxItem Content="Category 2" Margin="5,20,0,0"/>
             <ListBoxItem Content="Category 3" Margin="5,20,0,0"/>
-            <Image/>
+            
         </ListBox>
 
         <ContentControl x:Name="ContentArea" Grid.Column="1"/>
