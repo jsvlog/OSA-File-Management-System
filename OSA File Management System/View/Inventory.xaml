@@ -7,12 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="AliceBlue">
-        <!-- Row Definitions: 25% for the sorting and commands, 75% for the DataGrid -->
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <!-- For buttons and sorting commands -->
             <RowDefinition Height="*" />
-            <!-- For DataGrid -->
         </Grid.RowDefinitions>
 
         <!-- Buttons and Commands Section -->
@@ -28,9 +25,12 @@
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Item Name"  Width="*"/>
-                <DataGridTextColumn Header="Quantity"  Width="Auto"/>
-                <DataGridTextColumn Header="Date Added"  Width="Auto"/>
+                <DataGridTextColumn Header="Document Date"  Width="5*"/>
+                <DataGridTextColumn Header="Document Type"  Width="20*"/>
+                <DataGridTextColumn Header="Description"  Width="5*"/>
+                <DataGridTextColumn Header="Status"  Width="5*"/>
+                <DataGridTextColumn Header="Remarks"  Width="5*"/>
+                
             </DataGrid.Columns>
         </DataGrid>
 
