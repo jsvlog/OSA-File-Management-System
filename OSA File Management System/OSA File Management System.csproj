@@ -10,11 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\Certificate.png" />
     <None Remove="images\coa_logo.png" />
+    <None Remove="images\Inventory.png" />
+    <None Remove="images\RegionCom.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\Certificate.png" />
     <Resource Include="images\coa_logo.png" />
+    <Resource Include="images\Inventory.png" />
+    <Resource Include="images\RegionCom.png" />
   </ItemGroup>
 
   <ItemGroup>

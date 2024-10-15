@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:OSA_File_Management_System.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="AliceBlue">
         <TextBlock Text="Certificate of Appearance" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 

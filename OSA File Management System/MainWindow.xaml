@@ -5,21 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900">
+        Title="MainWindow" 
+        WindowState="Maximized" d:DesignWidth="1117.49" d:DesignHeight="677.96">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
 
-        <ListBox x:Name="CategoryListBox" SelectionChanged="CategoryListBox_SelectionChanged">
-            <ListBoxItem Content="Category 1" Margin="5,20,0,0"/>
-            <ListBoxItem Content="Category 2" Margin="5,20,0,0"/>
-            <ListBoxItem Content="Category 3" Margin="5,20,0,0"/>
-            
+        <Grid Background="CadetBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+            <Image Source="pack://application:,,,/images/coa_logo.png" 
+            Width="100" Height="100" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="0" VerticalAlignment="Center"/>
+
+            <TextBlock Text="OSA File Management System"
+                    FontFamily="Arial"  
+                    FontSize="15"    
+                    FontWeight="Bold"    
+                    Foreground="White"   
+                    Margin="20"          
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap"  
+                    TextAlignment="Center" Grid.Row="1" />
+        </Grid>
+
+        <ListBox x:Name="CategoryListBox" SelectionChanged="CategoryListBox_SelectionChanged" Grid.Column="0" Grid.Row="1" Background="CadetBlue">
+            <ListBoxItem Margin="5,20,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/images/Inventory.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="Inventory" VerticalAlignment="Center" Margin="4"/>
+                </StackPanel>
+            </ListBoxItem>
+
+            <ListBoxItem Margin="5,20,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/images/RegionCom.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="Region Comm." VerticalAlignment="Center" Margin="4"/>
+                </StackPanel>
+            </ListBoxItem>
+
+            <ListBoxItem Margin="5,20,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/images/Certificate.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="Certificate of Appearance" VerticalAlignment="Center" TextWrapping="NoWrap" Margin="4"/>
+                </StackPanel>
+            </ListBoxItem>
         </ListBox>
 
-        <ContentControl x:Name="ContentArea" Grid.Column="1"/>
+        <ContentControl x:Name="ContentArea" Grid.Column="1" Grid.RowSpan="2"/>
 
 
 

@@ -30,17 +30,24 @@ namespace OSA_File_Management_System
             // Get selected category
             if (CategoryListBox.SelectedItem is ListBoxItem selectedItem)
             {
-                switch (selectedItem.Content.ToString())
+                if (selectedItem.Content is StackPanel stackPanel)
                 {
-                    case "Category 1":
-                        ContentArea.Content = new View.Inventory(); // Load your UserControl or content for Category 1
-                        break;
-                    case "Category 2":
-                        ContentArea.Content = new View.RegionCom(); // Load your UserControl or content for Category 2
-                        break;
-                    case "Category 3":
-                        ContentArea.Content = new View.CertificateOfAppearance(); // Load your UserControl or content for Category 3
-                        break;
+                    var textBlock = stackPanel.Children.OfType<TextBlock>().FirstOrDefault();
+                    if (textBlock != null)
+                    {
+                        switch (textBlock.Text)
+                        {
+                            case "Inventory":
+                                ContentArea.Content = new View.Inventory(); // Load your UserControl or content for Category 1
+                                break;
+                            case "Region Comm.":
+                                ContentArea.Content = new View.RegionCom(); // Load your UserControl or content for Category 2
+                                break;
+                            case "Certificate of Appearance":
+                                ContentArea.Content = new View.CertificateOfAppearance(); // Load your UserControl or content for Category 3
+                                break;
+                        }
+                    }
                 }
             }
         }
