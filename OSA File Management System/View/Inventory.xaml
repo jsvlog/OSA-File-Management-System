@@ -67,15 +67,15 @@
 
         <!-- DataGrid Section -->
         <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False" Margin="2" 
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentList}" >
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Width="5*"/>
-                <DataGridTextColumn Header="Type"  Width="5*"/>
-                <DataGridTextColumn Header="Description"  Width="30*"/>
-                <DataGridTextColumn Header="Status"  Width="5*"/>
-                <DataGridTextColumn Header="Location"  Width="5*"/>
-                <DataGridTextColumn Header="Remarks"  Width="5*"/>
+                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Type"  Width="5*" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Description"  Width="30*" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Status"  Width="5*" Binding="{Binding Status}"/>
+                <DataGridTextColumn Header="Location"  Width="5*" Binding="{Binding Location}"/>
+                <DataGridTextColumn Header="Remarks"  Width="5*" Binding="{Binding Remarks}"/>
                 
             </DataGrid.Columns>
         </DataGrid>

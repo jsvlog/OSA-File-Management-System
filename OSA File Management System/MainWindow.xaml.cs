@@ -9,16 +9,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using OSA_File_Management_System.ViewModel;
 //using OSA_File_Management_System.ViewModel;
 namespace OSA_File_Management_System
 {
 
     public partial class MainWindow : Window
     {
+        DocumentViewModel ViewModel;
         public MainWindow()
         {
             InitializeComponent();
             ContentArea.Content = new View.Inventory();
+            ViewModel = new DocumentViewModel();
+            this.DataContext = ViewModel;
         }
 
         private void CategoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
