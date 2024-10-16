@@ -9,11 +9,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+//using OSA_File_Management_System.ViewModel;
 namespace OSA_File_Management_System
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -40,7 +39,7 @@ namespace OSA_File_Management_System
                             case "Inventory":
                                 ContentArea.Content = new View.Inventory(); // Load your UserControl or content for Category 1
                                 break;
-                            case "Region Comm.":
+                            case "Region Communications":
                                 ContentArea.Content = new View.RegionCom(); // Load your UserControl or content for Category 2
                                 break;
                             case "Certificate of Appearance":

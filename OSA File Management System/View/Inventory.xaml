@@ -13,22 +13,68 @@
         </Grid.RowDefinitions>
 
         <!-- Buttons and Commands Section -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Add Item" Margin="5" Padding="10" />
-            <Button Content="Remove Item" Margin="5" Padding="10" />
-            <Button Content="Sort by Name" Margin="5" Padding="10" />
-            <Button Content="Sort by Date" Margin="5" Padding="10" />
-        </StackPanel>
+        
+        <Grid Grid.Row="0" Margin="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" />
+            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left"/>
+            <Button x:Name="YearButton" Content="Filter" Margin="3" Padding="3" Click="YearButton_Click" Grid.Column="2" />
+            <Popup Name="YearPopup" PlacementTarget="{Binding ElementName=YearButton}" StaysOpen="False">
+                <Border BorderBrush="Gray" BorderThickness="1" Background="White">
+                    <StackPanel>
+                        <!-- ListBox with ListBoxItems containing CheckBoxes -->
+                        <ListBox>
+                            <ListBoxItem>
+                                <CheckBox Content="2016" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2017" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2018" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2019" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2020" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2021" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2022" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2023" />
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <CheckBox Content="2024" />
+                            </ListBoxItem>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+            </Popup>
+            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" />
+            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" />
+        </Grid>
 
         <!-- DataGrid Section -->
-        <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False" Margin="10" 
+        <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False" Margin="2" 
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Document Date"  Width="5*"/>
-                <DataGridTextColumn Header="Document Type"  Width="20*"/>
-                <DataGridTextColumn Header="Description"  Width="5*"/>
+                <DataGridTextColumn Header="Date"  Width="5*"/>
+                <DataGridTextColumn Header="Type"  Width="5*"/>
+                <DataGridTextColumn Header="Description"  Width="30*"/>
                 <DataGridTextColumn Header="Status"  Width="5*"/>
+                <DataGridTextColumn Header="Location"  Width="5*"/>
                 <DataGridTextColumn Header="Remarks"  Width="5*"/>
                 
             </DataGrid.Columns>

@@ -48,7 +48,7 @@
             <ListBoxItem Margin="5,20,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/images/RegionCom.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Region Comm." VerticalAlignment="Center" Margin="4"/>
+                    <TextBlock Text="Region Communications" VerticalAlignment="Center" Margin="4"/>
                 </StackPanel>
             </ListBoxItem>
 

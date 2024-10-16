@@ -24,5 +24,10 @@ namespace OSA_File_Management_System.View
         {
             InitializeComponent();
         }
+
+        private void YearButton_Click(object sender, RoutedEventArgs e)
+        {
+            YearPopup.IsOpen = !YearPopup.IsOpen;  // Toggle the Popup visibility
+        }
     }
 }
