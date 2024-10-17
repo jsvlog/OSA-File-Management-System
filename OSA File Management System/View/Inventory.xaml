@@ -61,7 +61,7 @@
                     </StackPanel>
                 </Border>
             </Popup>
-            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" />
+            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" Command="{Binding ShowAddForm}"/>
             <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" />
         </Grid>
 
