@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using OSA_File_Management_System.ViewModel;
 namespace OSA_File_Management_System.View
 {
     /// <summary>
@@ -19,9 +20,11 @@ namespace OSA_File_Management_System.View
     /// </summary>
     public partial class AddFormInventory : Window
     {
+       
         public AddFormInventory()
         {
             InitializeComponent();
+         
         }
     }
 }
