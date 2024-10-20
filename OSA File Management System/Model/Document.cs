@@ -19,12 +19,12 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
-        private string date;
+        private DateTime? date;
 
-        public string Date
+        public DateTime? Date
         {
             get { return date; }
-            set { date = value; }
+            set { date = value; OnPropertyChanged("Date"); }
         }
 
         private string type;
@@ -32,7 +32,7 @@ namespace OSA_File_Management_System.Model
         public string Type
         {
             get { return type; }
-            set { type = value; }
+            set { type = value; OnPropertyChanged("Type"); }
         }
 
         private string description;
@@ -40,7 +40,7 @@ namespace OSA_File_Management_System.Model
         public string Description
         {
             get { return description; }
-            set { description = value; }
+            set { description = value; OnPropertyChanged("Description"); }
         }
 
         private string status;
@@ -48,7 +48,7 @@ namespace OSA_File_Management_System.Model
         public string Status
         {
             get { return status; }
-            set { status = value; }
+            set { status = value; OnPropertyChanged("Status"); }
         }
 
         private string location;
@@ -56,7 +56,7 @@ namespace OSA_File_Management_System.Model
         public string Location
         {
             get { return location; }
-            set { location = value; }
+            set { location = value; OnPropertyChanged("Location"); }
         }
 
         private string remarks;
@@ -64,7 +64,7 @@ namespace OSA_File_Management_System.Model
         public string Remarks
         {
             get { return remarks; }
-            set { remarks = value; }
+            set { remarks = value; OnPropertyChanged("Remarks"); }
         }
 
         private string scannedCopy;
@@ -72,7 +72,7 @@ namespace OSA_File_Management_System.Model
         public string ScannedCopy
         {
             get { return scannedCopy; }
-            set { scannedCopy = value; }
+            set { scannedCopy = value; OnPropertyChanged("ScannedCopy"); }
         }
 
 

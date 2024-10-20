@@ -70,14 +70,39 @@
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentList}" >
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date, StringFormat=yyyy-MM-dd}"/>
                 <DataGridTextColumn Header="Type"  Width="5*" Binding="{Binding Type}"/>
-                <DataGridTextColumn Header="Description"  Width="30*" Binding="{Binding Description}"/>
+                <DataGridTemplateColumn Header="Description" Width="30*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Description}" 
+                           TextWrapping="Wrap" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Status"  Width="5*" Binding="{Binding Status}"/>
                 <DataGridTextColumn Header="Location"  Width="5*" Binding="{Binding Location}"/>
                 <DataGridTextColumn Header="Remarks"  Width="5*" Binding="{Binding Remarks}"/>
                 
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Edit" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                  CommandParameter="{Binding}" />
+                                <MenuItem Header="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                  CommandParameter="{Binding}" />
+                                <MenuItem Header="View Details and History" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                  CommandParameter="{Binding}" />
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
 
     </Grid>
