@@ -97,7 +97,7 @@
                               Command="{Binding ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="ViewDetails" Header="View Full Details"
                               Command="{Binding}"/>
-
+                            
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
