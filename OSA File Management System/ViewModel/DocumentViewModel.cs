@@ -40,6 +40,7 @@ namespace OSA_File_Management_System.ViewModel
             addFormData = new Document();
             documentServices = new DocumentServices();
             showAddForm = new RelayCommand(OpenAddDocumentForm);
+            showEditForm = new RelayCommand(OpenEditDocumentForm);
             selectFile = new RelayCommand(OpenSelectFile);
             closeAddForm = new RelayCommand(CloseAddForms);
             addDocument = new RelayCommand(AddDocumentMethod);
@@ -159,7 +160,6 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-
         #region Delete Document
         private RelayCommand deleteDocument;
 
@@ -229,7 +229,29 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Show edit Form
+        private RelayCommand showEditForm;
 
+        public RelayCommand ShowEditForm
+        {
+            get { return showEditForm; }
+        }
+
+        private EditFormInventory popupEditForm;
+
+        private void OpenEditDocumentForm()
+        {
+            // Create the popup window
+            popupEditForm = new EditFormInventory();
+
+            // Bind ViewModel to the popup window
+            popupEditForm.DataContext = this;
+
+            // Show the popup window
+            popupEditForm.ShowDialog();
+        }
+
+        #endregion
 
 
 
