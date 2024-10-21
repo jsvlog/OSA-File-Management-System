@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
@@ -42,6 +43,8 @@ namespace OSA_File_Management_System.ViewModel
             selectFile = new RelayCommand(OpenSelectFile);
             closeAddForm = new RelayCommand(CloseAddForms);
             addDocument = new RelayCommand(AddDocumentMethod);
+            deleteDocument = new RelayCommand(DeleteDocumentMethod);
+            viewPdf = new RelayCommand(OpenPdfFile);
             LoadData();
         }
 
@@ -119,7 +122,6 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
-
         #region Select pdf Copy
         private RelayCommand selectFile;
 
@@ -158,7 +160,74 @@ namespace OSA_File_Management_System.ViewModel
         #endregion
 
 
+        #region Delete Document
+        private RelayCommand deleteDocument;
 
+        public RelayCommand DeleteDocument
+        {
+            get { return deleteDocument; }
+            set { deleteDocument = value; }
+        }
+
+        private void DeleteDocumentMethod(object parameter)
+        {
+            if (parameter is Document documentToDelete)
+            {
+                // Confirm the deletion 
+                var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Call your documentServices to delete the document from the database
+                    bool isDeleted = documentServices.DeleteDocument(documentToDelete);
+
+                    // If deletion was successful, remove it from the ObservableCollection
+                    if (isDeleted)
+                    {
+                        LoadData();
+                        MessageBox.Show("Document deleted successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error deleting document.");
+                    }
+                }
+            }
+
+        }
+        #endregion
+
+        #region View PDF Copy
+        private RelayCommand viewPdf;
+
+        public RelayCommand ViewPdf
+        {
+            get { return viewPdf; }
+        }
+
+        private void OpenPdfFile(object parameter)
+        {
+
+            if (parameter is Document documentObj)
+            {
+                try
+                {
+                    // Use Process.Start to open the PDF file
+                    string pdfPath = documentObj.ScannedCopy.ToString();
+                    Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
+                }
+                catch (Exception ex)
+                {
+                    string pdfPath = documentObj.ScannedCopy.ToString();
+                    MessageBox.Show($"Failed to open PDF: {ex.Message} {pdfPath}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No valid PDF file path provided.");
+            }
+        }
+
+        #endregion
 
 
 

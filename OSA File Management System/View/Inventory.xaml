@@ -66,8 +66,8 @@
         </Grid>
 
         <!-- DataGrid Section -->
-        <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False" Margin="2" 
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentList}" >
+        <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False"  Margin="2" 
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentList, Mode=TwoWay}" >
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date, StringFormat=yyyy-MM-dd}"/>
@@ -87,22 +87,20 @@
                 <DataGridTextColumn Header="Remarks"  Width="5*" Binding="{Binding Remarks}"/>
                 
             </DataGrid.Columns>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu>
-                                <MenuItem Header="Edit" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                  CommandParameter="{Binding}" />
-                                <MenuItem Header="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                  CommandParameter="{Binding}" />
-                                <MenuItem Header="View Details and History" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                  CommandParameter="{Binding}" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.RowStyle>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="Edit" Header="Edit"
+                              Command="{Binding}"/>
+                    <MenuItem x:Name="parameter" Header="Delete"
+                              Command="{Binding DeleteDocument}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                              />
+                    <MenuItem x:Name="param" Header="View Pdf" 
+                              Command="{Binding ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    <MenuItem x:Name="ViewDetails" Header="View Full Details"
+                              Command="{Binding}"/>
+
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
 
     </Grid>

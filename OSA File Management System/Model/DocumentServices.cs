@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using OSA_File_Management_System.View;
 using System.Windows;
 using System.Data;
+using System.Reflection.Metadata;
 
 namespace OSA_File_Management_System.Model
 {
@@ -44,6 +45,7 @@ namespace OSA_File_Management_System.Model
                     {
                         inventoryList.Add(new Document
                         {
+                            Id = Convert.ToInt32(reader["id"]),
                             Date = Convert.ToDateTime(reader["date"]),
                             Type = reader["type"].ToString(),
                             Description = reader["description"].ToString(),
@@ -75,7 +77,7 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO inventorydocs (date, type, description, status, location, remarks, scannedCopy) VALUES (@date, @type, @description, @status, @location, @remarks, scannedCopy)";
+                string query = "INSERT INTO inventorydocs (date, type, description, status, location, remarks, scannedCopy) VALUES (@date, @type, @description, @status, @location, @remarks, @scannedCopy)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 if (objDocument.Date.HasValue)
@@ -108,6 +110,32 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Delete Document to Inventory
+        public bool DeleteDocument(Document document)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                string query = "DELETE FROM inventoryDocs WHERE id = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@id", document.Id); // Assuming 'Id' is the primary key
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                connection.Close();
+                return rowsAffected > 0; // Returns true if deletion is successful
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show($"Error: {ex.Message}");
+                return false;
+            }
+        }
+        #endregion
 
 
 
