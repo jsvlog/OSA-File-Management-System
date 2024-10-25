@@ -25,7 +25,7 @@ namespace OSA_File_Management_System.Model
 
         private void ConnectToDatabase()
         {
-            string connectionString = "SERVER=localhost;DATABASE=osasystem;UID=root;PASSWORD=12345;";
+            string connectionString = "SERVER=localhost;DATABASE=osasystem;UID=root;PASSWORD=johnson070;";
             connection = new MySqlConnection(connectionString);
         }
 
@@ -137,7 +137,39 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Save Edited Document
+        public bool SaveEditedDocument(Document document)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
 
+                string query = "UPDATE inventorydocs SET date = @date, type = @type, description = @description, status = @status, location = @location, remarks = @remarks, scannedcopy = @scannedcopy WHERE id = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@id", document.Id);
+                cmd.Parameters.AddWithValue("@date", document.Date);
+                cmd.Parameters.AddWithValue("@type", document.Type);
+                cmd.Parameters.AddWithValue("@description", document.Description);
+                cmd.Parameters.AddWithValue("@status", document.Status);
+                cmd.Parameters.AddWithValue("@location", document.Location);
+                cmd.Parameters.AddWithValue("@remarks", document.Remarks);
+                cmd.Parameters.AddWithValue("@scannedcopy", document.ScannedCopy);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return true ;
+        }
+
+
+        #endregion
 
 
     }

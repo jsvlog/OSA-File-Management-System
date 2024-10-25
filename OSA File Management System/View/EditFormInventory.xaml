@@ -42,23 +42,23 @@
 
         <!-- Date -->
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Date" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" SelectedDate="{Binding Path=AddFormData.Date, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" SelectedDate="{Binding Path=EditFormData.Date, Mode=TwoWay}"/>
 
         <!-- Type -->
         <TextBlock Grid.Row="0" Grid.Column="1" Text="Type" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=AddFormData.Date, Mode=TwoWay}" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EditFormData.Type, Mode=TwoWay}" />
 
         <!-- Status -->
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Status" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=AddFormData.Date, Mode=TwoWay}" />
+        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=EditFormData.Status, Mode=TwoWay}" />
 
         <!-- Location -->
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Location" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=AddFormData.Date, Mode=TwoWay}" />
+        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=EditFormData.Location, Mode=TwoWay}" />
 
         <!-- Remarks -->
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Remarks" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=AddFormData.Date, Mode=TwoWay}" />
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditFormData.Remarks, Mode=TwoWay}" />
 
         <!-- Scanned Copy -->
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
@@ -68,18 +68,18 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFile}"/>
-            <TextBox Grid.Column="1" Text="{Binding Path=AddFormData.Date}"/>
+            <TextBox Grid.Column="1" Text="{Binding Path=EditFormData.ScannedCopy}"/>
         </Grid>
 
 
         <!-- Description -->
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Description" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Path=AddFormData.Date}" TextWrapping="Wrap"/>
+        <TextBox Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Path=EditFormData.Description}" TextWrapping="Wrap"/>
 
         <!-- Buttons -->
         <StackPanel Grid.Row="6" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding}"/>
-            <Button Content="Cancel" Width="100" Command="{Binding}"/>
+            <Button Content="Save" Width="100" Command="{Binding Path=SaveEditedDocument}"/>
+            <Button Content="Cancel" Width="100" Command="{Binding Path=CloseEditForm}"/>
         </StackPanel>
     </Grid>
 </Window>

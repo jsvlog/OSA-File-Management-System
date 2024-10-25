@@ -1,0 +1,35 @@
+﻿<Window x:Class="OSA_File_Management_System.View.InventoryPrintPreview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSA_File_Management_System.View"
+        mc:Ignorable="d"
+        Title="InventoryPrintPreview" Height="450" Width="800">
+    <Grid>
+        <!-- Define two rows: one for the FlowDocumentReader, and one for the button -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <!-- FlowDocumentReader will take all available space -->
+            <RowDefinition Height="Auto" />
+            <!-- Button will take only as much space as needed -->
+        </Grid.RowDefinitions>
+
+        <!-- FlowDocumentReader in the first row -->
+        <FlowDocumentReader Name="DocumentReader" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                            ViewingMode="TwoPage"
+                            IsFindEnabled="True"
+                            IsPrintEnabled="True"
+                            Grid.Row="0"/>
+
+        <!-- Print button in the second row -->
+        <Button Content="Print" 
+                HorizontalAlignment="Center" 
+                Margin="10" 
+                Width="100" 
+                Command="{Binding Path=PrintDocumentInventory}"
+                Grid.Row="1" />
+    </Grid>
+</Window>

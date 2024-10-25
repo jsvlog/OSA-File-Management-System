@@ -22,9 +22,9 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" />
-            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left"/>
-            <Button x:Name="YearButton" Content="Filter" Margin="3" Padding="3" Click="YearButton_Click" Grid.Column="2" />
+            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" Command="{Binding BtnSearchInventory}" />
+            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding SearchTextInventory}"/>
+            <Button x:Name="YearButton" Content="Filter" Margin="3" Padding="3" Click="YearButton_Click" Grid.Column="2"  />
             <Popup Name="YearPopup" PlacementTarget="{Binding ElementName=YearButton}" StaysOpen="False">
                 <Border BorderBrush="Gray" BorderThickness="1" Background="White">
                     <StackPanel>
@@ -62,7 +62,7 @@
                 </Border>
             </Popup>
             <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" Command="{Binding ShowAddForm}"/>
-            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" />
+            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" Command="{Binding Path=PrintPreview}" />
         </Grid>
 
         <!-- DataGrid Section -->
