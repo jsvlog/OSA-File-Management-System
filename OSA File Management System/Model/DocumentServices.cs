@@ -25,7 +25,7 @@ namespace OSA_File_Management_System.Model
 
         private void ConnectToDatabase()
         {
-            string connectionString = "SERVER=localhost;DATABASE=osasystem;UID=root;PASSWORD=johnson070;";
+            string connectionString = "SERVER=localhost;DATABASE=osasystem;UID=root;PASSWORD=12345;";
             connection = new MySqlConnection(connectionString);
         }
 

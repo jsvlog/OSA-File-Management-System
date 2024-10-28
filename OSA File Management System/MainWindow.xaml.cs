@@ -17,12 +17,17 @@ namespace OSA_File_Management_System
     public partial class MainWindow : Window
     {
         DocumentViewModel ViewModel;
+        MainViewModel MainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
             ContentArea.Content = new View.Inventory();
+
             ViewModel = new DocumentViewModel();
-            this.DataContext = ViewModel;
+            MainViewModel = new MainViewModel();
+
+            this.DataContext = MainViewModel;
         }
 
         private void CategoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -50,6 +55,7 @@ namespace OSA_File_Management_System
                                 ContentArea.Content = new View.CertificateOfAppearance(); // Load your UserControl or content for Category 3
                                 break;
                         }
+                        
                     }
                 }
             }

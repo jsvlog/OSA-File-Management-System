@@ -22,8 +22,8 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" Command="{Binding BtnSearchInventory}" />
-            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding SearchTextInventory}"/>
+            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" Command="{Binding DocumentViewModel.BtnSearchInventory}" />
+            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding DocumentViewModel.SearchTextInventory}"/>
             <Button x:Name="YearButton" Content="Filter" Margin="3" Padding="3" Click="YearButton_Click" Grid.Column="2"  />
             <Popup Name="YearPopup" PlacementTarget="{Binding ElementName=YearButton}" StaysOpen="False">
                 <Border BorderBrush="Gray" BorderThickness="1" Background="White">
@@ -61,16 +61,16 @@
                     </StackPanel>
                 </Border>
             </Popup>
-            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" Command="{Binding ShowAddForm}"/>
-            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" Command="{Binding Path=PrintPreview}" />
+            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" Command="{Binding DocumentViewModel.ShowAddForm}"/>
+            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" Command="{Binding Path=DocumentViewModel.PrintPreview}" />
         </Grid>
 
         <!-- DataGrid Section -->
         <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False"  Margin="2" 
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentList, Mode=TwoWay}" >
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentViewModel.DocumentList, Mode=TwoWay}" >
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date, StringFormat=yyyy-MM-dd}"/>
+                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date, StringFormat=MM-dd-yyyy}"/>
                 <DataGridTextColumn Header="Type"  Width="5*" Binding="{Binding Type}"/>
                 <DataGridTemplateColumn Header="Description" Width="30*">
                     <DataGridTemplateColumn.CellTemplate>
@@ -90,11 +90,11 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="Edit" Header="Edit"
-                              Command="{Binding ShowEditForm}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                              Command="{Binding DocumentViewModel.ShowEditForm}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="parameter" Header="Delete"
-                              Command="{Binding DeleteDocument}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                              Command="{Binding DocumentViewModel.DeleteDocument}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="param" Header="View Pdf" 
-                              Command="{Binding ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                              Command="{Binding DocumentViewModel.ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="ViewDetails" Header="View Full Details"
                               Command="{Binding}"/>
                             

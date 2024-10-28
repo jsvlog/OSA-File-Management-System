@@ -27,7 +27,8 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-
+        //for sub ViewModel
+        public RegionComViewModel regionComViewModel;
 
         private DocumentServices documentServices;
 
@@ -42,7 +43,7 @@ namespace OSA_File_Management_System.ViewModel
 
         public DocumentViewModel()
         {
-            
+            regionComViewModel = new RegionComViewModel();
             addFormData = new Document();
             editFormData = new Document();
             documentServices = new DocumentServices();
@@ -67,6 +68,8 @@ namespace OSA_File_Management_System.ViewModel
         }
 
 
+
+        #region Inventory
 
         #region Show Add Form
         private RelayCommand showAddForm;
@@ -469,7 +472,7 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
-
+        #endregion
 
     }
 }

@@ -13,6 +13,8 @@
     <None Remove="images\Certificate.png" />
     <None Remove="images\coa_logo.png" />
     <None Remove="images\header.png" />
+    <None Remove="images\icons\add.png" />
+    <None Remove="images\icons\printer.png" />
     <None Remove="images\Inventory.png" />
     <None Remove="images\RegionCom.png" />
   </ItemGroup>
@@ -21,6 +23,8 @@
     <Resource Include="images\Certificate.png" />
     <Resource Include="images\coa_logo.png" />
     <Resource Include="images\header.png" />
+    <Resource Include="images\icons\add.png" />
+    <Resource Include="images\icons\printer.png" />
     <Resource Include="images\Inventory.png" />
     <Resource Include="images\RegionCom.png" />
   </ItemGroup>
