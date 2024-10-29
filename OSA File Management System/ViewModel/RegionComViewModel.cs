@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
@@ -33,6 +34,7 @@ namespace OSA_File_Management_System.ViewModel
             showAddToRegion = new RelayCommand(OpenAddDocumentForm);
             addToRegion = new RelayCommand(AddToRegionCommand);
             addToRegionData = new RegionComModel();
+            selectFile = new RelayCommand(OpenSelectFile);
             LoadAllRegionCom();
         }
 
@@ -117,6 +119,28 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Select pdf Copy
+        private RelayCommand selectFile;
+
+        public RelayCommand SelectFile
+        {
+            get { return selectFile; }
+        }
+
+        private void OpenSelectFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Set the selected file path
+                AddToRegionData.ScannedCopy = openFileDialog.FileName.ToString();
+            }
+        }
+        #endregion
 
 
 

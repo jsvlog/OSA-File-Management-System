@@ -114,7 +114,7 @@
 
 
 
-        <DataGrid x:Name="RegionComDataGrid" Grid.Row="2" AutoGenerateColumns="False"  Margin="2" 
+        <DataGrid x:Name="RegionComDataGrid" Grid.Row="2" AutoGenerateColumns="False"  Margin="2" CanUserSortColumns="True"
       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding RegionComViewModel.RegionComList, Mode=TwoWay}">
             <DataGrid.Resources>
                 <Style TargetType="DataGridColumnHeader">
@@ -124,7 +124,7 @@
             </DataGrid.Resources>
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="5*" Header="Date Received">
+                <DataGridTemplateColumn Width="5*" Header="Date Received" SortMemberPath="DateReceived">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="Date Received" 
