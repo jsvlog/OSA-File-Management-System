@@ -37,49 +37,49 @@ namespace OSA_File_Management_System.Model
             set { date = value; OnPropertyChanged("Date"); }
         }
 
-        private string type;
+        private string? type;
 
-        public string Type
+        public string? Type
         {
             get { return type; }
             set { type = value; OnPropertyChanged("Type"); }
         }
 
-        private string description;
+        private string? description;
 
-        public string Description
+        public string? Description
         {
             get { return description; }
             set { description = value; OnPropertyChanged("Description"); }
         }
 
-        private string status;
+        private string? status;
 
-        public string Status
+        public string? Status
         {
             get { return status; }
             set { status = value; OnPropertyChanged("Status"); }
         }
 
-        private string location;
+        private string? location;
 
-        public string Location
+        public string? Location
         {
             get { return location; }
             set { location = value; OnPropertyChanged("Location"); }
         }
 
-        private string remarks;
+        private string? remarks;
 
-        public string Remarks
+        public string? Remarks
         {
             get { return remarks; }
             set { remarks = value; OnPropertyChanged("Remarks"); }
         }
 
-        private string scannedCopy;
+        private string? scannedCopy;
 
-        public string ScannedCopy
+        public string? ScannedCopy
         {
             get { return scannedCopy; }
             set { scannedCopy = value; OnPropertyChanged("ScannedCopy"); }

@@ -5,10 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
+using OSA_File_Management_System.View.RegionCom;
 
 namespace OSA_File_Management_System.ViewModel
 {
@@ -24,10 +25,14 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
         private RegionComServices regionComServices;
-
+        
+        
         public RegionComViewModel()
         {
             regionComServices = new RegionComServices();
+            showAddToRegion = new RelayCommand(OpenAddDocumentForm);
+            addToRegion = new RelayCommand(AddToRegionCommand);
+            addToRegionData = new RegionComModel();
             LoadAllRegionCom();
         }
 
@@ -47,6 +52,72 @@ namespace OSA_File_Management_System.ViewModel
             RegionComList = regionComServices.GetAllRegionCom();
         }
         #endregion
+
+        #region Show Add To Region Form
+        private RelayCommand showAddToRegion;
+
+        public RelayCommand ShowAddToRegion
+        {
+            get { return showAddToRegion; }
+        }
+        private AddToRegion popup;
+        private void OpenAddDocumentForm()
+        {
+            // Create the popup window
+            popup = new AddToRegion();
+
+            // Bind ViewModel to the popup window
+            popup.DataContext = this;
+
+            // Show the popup window
+            popup.ShowDialog();
+        }
+
+        #endregion
+
+        #region Add RegionCom Data
+        private RegionComModel addToRegionData;
+
+        public RegionComModel AddToRegionData
+        {
+            get { return addToRegionData; }
+            set { addToRegionData = value; OnPropertyChanged("AddToRegionData"); }
+
+        }
+
+        private RelayCommand addToRegion;
+
+        public RelayCommand AddToRegion
+        {
+            get { return addToRegion; }
+        }
+
+        private void AddToRegionCommand()
+        {
+            try
+            {
+                var IsSaved = regionComServices.addToRegionCom(AddToRegionData);
+                if (IsSaved)
+                {
+
+                    MessageBox.Show("Saving Successfull");
+                    popup.Close();
+                    LoadAllRegionCom();
+                    AddToRegionData = new RegionComModel(); //to clear the fields after saving
+                }
+                else { MessageBox.Show("error saving"); }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
+
 
 
 

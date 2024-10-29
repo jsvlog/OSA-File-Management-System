@@ -46,13 +46,13 @@ namespace OSA_File_Management_System.Model
                         inventoryList.Add(new Document
                         {
                             Id = Convert.ToInt32(reader["id"]),
-                            Date = Convert.ToDateTime(reader["date"]),
-                            Type = reader["type"].ToString(),
-                            Description = reader["description"].ToString(),
-                            Status = reader["status"].ToString(),
-                            Location = reader["location"].ToString(),
-                            Remarks = reader["remarks"].ToString(),
-                            ScannedCopy = reader["scannedCopy"].ToString()
+                            Date = reader["date"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["date"]),
+                            Type = reader["type"]?.ToString() ?? string.Empty,
+                            Description = reader["description"]?.ToString() ?? string.Empty,
+                            Status = reader["status"]?.ToString() ?? string.Empty,
+                            Location = reader["location"]?.ToString() ?? string.Empty,
+                            Remarks = reader["remarks"]?.ToString() ?? string.Empty,
+                            ScannedCopy = reader["scannedCopy"]?.ToString() ?? string.Empty,
                         });
                     }
                     connection.Close();

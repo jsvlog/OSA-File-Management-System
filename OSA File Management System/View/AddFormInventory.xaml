@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OSA_File_Management_System.View"
         mc:Ignorable="d"
         Title="AddFormInventory"
-        Background="#f0f0f0"
+        Background="#E9EED9"
         Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="Button">
@@ -25,13 +25,19 @@
             <Setter Property="BorderBrush" Value="Gray" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Foreground" Value="#133E87"/>
+        </Style>
     </Window.Resources>
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="7*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="7*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="15*"/>
             <RowDefinition Height="Auto"/>
@@ -45,7 +51,7 @@
         <!-- Date -->
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Date" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" SelectedDate="{Binding Path=AddFormData.Date, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=AddFormData.Date, Mode=TwoWay}"/>
 
         <!-- Type -->
         <TextBlock Grid.Row="0" Grid.Column="1" Text="Type" FontWeight="Bold"/>

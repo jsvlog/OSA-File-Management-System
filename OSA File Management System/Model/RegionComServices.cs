@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,7 +83,49 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Add Document to Inventory
+        public bool addToRegionCom(RegionComModel objRegionCom)
+        {
 
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, numberOfCopies, dateSignBySA, dateSentOutToRegion, subjectParticulars, dateSentOutToTeam, receiver, dateReceiveByRegion, location, lbcRefNumber, remarks, scannedCopy) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @numberOfCopies, @dateSignBySA, @dateSentOutToRegion, @subjectParticulars, @dateSentOutToTeam, @receiver, @dateReceiveByRegion, @location, @lbcRefNumber, @remarks, @scannedCopy)";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
+                cmd.Parameters.AddWithValue("@documentDate", objRegionCom.DocumentDate);
+                cmd.Parameters.AddWithValue("@typeOfDocs", objRegionCom.TypeOfDocs);
+                cmd.Parameters.AddWithValue("@refNumber", objRegionCom.RefNumber);
+                cmd.Parameters.AddWithValue("@receivedFrom", objRegionCom.ReceivedFrom);
+                cmd.Parameters.AddWithValue("@numberOfCopies", objRegionCom.NumberOfCopies);
+                cmd.Parameters.AddWithValue("@dateSignBySA", objRegionCom.DateSignBySA);
+                cmd.Parameters.AddWithValue("@dateSentOutToRegion", objRegionCom.DateSentOutToRegion);
+                cmd.Parameters.AddWithValue("@subjectParticulars", objRegionCom.SubjectParticulars);
+                cmd.Parameters.AddWithValue("@dateSentOutToTeam", objRegionCom.DateSentOutToTeam);
+                cmd.Parameters.AddWithValue("@receiver", objRegionCom.Receiver);
+                cmd.Parameters.AddWithValue("@dateReceiveByRegion", objRegionCom.DateReceiveByRegion);
+                cmd.Parameters.AddWithValue("@location", objRegionCom.Location);
+                cmd.Parameters.AddWithValue("@remarks", objRegionCom.Remarks);
+                cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
+                cmd.Parameters.AddWithValue("@LbcRefNumber", objRegionCom.LbcRefNumber);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+
+        }
+        #endregion
 
 
 

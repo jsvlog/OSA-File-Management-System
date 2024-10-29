@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OSA_File_Management_System.View
+namespace OSA_File_Management_System.View.RegionCom
 {
     /// <summary>
-    /// Interaction logic for RegionCom.xaml
+    /// Interaction logic for AddToRegion.xaml
     /// </summary>
-    public partial class RegionCom : UserControl
+    public partial class AddToRegion : Window
     {
-        public RegionCom()
+        public AddToRegion()
         {
             InitializeComponent();
         }

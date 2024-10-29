@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using OSA_File_Management_System.ViewModel;
+using OSA_File_Management_System.View;
 //using OSA_File_Management_System.ViewModel;
 namespace OSA_File_Management_System
 {
@@ -49,13 +50,12 @@ namespace OSA_File_Management_System
                                 ContentArea.Content = new View.Inventory(); // Load your UserControl or content for Category 1
                                 break;
                             case "Region Communications":
-                                ContentArea.Content = new View.RegionCom(); // Load your UserControl or content for Category 2
+                                ContentArea.Content = new View.RegionComView.RegionComm(); // Load your UserControl or content for Category 2
                                 break;
                             case "Certificate of Appearance":
                                 ContentArea.Content = new View.CertificateOfAppearance(); // Load your UserControl or content for Category 3
                                 break;
                         }
-                        
                     }
                 }
             }
