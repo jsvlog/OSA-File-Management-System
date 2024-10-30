@@ -128,7 +128,7 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Save" Width="100" Command="{Binding AddToRegion}"/>
-            <Button Content="Cancel" Width="100" Command="{Binding CloseAddForm}"/>
+            <Button Content="Cancel" Width="100" Command="{Binding CloseAddToRegion}"/>
         </StackPanel>
 
 

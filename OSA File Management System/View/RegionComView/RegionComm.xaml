@@ -31,7 +31,7 @@
                         <RowDefinition Height="20*" />
                     </Grid.RowDefinitions>
 
-                    <Button Width="200" Height="40" Margin="5" Grid.Column="0" Grid.Row="0">
+                    <Button Width="200" Height="40" Margin="5" Grid.Column="0" Grid.Row="0" Command="{Binding RegionComViewModel.ShowAddFromRegion}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="pack://application:,,,/images/icons/add.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                             <TextBlock Text="From Region" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"/>

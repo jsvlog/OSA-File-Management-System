@@ -127,7 +127,50 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Add Document From Inventory
+        public bool addFromRegionCom(RegionComModel objRegionCom)
+        {
 
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, addressee, details, municipality, subjectParticulars, barangay, dateSentOutToTeam, receiver, location, actionableDoc, dateDeadline, remarks, scannedCopy) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @addressee, @details, @municipality, @subjectParticulars, @barangay, @dateSentOutToTeam, @receiver, @location, @actionableDoc, @dateDeadline, @remarks, @scannedCopy)";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
+                cmd.Parameters.AddWithValue("@documentDate", objRegionCom.DocumentDate);
+                cmd.Parameters.AddWithValue("@typeOfDocs", objRegionCom.TypeOfDocs);
+                cmd.Parameters.AddWithValue("@refNumber", objRegionCom.RefNumber);
+                cmd.Parameters.AddWithValue("@receivedFrom", objRegionCom.ReceivedFrom);
+                cmd.Parameters.AddWithValue("@addressee", objRegionCom.Addressee);
+                cmd.Parameters.AddWithValue("@details", objRegionCom.Details);
+                cmd.Parameters.AddWithValue("@municipality", objRegionCom.Municipality);
+                cmd.Parameters.AddWithValue("@subjectParticulars", objRegionCom.SubjectParticulars);
+                cmd.Parameters.AddWithValue("@barangay", objRegionCom.Barangay);
+                cmd.Parameters.AddWithValue("@dateSentOutToTeam", objRegionCom.DateSentOutToTeam);
+                cmd.Parameters.AddWithValue("@receiver", objRegionCom.Receiver);
+                cmd.Parameters.AddWithValue("@location", objRegionCom.Location);
+                cmd.Parameters.AddWithValue("@actionableDoc", objRegionCom.ActionableDoc);
+                cmd.Parameters.AddWithValue("@dateDeadline", objRegionCom.DateDeadline);
+                cmd.Parameters.AddWithValue("@remarks", objRegionCom.Remarks);
+                cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+
+        }
+        #endregion
 
 
 
