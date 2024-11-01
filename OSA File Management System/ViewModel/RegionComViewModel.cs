@@ -39,9 +39,12 @@ namespace OSA_File_Management_System.ViewModel
             closeAddFromRegion = new RelayCommand(CloseAddFromRegionCommand);
             addToRegionData = new RegionComModel();
             addFromRegionData = new RegionComModel();
+            editFromRegionData = new RegionComModel();
             selectFile = new RelayCommand(OpenSelectFile);
             showAddFromRegion = new RelayCommand(OpenAddFromRegionForm);
             selectFileFromRegion = new RelayCommand(OpenSelectFileFromRegion);
+            deleteData = new RelayCommand(DeleteDataMethod);
+            showEditFromOrTo = new RelayCommand(OpenEditFromOrTo);
             LoadAllRegionCom();
         }
 
@@ -220,6 +223,7 @@ namespace OSA_File_Management_System.ViewModel
         {
             try
             {
+                AddFromRegionData.Direction = "From Region";
                 var IsSaved = regionComServices.addFromRegionCom(AddFromRegionData);
                 if (IsSaved)
                 {
@@ -264,9 +268,113 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
+        #region Delete Data
+        private RelayCommand deleteData;
+
+        public RelayCommand DeleteData
+        {
+            get { return deleteData; }
+            set { deleteData = value; }
+        }
+
+        private void DeleteDataMethod(object parameter)
+        {
+            if (parameter is RegionComModel documentToDelete)
+            {
+                // Confirm the deletion 
+                var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Call your documentServices to delete the document from the database
+                    bool isDeleted = regionComServices.DeleteData(documentToDelete);
+
+                    // If deletion was successful, remove it from the ObservableCollection
+                    if (isDeleted)
+                    {
+                        LoadAllRegionCom();
+                        MessageBox.Show("Document deleted successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error deleting document.");
+                    }
+                }
+            }
+
+        }
+        #endregion
+
+        #region Show edit From Region or To Region
+
+  
+        private RegionComModel editFromRegionData;
+
+        public RegionComModel EditFromRegionData
+        {
+            get { return editFromRegionData; }
+            set { editFromRegionData = value; OnPropertyChanged("EditFromRegionData"); }
+        }
+
+        private RegionComModel editToRegionData;
+
+        public RegionComModel EditToRegionData
+        {
+            get { return editToRegionData; }
+            set { editToRegionData = value; OnPropertyChanged("EditToRegionData"); }
+        }
 
 
+        private RelayCommand showEditFromOrTo;
 
+        public RelayCommand ShowEditFromOrTo
+        {
+            get { return showEditFromOrTo; }
+        }
+
+        private EditFromRegion popupEditFromRegion; //put it outside the method to close from another method
+        private EditToRegion popupEditToRegion;//put it outside the method to close from another method
+
+        private void OpenEditFromOrTo(object parameter)
+        {
+            if (parameter is RegionComModel documentToEdit)
+            {
+                if (documentToEdit.Direction == "To Region")
+                {
+                    EditToRegionData = documentToEdit;
+                    // Create the popup window
+                    popupEditToRegion = new EditToRegion();
+
+                    // Bind ViewModel to the popup window
+                    popupEditToRegion.DataContext = this;
+
+                    // Show the popup window
+                    popupEditToRegion.ShowDialog();
+                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+
+                }
+                else if (documentToEdit.Direction == "From Region")
+                {
+                    EditFromRegionData = documentToEdit;
+                    // Create the popup window
+                    popupEditFromRegion = new EditFromRegion();
+
+                    // Bind ViewModel to the popup window
+                    popupEditFromRegion.DataContext = this;
+
+                    // Show the popup window
+                    popupEditFromRegion.ShowDialog();
+                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+
+                } else
+                {
+                    MessageBox.Show(" Direction not found");
+                }
+
+            }
+
+        }
+
+        #endregion
 
 
 

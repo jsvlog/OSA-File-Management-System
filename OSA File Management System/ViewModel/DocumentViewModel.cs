@@ -261,7 +261,7 @@ namespace OSA_File_Management_System.ViewModel
             get { return showEditForm; }
         }
 
-        private EditFormInventory popupEditForm;
+        private EditFormInventory popupEditForm; //put it outside the method to close from another method
 
         private void OpenEditDocumentForm(object parameter)
         {
@@ -279,7 +279,7 @@ namespace OSA_File_Management_System.ViewModel
             }
             // Show the popup window
             popupEditForm.ShowDialog();
-            LoadData();
+            LoadData(); // after closing the popup this will load again the whole data
 
         }
 

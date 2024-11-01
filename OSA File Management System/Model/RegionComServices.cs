@@ -46,28 +46,28 @@ namespace OSA_File_Management_System.Model
                         Id = Convert.ToInt32(reader["id"]),
                         DateReceived = reader["dateReceived"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateReceived"]),
                         DocumentDate = reader["documentDate"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["documentDate"]),
-                        TypeOfDocs = reader["typeOfDocs"]?.ToString() ?? string.Empty,
-                        Addressee = reader["addressee"]?.ToString() ?? string.Empty,
-                        SubjectParticulars = reader["subjectParticulars"]?.ToString() ?? string.Empty,
-                        Details = reader["details"]?.ToString() ?? string.Empty,
-                        RefNumber = reader["refnumber"]?.ToString() ?? string.Empty,
-                        Municipality = reader["municipality"]?.ToString() ?? string.Empty,
-                        Barangay = reader["barangay"]?.ToString() ?? string.Empty,
-                        ReceivedFrom = reader["receivedFrom"]?.ToString() ?? string.Empty,
+                        TypeOfDocs = reader["typeOfDocs"] is DBNull ? null : reader["typeOfDocs"].ToString(),
+                        Addressee = reader["addressee"] is DBNull ? null : reader["addressee"].ToString(),
+                        SubjectParticulars = reader["subjectParticulars"] is DBNull ? null : reader["subjectParticulars"].ToString(),
+                        Details = reader["details"] is DBNull ? null : reader["details"].ToString(),
+                        RefNumber = reader["refNumber"] is DBNull ? null : reader["refNumber"].ToString(),
+                        Municipality = reader["municipality"] is DBNull ? null : reader["municipality"].ToString(),
+                        Barangay = reader["barangay"] is DBNull ? null : reader["barangay"].ToString(),
+                        ReceivedFrom = reader["receivedFrom"] is DBNull ? null : reader["receivedFrom"].ToString(),
                         DateSentOutToTeam = reader["dateSentOutToTeam"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSentOutToTeam"]),
-                        Receiver = reader["receiver"]?.ToString() ?? string.Empty,
-                        Location = reader["location"]?.ToString() ?? string.Empty,
-                        ActionableDoc = reader["actionableDoc"] is DBNull ? false : Convert.ToBoolean(reader["actionableDoc"]),
+                        Receiver = reader["receiver"] is DBNull ? null : reader["receiver"].ToString(),
+                        Location = reader["location"] is DBNull ? null : reader["location"].ToString(),
+                        ActionableDoc = reader["actionableDoc"] is DBNull ? (bool?)null : Convert.ToBoolean(reader["actionableDoc"]),
                         DateDeadline = reader["dateDeadline"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateDeadline"]),
-                        Remarks = reader["remarks"]?.ToString() ?? string.Empty,
-                        TrackingCode = reader["trackingCode"]?.ToString() ?? string.Empty,
-                        Direction = reader["direction"]?.ToString() ?? string.Empty,
-                        NumberOfCopies = reader["numberOfCopies"]?.ToString() ?? string.Empty,
+                        Remarks = reader["remarks"] is DBNull ? null : reader["remarks"].ToString(),
+                        TrackingCode = reader["trackingCode"] is DBNull ? null : reader["trackingCode"].ToString(),
+                        Direction = reader["direction"] is DBNull ? null : reader["direction"].ToString(),
+                        NumberOfCopies = reader["numberOfCopies"] is DBNull ? null : reader["numberOfCopies"].ToString(),
                         DateSignBySA = reader["dateSignBySA"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSignBySA"]),
                         DateReceiveByRegion = reader["dateReceiveByRegion"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateReceiveByRegion"]),
                         DateSentOutToRegion = reader["dateSentOutToRegion"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSentOutToRegion"]),
-                        LbcRefNumber = reader["lbcRefNumber"]?.ToString() ?? string.Empty,
-                        ScannedCopy = reader["scannedCopy"]?.ToString() ?? string.Empty
+                        LbcRefNumber = reader["lbcRefNumber"] is DBNull ? null : reader["lbcRefNumber"].ToString(),
+                        ScannedCopy = reader["scannedCopy"] is DBNull ? null : reader["scannedCopy"].ToString(),
 
                     });
                 }
@@ -83,18 +83,18 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
-        #region Add Document to Inventory
+        #region Add Data To Region
         public bool addToRegionCom(RegionComModel objRegionCom)
         {
-
+            objRegionCom.Direction = "To Region";
             try
             {
                 if (connection.State == ConnectionState.Closed)
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, numberOfCopies, dateSignBySA, dateSentOutToRegion, subjectParticulars, dateSentOutToTeam, receiver, dateReceiveByRegion, location, lbcRefNumber, remarks, scannedCopy) " +
-                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @numberOfCopies, @dateSignBySA, @dateSentOutToRegion, @subjectParticulars, @dateSentOutToTeam, @receiver, @dateReceiveByRegion, @location, @lbcRefNumber, @remarks, @scannedCopy)";
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, numberOfCopies, dateSignBySA, dateSentOutToRegion, subjectParticulars, dateSentOutToTeam, receiver, dateReceiveByRegion, location, lbcRefNumber, remarks, scannedCopy, direction) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @numberOfCopies, @dateSignBySA, @dateSentOutToRegion, @subjectParticulars, @dateSentOutToTeam, @receiver, @dateReceiveByRegion, @location, @lbcRefNumber, @remarks, @scannedCopy, @direction)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
@@ -112,7 +112,8 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@location", objRegionCom.Location);
                 cmd.Parameters.AddWithValue("@remarks", objRegionCom.Remarks);
                 cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
-                cmd.Parameters.AddWithValue("@LbcRefNumber", objRegionCom.LbcRefNumber);
+                cmd.Parameters.AddWithValue("@lbcRefNumber", objRegionCom.LbcRefNumber);
+                cmd.Parameters.AddWithValue("@direction", objRegionCom.Direction);
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -127,18 +128,18 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
-        #region Add Document From Inventory
+        #region Add Data from Region
         public bool addFromRegionCom(RegionComModel objRegionCom)
         {
-
+            objRegionCom.Direction = "From Region";
             try
             {
                 if (connection.State == ConnectionState.Closed)
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, addressee, details, municipality, subjectParticulars, barangay, dateSentOutToTeam, receiver, location, actionableDoc, dateDeadline, remarks, scannedCopy) " +
-                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @addressee, @details, @municipality, @subjectParticulars, @barangay, @dateSentOutToTeam, @receiver, @location, @actionableDoc, @dateDeadline, @remarks, @scannedCopy)";
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, addressee, details, municipality, subjectParticulars, barangay, dateSentOutToTeam, receiver, location, actionableDoc, dateDeadline, remarks, scannedCopy, direction) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @addressee, @details, @municipality, @subjectParticulars, @barangay, @dateSentOutToTeam, @receiver, @location, @actionableDoc, @dateDeadline, @remarks, @scannedCopy, @direction)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
@@ -158,6 +159,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@dateDeadline", objRegionCom.DateDeadline);
                 cmd.Parameters.AddWithValue("@remarks", objRegionCom.Remarks);
                 cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
+                cmd.Parameters.AddWithValue("@direction", objRegionCom.Direction);
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -172,7 +174,32 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Delete Document to RegionCom
+        public bool DeleteData(RegionComModel rmodel)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                string query = "DELETE FROM regioncom WHERE id = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@id", rmodel.Id); // Assuming 'Id' is the primary key
+                int rowsAffected = cmd.ExecuteNonQuery();
 
+                connection.Close();
+                return rowsAffected > 0; // Returns true if deletion is successful
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show($"Error: {ex.Message}");
+                return false;
+            }
+        }
+        #endregion
 
 
     }

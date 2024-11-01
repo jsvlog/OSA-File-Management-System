@@ -1,11 +1,11 @@
-﻿<Window x:Class="OSA_File_Management_System.View.RegionComView.AddFromRegion"
+﻿<Window x:Class="OSA_File_Management_System.View.RegionComView.EditFromRegion"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
         mc:Ignorable="d"
-        Title="AddFromRegion" Height="700" Width="1100" Background="#E9EED9">
+        Title="EditFromRegion" Height="700" Width="1100" Background="#E9EED9">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#2196F3" />
@@ -38,7 +38,6 @@
         </Style>
     </Window.Resources>
 
-
     <Grid Margin="20">
 
         <Grid.RowDefinitions>
@@ -64,70 +63,71 @@
 
         <!--1 Date Received-->
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Date Received" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=AddFromRegionData.DateReceived, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditFromRegionData.DateReceived, Mode=TwoWay}"/>
 
         <!-- 2 Document Date-->
         <TextBlock Grid.Row="0" Grid.Column="1" Text="Document Date" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=AddFromRegionData.DocumentDate, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="1" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditFromRegionData.DocumentDate, Mode=TwoWay}"/>
 
         <!-- 3 Type of Document-->
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Type of Document" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=AddFromRegionData.TypeOfDocs}"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=EditFromRegionData.TypeOfDocs}"/>
 
         <!-- 4 Control No.-->
         <TextBlock Grid.Row="0" Grid.Column="3" Text="Control No." FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=AddFromRegionData.RefNumber}"/>
+        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=EditFromRegionData.RefNumber}"/>
 
         <!-- 5 Received From-->
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Received From" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=AddFromRegionData.ReceivedFrom}"/>
+        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=EditFromRegionData.ReceivedFrom}"/>
 
         <!-- 6 Addressee-->
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Addressee" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=AddFromRegionData.Addressee}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditFromRegionData.Adressee}"/>
 
         <!-- 7 Details-->
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Details" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="2"  Text="{Binding Path=AddFromRegionData.Details}"/>
+        <TextBox Grid.Row="3" Grid.Column="2"  Text="{Binding Path=EditFromRegionData.Details}"/>
 
         <!-- 8 Municipality-->
         <TextBlock Grid.Row="2" Grid.Column="3" Text="Municipality" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Path=AddFromRegionData.Municipality}"/>
+        <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Path=EditFromRegionData.Municipality}"/>
 
         <!-- 9 Subject/Particulars-->
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Subject / Particulars" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=AddFromRegionData.SubjectParticulars}"/>
+        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=EditFromRegionData.SubjectParticulars}"/>
 
         <!-- 10 Barangay-->
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Barangay" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding Path=AddFromRegionData.Barangay}"/>
+        <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding Path=EditFromRegionData.Barangay}"/>
 
         <!-- 11 Date Sent To Teams-->
         <TextBlock Grid.Row="6" Grid.Column="1" Text="Date Sent Out to Teams" FontWeight="Bold"/>
-        <DatePicker Grid.Row="7" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=AddFromRegionData.DateSentOutToTeam, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="7" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditFromRegionData.DateSentOutToTeam, Mode=TwoWay}"/>
 
         <!-- 12 Receiver-->
         <TextBlock Grid.Row="6" Grid.Column="2" Text="Receiver" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Path=AddFromRegionData.Receiver}"/>
+        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Path=EditFromRegionData.Receiver}"/>
 
         <!-- 13 Location-->
         <TextBlock Grid.Row="6" Grid.Column="3" Text="Location" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=AddFromRegionData.Location}"/>
+        <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=EditFromRegionData.Location}"/>
 
         <!-- 14 Actionable Document-->
         <TextBlock Grid.Row="8" Grid.Column="0" Text="Actionable Document" FontWeight="Bold"/>
-        <ComboBox SelectedValue="{Binding Path=AddFromRegionData.ActionableDoc}" Grid.Row="9" Grid.Column="0" SelectedValuePath="Tag">
+        <ComboBox SelectedValue="{Binding Path=EditFromRegionData.ActionableDoc}" Grid.Row="9" Grid.Column="0" SelectedValuePath="Tag">
+            <ComboBoxItem Content="" Tag="{x:Null}" />
             <ComboBoxItem Content="Yes" Tag="True" />
             <ComboBoxItem Content="No" Tag="False" />
         </ComboBox>
 
         <!-- 15 Date Deadline-->
         <TextBlock Grid.Row="8" Grid.Column="1" Text="Date Deadline" FontWeight="Bold"/>
-        <DatePicker Grid.Row="9" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=AddFromRegionData.DateDeadline, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="9" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditFromRegionData.DateDeadline, Mode=TwoWay}"/>
 
         <!-- 16 Remarks-->
         <TextBlock Grid.Row="8" Grid.Column="2" Text="Remarks" FontWeight="Bold"/>
-        <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding Path=AddFromRegionData.Remarks}"/>
+        <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding Path=EditFromRegionData.Remarks}"/>
 
         <!-- 17 Scanned Copy -->
         <TextBlock Grid.Row="8" Grid.Column="3" Text="Scanned Copy" FontWeight="Bold"/>
@@ -137,15 +137,14 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFileFromRegion}"/>
-            <TextBox Grid.Column="1" Text="{Binding Path=AddFromRegionData.ScannedCopy}"/>
+            <TextBox Grid.Column="1" Text="{Binding Path=EditFromRegionData.ScannedCopy}"/>
         </Grid>
 
         <!-- Buttons -->
         <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding AddFromRegion}"/>
-            <Button Content="Cancel" Width="100" Command="{Binding CloseAddFromRegion}"/>
+            <Button Content="Save" Width="100" Command="{Binding EditFromRegion}"/>
+            <Button Content="Cancel" Width="100" Command="{Binding CloseEditFromRegion}"/>
         </StackPanel>
-
 
 
 

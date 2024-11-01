@@ -262,9 +262,9 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="Edit" Header="Edit"
-                  Command="{Binding ShowEditForm}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                  Command="{Binding RegionComViewModel.ShowEditFromOrTo}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="parameter" Header="Delete"
-                  Command="{Binding DeleteDocument}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                  Command="{Binding RegionComViewModel.DeleteData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="param" Header="View Pdf" 
                   Command="{Binding ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     <MenuItem x:Name="ViewDetails" Header="View Full Details"

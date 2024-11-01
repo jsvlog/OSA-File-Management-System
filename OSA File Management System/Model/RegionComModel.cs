@@ -42,65 +42,65 @@ namespace OSA_File_Management_System.Model
             set { documentDate = value; OnPropertyChanged("DocumentDate"); }
         }
 
-        private string typeOfDocs;
+        private string? typeOfDocs;
 
-        public string TypeOfDocs
+        public string? TypeOfDocs
         {
             get { return typeOfDocs; }
             set { typeOfDocs = value; OnPropertyChanged("TypeOfDocs"); }
         }
 
-        private string addressee;
+        private string? addressee;
 
-        public string Addressee
+        public string? Addressee
         {
             get { return addressee; }
             set { addressee = value; OnPropertyChanged("Addressee"); }
         }
 
-        private string subjectParticulars;
+        private string? subjectParticulars;
 
-        public string SubjectParticulars
+        public string? SubjectParticulars
         {
             get { return subjectParticulars; }
             set { subjectParticulars = value; OnPropertyChanged("SubjectParticulars"); }
         }
 
-        private string details;
+        private string? details;
 
-        public string Details
+        public string? Details
         {
             get { return details; }
             set { details = value; OnPropertyChanged("Details"); }
         }
 
-        private string refNumber;
+        private string? refNumber;
 
-        public string RefNumber
+        public string? RefNumber
         {
             get { return refNumber; }
             set { refNumber = value; OnPropertyChanged("RefNumber"); }
         }
 
-        private string municipality;
+        private string? municipality;
 
-        public string Municipality
+        public string? Municipality
         {
             get { return municipality; }
             set { municipality = value; OnPropertyChanged("Municipality"); }
         }
 
-        private string barangay;
+        private string? barangay;
 
-        public string Barangay
+        public string? Barangay
         {
             get { return barangay; }
             set { barangay = value; OnPropertyChanged("Barangay"); }
         }
 
-        private string receivedFrom;
+        private string? receivedFrom;
 
-        public string ReceivedFrom
+        public string? ReceivedFrom
         {
             get { return receivedFrom; }
             set { receivedFrom = value; OnPropertyChanged("ReceivedFrom"); }
@@ -114,17 +114,17 @@ namespace OSA_File_Management_System.Model
             set { dateSentOutToTeam = value; OnPropertyChanged("DateSentOutToTeam"); }
         }
 
-        private string receiver;
+        private string? receiver;
 
-        public string Receiver
+        public string? Receiver
         {
             get { return receiver; }
             set { receiver = value; OnPropertyChanged("Receiver"); }
         }
 
-        private string location;
+        private string? location;
 
-        public string Location
+        public string? Location
         {
             get { return location; }
             set { location = value; OnPropertyChanged("Location"); }
@@ -146,33 +146,33 @@ namespace OSA_File_Management_System.Model
             set { dateDeadline = value; OnPropertyChanged("DateDeadline"); }
         }
 
-        private string remarks;
+        private string? remarks;
 
-        public string Remarks
+        public string? Remarks
         {
             get { return remarks; }
             set { remarks = value; OnPropertyChanged("Remarks"); }
         }
 
-        private string trackingCode;
+        private string? trackingCode;
 
-        public string TrackingCode
+        public string? TrackingCode
         {
             get { return trackingCode; }
             set { trackingCode = value; OnPropertyChanged("TrackingCode"); }
         }
 
-        private string direction;
+        private string? direction;
 
-        public string Direction
+        public string? Direction
         {
             get { return direction; }
             set { direction = value; OnPropertyChanged("Direction"); }
         }
 
-        private string scannedCopy;
+        private string? scannedCopy;
 
-        public string ScannedCopy
+        public string? ScannedCopy
         {
             get { return scannedCopy; }
             set { scannedCopy = value; OnPropertyChanged("ScannedCopy"); }
@@ -181,9 +181,9 @@ namespace OSA_File_Management_System.Model
 
 
         //this part is for Document to region
-        private string numberOfCopies;
+        private string? numberOfCopies;
 
-        public string NumberOfCopies
+        public string? NumberOfCopies
         {
             get { return numberOfCopies; }
             set { numberOfCopies = value; OnPropertyChanged("NumberOfCopies"); }
@@ -213,9 +213,9 @@ namespace OSA_File_Management_System.Model
             set { dateSentOutToRegion = value; OnPropertyChanged("DateSentOutToRegion"); }
         }
 
-        private string lbcRefNumber;
+        private string? lbcRefNumber;
 
-        public string LbcRefNumber
+        public string? LbcRefNumber
         {
             get { return lbcRefNumber; }
             set { lbcRefNumber = value; OnPropertyChanged("LbcRefNumber"); }
