@@ -83,7 +83,7 @@
 
         <!-- 6 Addressee-->
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Addressee" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditFromRegionData.Adressee}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditFromRegionData.Addressee}"/>
 
         <!-- 7 Details-->
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Details" FontWeight="Bold"/>
@@ -142,7 +142,7 @@
 
         <!-- Buttons -->
         <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding EditFromRegion}"/>
+            <Button Content="Save" Width="100" Command="{Binding SaveEditedFromRegion}"/>
             <Button Content="Cancel" Width="100" Command="{Binding CloseEditFromRegion}"/>
         </StackPanel>
 

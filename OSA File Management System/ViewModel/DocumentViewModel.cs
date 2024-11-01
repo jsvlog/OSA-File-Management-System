@@ -69,7 +69,6 @@ namespace OSA_File_Management_System.ViewModel
 
 
 
-        #region Inventory
 
         #region Show Add Form
         private RelayCommand showAddForm;
@@ -472,7 +471,7 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
-        #endregion
+  
 
     }
 }

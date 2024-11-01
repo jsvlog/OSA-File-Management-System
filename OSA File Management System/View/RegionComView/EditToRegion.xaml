@@ -127,7 +127,7 @@
 
         <!-- Buttons -->
         <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding EditToRegion}"/>
+            <Button Content="Save" Width="100" Command="{Binding SaveEditedToRegion}"/>
             <Button Content="Cancel" Width="100" Command="{Binding CloseEditToRegion}"/>
         </StackPanel>
 

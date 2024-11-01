@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,12 @@ namespace OSA_File_Management_System.ViewModel
             selectFileFromRegion = new RelayCommand(OpenSelectFileFromRegion);
             deleteData = new RelayCommand(DeleteDataMethod);
             showEditFromOrTo = new RelayCommand(OpenEditFromOrTo);
+            saveEditedToRegion = new RelayCommand(SaveEditedToRegionCommand);
+            saveEditedFromRegion = new RelayCommand(SaveEditedFromRegionCommand);
+            closeEditToRegion = new RelayCommand(CloseEditToRegionCommand);
+            closeEditFromRegion = new RelayCommand(CloseEditFromRegionCommand);
+            viewPdfToRegion = new RelayCommand(OpenPdfToRegion);
+            btnSearchRegionCom = new RelayCommand(ExecuteSearch);
             LoadAllRegionCom();
         }
 
@@ -304,9 +311,9 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-        #region Show edit From Region or To Region
+        #region Show edit (From Region or To Region )
 
-  
+
         private RegionComModel editFromRegionData;
 
         public RegionComModel EditFromRegionData
@@ -376,7 +383,178 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region save Edit To Region
+        private RelayCommand saveEditedToRegion;
 
+        public RelayCommand SaveEditedToRegion
+        {
+            get { return saveEditedToRegion; }
+        }
+
+        private void SaveEditedToRegionCommand()
+        {
+            try
+            {
+                var isSaved = regionComServices.SaveEditedToRegion(EditToRegionData);
+                if (isSaved)
+                {
+                    MessageBox.Show("Edited Successfully");
+                    popupEditToRegion.Close();
+                    LoadAllRegionCom();
+                    EditToRegionData = new RegionComModel(); //to clear the fields after saving
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+
+
+        #endregion
+
+        #region save Edit From Region
+        private RelayCommand saveEditedFromRegion;
+
+        public RelayCommand SaveEditedFromRegion
+        {
+            get { return saveEditedFromRegion; }
+        }
+
+        private void SaveEditedFromRegionCommand()
+        {
+            try
+            {
+                var isSaved = regionComServices.SaveEditedFromRegion(EditFromRegionData);
+                if (isSaved)
+                {
+                    MessageBox.Show("Edited Successfully");
+                    popupEditFromRegion.Close();
+                    LoadAllRegionCom();
+                    EditFromRegionData = new RegionComModel(); //to clear the fields after saving
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Close Edit To Region Popup
+        private RelayCommand closeEditToRegion;
+
+        public RelayCommand CloseEditToRegion
+        {
+            get { return closeEditToRegion; }
+        }
+
+        private void CloseEditToRegionCommand()
+        {
+            popupEditToRegion.Close();
+        }
+
+        #endregion
+
+        #region Close Edit From Region Popup
+        private RelayCommand closeEditFromRegion;
+
+        public RelayCommand CloseEditFromRegion
+        {
+            get { return closeEditFromRegion; }
+        }
+
+        private void CloseEditFromRegionCommand()
+        {
+            popupEditFromRegion.Close();
+        }
+
+        #endregion
+
+        #region View PDF (To and From) Region
+        private RelayCommand viewPdfToRegion;
+
+        public RelayCommand ViewPdfToRegion
+        {
+            get { return viewPdfToRegion; }
+        }
+
+        private void OpenPdfToRegion(object parameter)
+        {
+
+            if (parameter is RegionComModel documentObj)
+            {
+                try
+                {
+                    if (documentObj.ScannedCopy != null)
+                    {
+                        // Use Process.Start to open the PDF file
+                        string pdfPath = documentObj.ScannedCopy.ToString();
+                        Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
+                    }
+                    else
+                    {
+                        MessageBox.Show("No Pdf File uploded");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to open PDF: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No valid PDF file path provided.");
+            }
+        }
+
+        #endregion
+
+        #region Search 
+        private string searchTextRegionCom;
+
+        public string SearchTextRegionCom
+        {
+            get { return searchTextRegionCom; }
+            set { searchTextRegionCom = value; OnPropertyChanged("SearchTextRegionCom"); }
+        }
+
+
+        private RelayCommand btnSearchRegionCom;
+
+        public RelayCommand BtnSearchRegionCom
+        {
+            get { return btnSearchRegionCom; }
+        }
+
+        private void ExecuteSearch()
+        {
+            if (string.IsNullOrEmpty(SearchTextRegionCom))
+            {
+                LoadAllRegionCom();
+            }
+            else
+            {
+                LoadAllRegionCom();
+                var filteredDocuments = RegionComList.Where(d =>
+                     (d.DateReceived.HasValue && d.DateReceived.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (d.DocumentDate.HasValue && d.DocumentDate.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(d.TypeOfDocs) && d.TypeOfDocs.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(d.SubjectParticulars) && d.SubjectParticulars.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(d.RefNumber) && d.RefNumber.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(d.ReceivedFrom) && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(d.Remarks) && d.Remarks.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
+                 ).ToList();
+
+                // Bind the filtered list to the DataGrid
+                RegionComList = new ObservableCollection<RegionComModel>(filteredDocuments);
+            }
+        }
+        #endregion
 
     }
 }

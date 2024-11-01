@@ -201,6 +201,96 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Save Edited ToRegion
+        public bool SaveEditedToRegion(RegionComModel ToRegionData)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, numberOfCopies = @numberOfCopies, dateSignBySA = @dateSignBySA, dateSentOutToRegion = @dateSentOutToRegion, subjectParticulars = @subjectParticulars, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, dateReceiveByRegion = @dateReceiveByRegion, location = @location, lbcRefNumber = @lbcRefNumber, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction  WHERE id = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@id", ToRegionData.Id);
+                cmd.Parameters.AddWithValue("@dateReceived", ToRegionData.DateReceived);
+                cmd.Parameters.AddWithValue("@documentDate", ToRegionData.DocumentDate);
+                cmd.Parameters.AddWithValue("@typeOfDocs", ToRegionData.TypeOfDocs);
+                cmd.Parameters.AddWithValue("@refNumber", ToRegionData.RefNumber);
+                cmd.Parameters.AddWithValue("@receivedFrom", ToRegionData.ReceivedFrom);
+                cmd.Parameters.AddWithValue("@numberOfCopies", ToRegionData.NumberOfCopies);
+                cmd.Parameters.AddWithValue("@dateSignBySA", ToRegionData.DateSignBySA);
+                cmd.Parameters.AddWithValue("@dateSentOutToRegion", ToRegionData.DateSentOutToRegion);
+                cmd.Parameters.AddWithValue("@subjectParticulars", ToRegionData.SubjectParticulars);
+                cmd.Parameters.AddWithValue("@dateSentOutToTeam", ToRegionData.DateSentOutToTeam);
+                cmd.Parameters.AddWithValue("@receiver", ToRegionData.Receiver);
+                cmd.Parameters.AddWithValue("@dateReceiveByRegion", ToRegionData.DateReceiveByRegion);
+                cmd.Parameters.AddWithValue("@location", ToRegionData.Location);
+                cmd.Parameters.AddWithValue("@remarks", ToRegionData.Remarks);
+                cmd.Parameters.AddWithValue("@scannedCopy", ToRegionData.ScannedCopy);
+                cmd.Parameters.AddWithValue("@lbcRefNumber", ToRegionData.LbcRefNumber);
+                cmd.Parameters.AddWithValue("@direction", ToRegionData.Direction);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+        }
+
+
+        #endregion
+
+        #region Save Edited FromRegion
+        public bool SaveEditedFromRegion(RegionComModel FromRegionData)
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, addressee = @addressee, details = @details, municipality = @municipality, subjectParticulars = @subjectParticulars, barangay = @barangay, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, location = @location, actionableDoc = @actionableDoc, dateDeadline = @dateDeadline, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction  WHERE id = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@id", FromRegionData.Id);
+                cmd.Parameters.AddWithValue("@dateReceived", FromRegionData.DateReceived);
+                cmd.Parameters.AddWithValue("@documentDate", FromRegionData.DocumentDate);
+                cmd.Parameters.AddWithValue("@typeOfDocs", FromRegionData.TypeOfDocs);
+                cmd.Parameters.AddWithValue("@refNumber", FromRegionData.RefNumber);
+                cmd.Parameters.AddWithValue("@receivedFrom", FromRegionData.ReceivedFrom);
+                cmd.Parameters.AddWithValue("@addressee", FromRegionData.Addressee);
+                cmd.Parameters.AddWithValue("@details", FromRegionData.Details);
+                cmd.Parameters.AddWithValue("@municipality", FromRegionData.Municipality);
+                cmd.Parameters.AddWithValue("@subjectParticulars", FromRegionData.SubjectParticulars);
+                cmd.Parameters.AddWithValue("@barangay", FromRegionData.Barangay);
+                cmd.Parameters.AddWithValue("@dateSentOutToTeam", FromRegionData.DateSentOutToTeam);
+                cmd.Parameters.AddWithValue("@receiver", FromRegionData.Receiver);
+                cmd.Parameters.AddWithValue("@location", FromRegionData.Location);
+                cmd.Parameters.AddWithValue("@actionableDoc", FromRegionData.ActionableDoc);
+                cmd.Parameters.AddWithValue("@dateDeadline", FromRegionData.DateDeadline);
+                cmd.Parameters.AddWithValue("@remarks", FromRegionData.Remarks);
+                cmd.Parameters.AddWithValue("@scannedCopy", FromRegionData.ScannedCopy);
+                cmd.Parameters.AddWithValue("@direction", FromRegionData.Direction);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+        }
+
+
+        #endregion
+
 
     }
 }
+
