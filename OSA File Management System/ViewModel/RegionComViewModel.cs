@@ -52,6 +52,10 @@ namespace OSA_File_Management_System.ViewModel
             closeEditFromRegion = new RelayCommand(CloseEditFromRegionCommand);
             viewPdfToRegion = new RelayCommand(OpenPdfToRegion);
             btnSearchRegionCom = new RelayCommand(ExecuteSearch);
+            fromRegionFullData = new RegionComModel();
+            toRegionFullData = new RegionComModel();
+            showFullData = new RelayCommand(OpenFullDetailsForm);
+
             LoadAllRegionCom();
         }
 
@@ -555,6 +559,81 @@ namespace OSA_File_Management_System.ViewModel
             }
         }
         #endregion
+
+        #region Show Full Details (From Region or To Region )
+
+
+        private RegionComModel fromRegionFullData;
+
+        public RegionComModel FromRegionFullData
+        {
+            get { return fromRegionFullData; }
+            set { fromRegionFullData = value; OnPropertyChanged("FromRegionFullData"); }
+        }
+
+        private RegionComModel toRegionFullData;
+
+        public RegionComModel ToRegionFullData
+        {
+            get { return toRegionFullData; }
+            set { toRegionFullData = value; OnPropertyChanged("ToRegionFullData"); }
+        }
+
+
+        private RelayCommand showFullData;
+
+        public RelayCommand ShowFullData
+        {
+            get { return showFullData; }
+        }
+
+        private FullDetailsFromRegion popupFullDetailsFromRegion;        //put it outside the method to close from another method
+        private FullDetailsToRegion popupFullDetailsToRegion;            //put it outside the method to close from another method
+
+        private void OpenFullDetailsForm(object parameter)
+        {
+            if (parameter is RegionComModel documentToShow)
+            {
+                if (documentToShow.Direction == "To Region")
+                {
+                    ToRegionFullData = documentToShow;
+                    // Create the popup window
+                    popupFullDetailsToRegion = new FullDetailsToRegion();
+
+                    // Bind ViewModel to the popup window
+                    popupFullDetailsToRegion.DataContext = this;
+
+                    // Show the popup window
+                    popupFullDetailsToRegion.ShowDialog();
+                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+
+                }
+                else if (documentToShow.Direction == "From Region")
+                {
+                    FromRegionFullData = documentToShow;
+                    // Create the popup window
+                    popupFullDetailsFromRegion = new FullDetailsFromRegion();
+
+                    // Bind ViewModel to the popup window
+                    popupFullDetailsFromRegion.DataContext = this;
+
+                    // Show the popup window
+                    popupFullDetailsFromRegion.ShowDialog();
+                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+
+                }
+                else
+                {
+                    MessageBox.Show(" Direction not found");
+                }
+
+            }
+
+        }
+
+        #endregion
+
+
 
     }
 }

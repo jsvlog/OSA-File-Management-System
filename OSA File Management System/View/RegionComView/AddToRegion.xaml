@@ -88,7 +88,7 @@
 
         <!--Subject/Particulars-->
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Subject / Particulars" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=AddToRegionData.SubjectParticulars}"/>
+        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=AddToRegionData.SubjectParticulars}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Date Sent To Teams-->
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Date Sent Out to Teams" FontWeight="Bold"/>

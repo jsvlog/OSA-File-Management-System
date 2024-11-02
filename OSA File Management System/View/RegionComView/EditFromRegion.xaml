@@ -95,7 +95,7 @@
 
         <!-- 9 Subject/Particulars-->
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Subject / Particulars" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=EditFromRegionData.SubjectParticulars}"/>
+        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=EditFromRegionData.SubjectParticulars}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!-- 10 Barangay-->
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Barangay" FontWeight="Bold"/>

@@ -1,0 +1,301 @@
+﻿<Window x:Class="OSA_File_Management_System.View.RegionComView.FullDetailsFromRegion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
+        mc:Ignorable="d"
+        Title="FullDetailsFromRegion" Height="700" Width="1100" Background="#E9EED9">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="10,10,3,10" />
+            <Setter Property="Foreground" Value="#133E87"/>
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="AlternateTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="3,10" />
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <!--1 Date Received-->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Date Received:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateReceived, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--2 Document Date-->
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Document Date:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DocumentDate, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--3 Typre of Documenmt-->
+        <TextBlock Grid.Row="0" Grid.Column="4" Text="Type of Document:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.TypeOfDocs}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--4 Control No.-->
+        <TextBlock Grid.Row="0" Grid.Column="6" Text="Control No.:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.RefNumber}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--5 Received From-->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Received From:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.ReceivedFrom}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--6 Addressee-->
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Addressee:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Addressee}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--7 Details-->
+        <TextBlock Grid.Row="1" Grid.Column="4" Text="Details:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Details}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--8 Municipality-->
+        <TextBlock Grid.Row="1" Grid.Column="6" Text="Municipality:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Municipality}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--9 Subject / Particulars-->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Subject / Particulars :" FontWeight="Bold"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="7" Text="{Binding FromRegionFullData.SubjectParticulars}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--10 Barangay-->
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Barangay:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Barangay}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--11 Date Sent Out to Teams-->
+        <TextBlock Grid.Row="3" Grid.Column="2" Text="Date Sent Out to Teams:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateSentOutToTeam, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--12 Receiver-->
+        <TextBlock Grid.Row="3" Grid.Column="4" Text="Receiver:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Receiver}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--13 Location-->
+        <TextBlock Grid.Row="3" Grid.Column="6" Text="Location:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="3" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Location}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--14 Actionable Doc?-->
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Actionable Document:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.ActionableDoc}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--15 Date Deadline-->
+        <TextBlock Grid.Row="4" Grid.Column="2" Text="Date Deadline:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateDeadline, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!--16 Remarks-->
+        <TextBlock Grid.Row="4" Grid.Column="4" Text="Remarks:" FontWeight="Bold"/>
+        <TextBlock Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Remarks}" Style="{StaticResource AlternateTextBlockStyle}"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="4" Grid.Column="6" Grid.ColumnSpan="2" Margin="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="View PDF" Width="100" Command="{Binding}"/>
+            <Button Content="Edit" Width="100" Command="{Binding }"/>
+        </StackPanel>
+        
+        
+        
+        
+        <!-- This Part is for data grid that are related to the viewd Doc-->
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" Text="Data Related to the Current Document" FontWeight="Bold"/>
+        <DataGrid x:Name="RegionComDataGrid" Grid.Row="6" Grid.ColumnSpan="8" AutoGenerateColumns="False"  Margin="2" CanUserSortColumns="True"
+HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding RegionComViewModel.RegionComList, Mode=TwoWay}">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </DataGrid.Resources>
+            <!-- Define the columns of the DataGrid -->
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="5*" Header="Date Received" SortMemberPath="DateReceived">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Date Received" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateReceived, StringFormat=MM-dd-yyyy}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="5*" Header="Document Date">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Document Date" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="5*" Header="Type of Document">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Type of Document" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TypeOfDocs}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="30*" Header="Subject / Particulars" >
+                    <DataGridTemplateColumn.HeaderTemplate >
+                        <DataTemplate>
+                            <TextBlock Text="Subject / Particulars" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding SubjectParticulars}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="5*" Header="Ref. No. / Transmittal No.">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Control No." 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RefNumber}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="5*" Header="Received From">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Received From" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ReceivedFrom}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="8*" Header="Remarks">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Remarks" 
+                 TextWrapping="Wrap" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Remarks}" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="Edit" Header="Edit"
+            Command="{Binding RegionComViewModel.ShowEditFromOrTo}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    <MenuItem x:Name="parameter" Header="Delete"
+            Command="{Binding RegionComViewModel.DeleteData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    <MenuItem x:Name="param" Header="View Pdf" 
+            Command="{Binding RegionComViewModel.ViewPdfToRegion}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    <MenuItem x:Name="ViewDetails" Header="View Full Details"
+            Command="{Binding RegionComViewModel.ShowFullData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+
+
+
+
+
+
+
+    </Grid>
+</Window>
