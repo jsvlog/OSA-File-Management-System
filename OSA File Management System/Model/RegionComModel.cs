@@ -18,9 +18,9 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
-        private int id;
+        private int? id;
 
-        public int Id
+        public int? Id
         {
             get { return id; }
             set { id = value; OnPropertyChanged("Id"); }

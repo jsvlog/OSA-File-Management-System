@@ -19,43 +19,56 @@
 
         <Grid Background="CadetBlue">
             <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image Source="pack://application:,,,/images/coa_logo.png" 
+            <Image Source="pack://application:,,,/images/coa_logo.png" Margin="2,15,2,2"
             Width="100" Height="100" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="0" VerticalAlignment="Center"/>
 
-            <TextBlock Text="OSA File Management System"
+            <TextBlock Text="OSA File Management System" 
                     FontFamily="Arial"  
                     FontSize="15"    
                     FontWeight="Bold"    
                     Foreground="White"   
-                    Margin="20"          
+                    Margin="5"          
                     HorizontalAlignment="Center" 
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     TextWrapping="Wrap"  
                     TextAlignment="Center" Grid.Row="1" />
+            <TextBlock Text="LGAS-B, Oriental Mindoro"
+                    FontFamily="Arial"  
+                    FontSize="10"    
+                    FontWeight="ExtraLight"    
+                    Foreground="White"   
+                    Margin="0"          
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap" 
+                    TextAlignment="Center" Grid.Row="2" />
         </Grid>
 
         <ListBox x:Name="CategoryListBox" SelectionChanged="CategoryListBox_SelectionChanged" Grid.Column="0" Grid.Row="1" Background="CadetBlue">
+
+
             <ListBoxItem Margin="5,20,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/Inventory.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Inventory" VerticalAlignment="Center" Margin="4"/>
+                    <Image Source="pack://application:,,,/images/RegionCom.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="Region Communications" VerticalAlignment="Center" Margin="4" FontWeight="Bold" Foreground="#131842" />
                 </StackPanel>
             </ListBoxItem>
 
             <ListBoxItem Margin="5,20,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/RegionCom.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Region Communications" VerticalAlignment="Center" Margin="4"/>
+                    <Image Source="pack://application:,,,/images/Inventory.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="Inventory" VerticalAlignment="Center" Margin="4" FontWeight="Bold" Foreground="#131842"/>
                 </StackPanel>
             </ListBoxItem>
 
             <ListBoxItem Margin="5,20,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/images/Certificate.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Certificate of Appearance" VerticalAlignment="Center" TextWrapping="NoWrap" Margin="4"/>
+                    <TextBlock Text="Certificate of Appearance" VerticalAlignment="Center" TextWrapping="NoWrap" Margin="4" FontWeight="Bold" Foreground="#131842"/>
                 </StackPanel>
             </ListBoxItem>
         </ListBox>

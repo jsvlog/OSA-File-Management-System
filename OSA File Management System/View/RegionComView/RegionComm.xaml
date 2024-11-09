@@ -74,12 +74,12 @@
                         <RowDefinition Height="20*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Latest transmittal to region:" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Foreground="#0D92F4"/>
-                    <TextBlock Text="Latest transmittal to teams:" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Foreground="#0D92F4"/>
-                    <TextBlock Text="Latest documents from region:" FontWeight="Bold" Grid.Column="0" Grid.Row="2" Foreground="#0D92F4"/>
-                    <TextBlock Text="No. of actionable document this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="0" Foreground="#0D92F4"/>
-                    <TextBlock Text="No. of documents sent this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="1" Foreground="#0D92F4"/>
-                    <TextBlock Text="No. of documents received this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Foreground="#0D92F4"/>
+                    <TextBlock Text="Latest transmittal to region:" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="Latest transmittal to teams:" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="Latest documents from region:" FontWeight="Bold" Grid.Column="0" Grid.Row="2" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="No. of actionable document this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="0" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="No. of documents sent this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="1" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="No. of documents received this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Foreground="WhiteSmoke"/>
 
                     <TextBlock Text="N/A"  Grid.Column="1" Grid.Row="0"/>
                     <TextBlock Text="N/A"  Grid.Column="1" Grid.Row="1"/>

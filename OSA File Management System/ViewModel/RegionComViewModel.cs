@@ -55,9 +55,11 @@ namespace OSA_File_Management_System.ViewModel
             fromRegionFullData = new RegionComModel();
             toRegionFullData = new RegionComModel();
             showFullData = new RelayCommand(OpenFullDetailsForm);
-
+            viewPdfFullData = new RelayCommand(ViewPdfFullDataCommand);
+            showEditFromFullData = new RelayCommand(ShowEditFromFullDataCommand);
             LoadAllRegionCom();
         }
+
 
 
 
@@ -589,6 +591,8 @@ namespace OSA_File_Management_System.ViewModel
 
         private FullDetailsFromRegion popupFullDetailsFromRegion;        //put it outside the method to close from another method
         private FullDetailsToRegion popupFullDetailsToRegion;            //put it outside the method to close from another method
+        public string ActionableDocDisplayFrom => FromRegionFullData.ActionableDoc == true ? "Yes" : FromRegionFullData.ActionableDoc == false ? "No" : "N/A"; //This is to display Yes or No in the textbox instead of True or False
+        public string ActionableDocDisplayTo => ToRegionFullData.ActionableDoc == true ? "Yes" : ToRegionFullData.ActionableDoc == false ? "No" : "N/A"; //This is to display Yes or No in the textbox instead of True or False
 
         private void OpenFullDetailsForm(object parameter)
         {
@@ -603,8 +607,10 @@ namespace OSA_File_Management_System.ViewModel
                     // Bind ViewModel to the popup window
                     popupFullDetailsToRegion.DataContext = this;
 
+
                     // Show the popup window
                     popupFullDetailsToRegion.ShowDialog();
+                    ToRegionFullData = new RegionComModel(); //to refresh or empty the value of toRegionFullData after closing
                     LoadAllRegionCom(); // after closing the popup this will load again the whole data
 
                 }
@@ -619,12 +625,13 @@ namespace OSA_File_Management_System.ViewModel
 
                     // Show the popup window
                     popupFullDetailsFromRegion.ShowDialog();
+                    FromRegionFullData = new RegionComModel(); //to refresh or empty the value of fromRegionFullData after closing
                     LoadAllRegionCom(); // after closing the popup this will load again the whole data
 
                 }
                 else
                 {
-                    MessageBox.Show(" Direction not found");
+                    MessageBox.Show(" Direction not found in viewinf full Details");
                 }
 
             }
@@ -632,6 +639,94 @@ namespace OSA_File_Management_System.ViewModel
         }
 
         #endregion
+
+        #region View PDF From Full Data Window
+        private RelayCommand viewPdfFullData;
+
+        public RelayCommand ViewPdfFullData
+        {
+            get { return viewPdfFullData; }
+        }
+
+
+        private void ViewPdfFullDataCommand()
+        {
+            try
+            {
+                if (ToRegionFullData.ScannedCopy == null && FromRegionFullData.ScannedCopy != null)
+                {
+                    // Use Process.Start to open the PDF file
+                    string pdfPath = FromRegionFullData.ScannedCopy.ToString();
+                    Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
+                    
+
+                }
+                else if (ToRegionFullData.ScannedCopy != null && FromRegionFullData.ScannedCopy == null)
+                {
+                    // Use Process.Start to open the PDF file
+                    string pdfPath = ToRegionFullData.ScannedCopy.ToString();
+                    Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
+                }
+                else
+                {
+                    MessageBox.Show("PDF file Empty");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                
+            }
+
+
+
+
+        }
+
+        #endregion
+
+        #region Edit Data From Full Data Window
+
+        private RelayCommand showEditFromFullData;
+
+        public RelayCommand ShowEditFromFullData
+        {
+            get { return showEditFromFullData; }
+            set { showEditFromFullData = value; }
+        }
+
+        private void ShowEditFromFullDataCommand()
+        {
+            RegionComModel parameterModel = null;
+
+            // Check which full data is available and set the parameter model accordingly
+            if (FromRegionFullData.Direction != null && ToRegionFullData.Direction == null)
+            {
+                parameterModel = FromRegionFullData;
+            }
+            else if (ToRegionFullData.Direction != null && FromRegionFullData.Direction == null)
+            {
+                parameterModel = ToRegionFullData;
+            }
+
+            // If parameterModel is set, proceed to open the edit window
+            if (parameterModel != null)
+            {
+                OpenEditFromOrTo(parameterModel);
+            }
+            else
+            {
+                MessageBox.Show("Problem Showing Edit Form");
+            }
+
+        }
+
+
+        #endregion
+
+
+        
+
 
 
 

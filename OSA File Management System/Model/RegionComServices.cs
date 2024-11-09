@@ -87,14 +87,19 @@ namespace OSA_File_Management_System.Model
         public bool addToRegionCom(RegionComModel objRegionCom)
         {
             objRegionCom.Direction = "To Region";
+            if (objRegionCom.TrackingCode == null)
+            {
+                objRegionCom.TrackingCode = Guid.NewGuid().ToString();
+            }
+
             try
             {
                 if (connection.State == ConnectionState.Closed)
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, numberOfCopies, dateSignBySA, dateSentOutToRegion, subjectParticulars, dateSentOutToTeam, receiver, dateReceiveByRegion, location, lbcRefNumber, remarks, scannedCopy, direction) " +
-                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @numberOfCopies, @dateSignBySA, @dateSentOutToRegion, @subjectParticulars, @dateSentOutToTeam, @receiver, @dateReceiveByRegion, @location, @lbcRefNumber, @remarks, @scannedCopy, @direction)";
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, numberOfCopies, dateSignBySA, dateSentOutToRegion, subjectParticulars, dateSentOutToTeam, receiver, dateReceiveByRegion, location, lbcRefNumber, remarks, scannedCopy, direction, trackingCode) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @numberOfCopies, @dateSignBySA, @dateSentOutToRegion, @subjectParticulars, @dateSentOutToTeam, @receiver, @dateReceiveByRegion, @location, @lbcRefNumber, @remarks, @scannedCopy, @direction, @trackingCode)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
@@ -114,6 +119,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
                 cmd.Parameters.AddWithValue("@lbcRefNumber", objRegionCom.LbcRefNumber);
                 cmd.Parameters.AddWithValue("@direction", objRegionCom.Direction);
+                cmd.Parameters.AddWithValue("@trackingCode", objRegionCom.TrackingCode);
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -132,14 +138,19 @@ namespace OSA_File_Management_System.Model
         public bool addFromRegionCom(RegionComModel objRegionCom)
         {
             objRegionCom.Direction = "From Region";
+            if (objRegionCom.TrackingCode == null)
+            {
+                objRegionCom.TrackingCode = Guid.NewGuid().ToString();
+            }
+
             try
             {
                 if (connection.State == ConnectionState.Closed)
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, addressee, details, municipality, subjectParticulars, barangay, dateSentOutToTeam, receiver, location, actionableDoc, dateDeadline, remarks, scannedCopy, direction) " +
-                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @addressee, @details, @municipality, @subjectParticulars, @barangay, @dateSentOutToTeam, @receiver, @location, @actionableDoc, @dateDeadline, @remarks, @scannedCopy, @direction)";
+                string query = "INSERT INTO regioncom (dateReceived, documentDate, typeOfDocs, refNumber, receivedFrom, addressee, details, municipality, subjectParticulars, barangay, dateSentOutToTeam, receiver, location, actionableDoc, dateDeadline, remarks, scannedCopy, direction, trackingCode) " +
+                                              "VALUES (@dateReceived, @documentDate, @typeOfDocs, @refNumber, @receivedFrom, @addressee, @details, @municipality, @subjectParticulars, @barangay, @dateSentOutToTeam, @receiver, @location, @actionableDoc, @dateDeadline, @remarks, @scannedCopy, @direction, @trackingCode)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@dateReceived", objRegionCom.DateReceived);
@@ -160,6 +171,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@remarks", objRegionCom.Remarks);
                 cmd.Parameters.AddWithValue("@scannedCopy", objRegionCom.ScannedCopy);
                 cmd.Parameters.AddWithValue("@direction", objRegionCom.Direction);
+                cmd.Parameters.AddWithValue("@trackingCode", objRegionCom.TrackingCode);
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -248,6 +260,11 @@ namespace OSA_File_Management_System.Model
         #region Save Edited FromRegion
         public bool SaveEditedFromRegion(RegionComModel FromRegionData)
         {
+            if (FromRegionData.TrackingCode == null)
+            {
+                FromRegionData.TrackingCode = Guid.NewGuid().ToString();
+            }
+
             try
             {
                 if (connection.State == ConnectionState.Closed)
@@ -255,7 +272,7 @@ namespace OSA_File_Management_System.Model
                     connection.Open();
                 }
 
-                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, addressee = @addressee, details = @details, municipality = @municipality, subjectParticulars = @subjectParticulars, barangay = @barangay, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, location = @location, actionableDoc = @actionableDoc, dateDeadline = @dateDeadline, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction  WHERE id = @id";
+                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, addressee = @addressee, details = @details, municipality = @municipality, subjectParticulars = @subjectParticulars, barangay = @barangay, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, location = @location, actionableDoc = @actionableDoc, dateDeadline = @dateDeadline, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction, trackingCode = @trackingCode  WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", FromRegionData.Id);
                 cmd.Parameters.AddWithValue("@dateReceived", FromRegionData.DateReceived);
@@ -276,6 +293,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@remarks", FromRegionData.Remarks);
                 cmd.Parameters.AddWithValue("@scannedCopy", FromRegionData.ScannedCopy);
                 cmd.Parameters.AddWithValue("@direction", FromRegionData.Direction);
+                cmd.Parameters.AddWithValue("@trackingCode", FromRegionData.TrackingCode);
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }
@@ -286,8 +304,6 @@ namespace OSA_File_Management_System.Model
             }
             return true;
         }
-
-
         #endregion
 
 

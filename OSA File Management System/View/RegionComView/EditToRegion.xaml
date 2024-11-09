@@ -30,107 +30,108 @@
             <Setter Property="Foreground" Value="#133E87"/>
         </Style>
     </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="20">
 
-    <Grid Margin="20">
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="10*"/>
-        </Grid.ColumnDefinitions>
-
-        <!--Date Received-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Date Received" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateReceived, Mode=TwoWay}"/>
-
-        <!--Document Date-->
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Document Date" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DocumentDate, Mode=TwoWay}"/>
-
-        <!--Type of Document-->
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="Type of Document" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=EditToRegionData.TypeOfDocs}"/>
-
-        <!--Control No.-->
-        <TextBlock Grid.Row="0" Grid.Column="3" Text="Control No." FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=EditToRegionData.RefNumber}"/>
-
-        <!--Received From-->
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Received From" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=EditToRegionData.ReceivedFrom}"/>
-
-        <!--Number of Copies-->
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="Number of Copies" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditToRegionData.NumberOfCopies}"/>
-
-        <!--Date Sign by SA-->
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Date Sign by SA" FontWeight="Bold"/>
-        <DatePicker Grid.Row="3" Grid.Column="2" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSignBySA, Mode=TwoWay}"/>
-
-        <!--Date Sent Out to Region-->
-        <TextBlock Grid.Row="2" Grid.Column="3" Text="Date Sent out to Region" FontWeight="Bold"/>
-        <DatePicker Grid.Row="3" Grid.Column="3" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSentOutToRegion, Mode=TwoWay}"/>
-
-        <!--Subject/Particulars-->
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Subject / Particulars" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=EditToRegionData.SubjectParticulars}" TextWrapping="Wrap" AcceptsReturn="True"/>
-
-        <!--Date Sent To Teams-->
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="Date Sent Out to Teams" FontWeight="Bold"/>
-        <DatePicker Grid.Row="7" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSentOutToTeam, Mode=TwoWay}"/>
-
-        <!--Receiver-->
-        <TextBlock Grid.Row="6" Grid.Column="1" Text="Receiver" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Path=EditToRegionData.Receiver}"/>
-
-        <!--Date Received by Region-->
-        <TextBlock Grid.Row="6" Grid.Column="2" Text="Date Received by Region" FontWeight="Bold"/>
-        <DatePicker Grid.Row="7" Grid.Column="2" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateReceiveByRegion, Mode=TwoWay}"/>
-
-        <!--Location-->
-        <TextBlock Grid.Row="6" Grid.Column="3" Text="Location" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=EditToRegionData.Location}"/>
-
-        <!--LBC Reference Number-->
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="LBC Reference Number" FontWeight="Bold"/>
-        <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding Path=EditToRegionData.LbcRefNumber}"/>
-
-        <!--Remarks-->
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="Remarks" FontWeight="Bold"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Path=EditToRegionData.Remarks}"/>
-
-        <!-- Scanned Copy -->
-        <TextBlock Grid.Row="8" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
-        <Grid Grid.Row="9" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFile}"/>
-            <TextBox Grid.Column="1" Text="{Binding Path=EditToRegionData.ScannedCopy}"/>
+
+            <!--Date Received-->
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Date Received" FontWeight="Bold"/>
+            <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateReceived, Mode=TwoWay}"/>
+
+            <!--Document Date-->
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Document Date" FontWeight="Bold"/>
+            <DatePicker Grid.Row="1" Grid.Column="1" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DocumentDate, Mode=TwoWay}"/>
+
+            <!--Type of Document-->
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Type of Document" FontWeight="Bold"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=EditToRegionData.TypeOfDocs}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Control No.-->
+            <TextBlock Grid.Row="0" Grid.Column="3" Text="Control No." FontWeight="Bold"/>
+            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=EditToRegionData.RefNumber}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Received From-->
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Received From" FontWeight="Bold"/>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=EditToRegionData.ReceivedFrom}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Number of Copies-->
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Number of Copies" FontWeight="Bold"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditToRegionData.NumberOfCopies}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Date Sign by SA-->
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Date Sign by SA" FontWeight="Bold"/>
+            <DatePicker Grid.Row="3" Grid.Column="2" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSignBySA, Mode=TwoWay}"/>
+
+            <!--Date Sent Out to Region-->
+            <TextBlock Grid.Row="2" Grid.Column="3" Text="Date Sent out to Region" FontWeight="Bold"/>
+            <DatePicker Grid.Row="3" Grid.Column="3" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSentOutToRegion, Mode=TwoWay}"/>
+
+            <!--Subject/Particulars-->
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Subject / Particulars" FontWeight="Bold"/>
+            <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=EditToRegionData.SubjectParticulars}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Date Sent To Teams-->
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Date Sent Out to Teams" FontWeight="Bold"/>
+            <DatePicker Grid.Row="7" Grid.Column="0" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateSentOutToTeam, Mode=TwoWay}"/>
+
+            <!--Receiver-->
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Receiver" FontWeight="Bold"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Path=EditToRegionData.Receiver}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Date Received by Region-->
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="Date Received by Region" FontWeight="Bold"/>
+            <DatePicker Grid.Row="7" Grid.Column="2" FontSize="15" Margin="5" SelectedDate="{Binding Path=EditToRegionData.DateReceiveByRegion, Mode=TwoWay}"/>
+
+            <!--Location-->
+            <TextBlock Grid.Row="6" Grid.Column="3" Text="Location" FontWeight="Bold"/>
+            <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=EditToRegionData.Location}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--LBC Reference Number-->
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="LBC Reference Number" FontWeight="Bold"/>
+            <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding Path=EditToRegionData.LbcRefNumber}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Remarks-->
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Remarks" FontWeight="Bold"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Path=EditToRegionData.Remarks}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!-- Scanned Copy -->
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
+            <Grid Grid.Row="9" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFile}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=EditToRegionData.ScannedCopy}"/>
+            </Grid>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Save" Width="100" Command="{Binding SaveEditedToRegion}"/>
+                <Button Content="Cancel" Width="100" Command="{Binding CloseEditToRegion}"/>
+            </StackPanel>
+
+
         </Grid>
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding SaveEditedToRegion}"/>
-            <Button Content="Cancel" Width="100" Command="{Binding CloseEditToRegion}"/>
-        </StackPanel>
-
-
-    </Grid>
+    </ScrollViewer>
 </Window>

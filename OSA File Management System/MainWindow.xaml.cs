@@ -23,7 +23,7 @@ namespace OSA_File_Management_System
         public MainWindow()
         {
             InitializeComponent();
-            ContentArea.Content = new View.Inventory();
+            ContentArea.Content = new View.RegionComView.RegionComm();
 
             ViewModel = new DocumentViewModel();
             MainViewModel = new MainViewModel();

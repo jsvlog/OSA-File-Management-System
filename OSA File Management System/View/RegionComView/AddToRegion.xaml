@@ -64,19 +64,19 @@
 
         <!--Type of Document-->
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Type of Document" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=AddToRegionData.TypeOfDocs}"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=AddToRegionData.TypeOfDocs}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Control No.-->
         <TextBlock Grid.Row="0" Grid.Column="3" Text="Control No." FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=AddToRegionData.RefNumber}"/>
+        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=AddToRegionData.RefNumber}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Received From-->
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Received From" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=AddToRegionData.ReceivedFrom}"/>
+        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=AddToRegionData.ReceivedFrom}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Number of Copies-->
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Number of Copies" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=AddToRegionData.NumberOfCopies}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=AddToRegionData.NumberOfCopies}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Date Sign by SA-->
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Date Sign by SA" FontWeight="Bold"/>
@@ -96,7 +96,7 @@
 
         <!--Receiver-->
         <TextBlock Grid.Row="6" Grid.Column="1" Text="Receiver" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Path=AddToRegionData.Receiver}"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Path=AddToRegionData.Receiver}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Date Received by Region-->
         <TextBlock Grid.Row="6" Grid.Column="2" Text="Date Received by Region" FontWeight="Bold"/>
@@ -104,15 +104,15 @@
 
         <!--Location-->
         <TextBlock Grid.Row="6" Grid.Column="3" Text="Location" FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=AddToRegionData.Location}"/>
+        <TextBox Grid.Row="7" Grid.Column="3" Text="{Binding Path=AddToRegionData.Location}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--LBC Reference Number-->
         <TextBlock Grid.Row="8" Grid.Column="0" Text="LBC Reference Number" FontWeight="Bold"/>
-        <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding Path=AddToRegionData.LbcRefNumber}"/>
+        <TextBox Grid.Row="9" Grid.Column="0" Text="{Binding Path=AddToRegionData.LbcRefNumber}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!--Remarks-->
         <TextBlock Grid.Row="8" Grid.Column="1" Text="Remarks" FontWeight="Bold"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Path=AddToRegionData.Remarks}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Path=AddToRegionData.Remarks}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <!-- Scanned Copy -->
         <TextBlock Grid.Row="8" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
@@ -125,8 +125,15 @@
             <TextBox Grid.Column="1" Text="{Binding Path=AddToRegionData.ScannedCopy}"/>
         </Grid>
 
+        <Border Grid.Row="10" Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="Gray" Margin="5" HorizontalAlignment="Left" Background="#219B9D">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Tracking ID for Related Docs" FontWeight="Bold" VerticalAlignment="Center" Margin="5"/>
+                <TextBox Width="350" Margin="5" Text="{Binding Path=AddToRegionData.TrackingCode}"/>
+            </StackPanel>
+        </Border>
+
         <!-- Buttons -->
-        <StackPanel Grid.Row="10" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="11" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Save" Width="100" Command="{Binding AddToRegion}"/>
             <Button Content="Cancel" Width="100" Command="{Binding CloseAddToRegion}"/>
         </StackPanel>
