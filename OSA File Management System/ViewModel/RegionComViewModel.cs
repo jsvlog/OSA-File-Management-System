@@ -28,11 +28,12 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
         private RegionComServices regionComServices;
-        
-        
+
+
         public RegionComViewModel()
         {
             regionComServices = new RegionComServices();
+            btnLoadData = new RelayCommand(LoadAllRegionCom);
             showAddToRegion = new RelayCommand(OpenAddDocumentForm);
             addToRegion = new RelayCommand(AddToRegionCommand);
             closeAddToRegion = new RelayCommand(CloseAddToRegionCommand);
@@ -57,6 +58,7 @@ namespace OSA_File_Management_System.ViewModel
             showFullData = new RelayCommand(OpenFullDetailsForm);
             viewPdfFullData = new RelayCommand(ViewPdfFullDataCommand);
             showEditFromFullData = new RelayCommand(ShowEditFromFullDataCommand);
+            deleteFromFullData = new RelayCommand(DeleteFromFullDataCommand);
             LoadAllRegionCom();
         }
 
@@ -78,6 +80,114 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
+        #region Refresh Data of Gid 
+        private RelayCommand btnLoadData;
+
+        public RelayCommand BtnLoadData
+        {
+            get { return btnLoadData; }
+            set { btnLoadData = value; OnPropertyChanged("BtnLoadData"); }
+        }
+
+
+        #endregion
+
+        #region Filter if To Region or From Region or All is to be displayed
+        // RadioButton IsChecked properties
+        private bool _isAllChecked;
+        public bool IsAllChecked
+        {
+            get { return _isAllChecked; }
+            set
+            {
+                _isAllChecked = value;
+                FilterDocs();
+                OnPropertyChanged("IsAllChecked");
+            }
+        }
+
+        private bool _isToRegionChecked;
+        public bool IsToRegionChecked
+        {
+            get { return _isToRegionChecked; }
+            set
+            {
+                _isToRegionChecked = value;
+                FilterDocs();
+                OnPropertyChanged("IsToRegionChecked");
+            }
+        }
+
+        private bool _isFromRegionChecked;
+        public bool IsFromRegionChecked
+        {
+            get { return _isFromRegionChecked; }
+            set
+            {
+                _isFromRegionChecked = value;
+                FilterDocs();
+                OnPropertyChanged("IsFromRegionChecked");
+            }
+        }
+
+        private bool isHidden;
+
+        public bool IsHidden
+        {
+            get { return isHidden; }
+            set { isHidden = value; OnPropertyChanged("IsHidden"); }
+        }
+
+        //to show if you want to show To region, From Region or All
+        private void FilterDocs()
+        {
+            if (IsAllChecked)
+            {
+                foreach (var doc in RegionComList)
+                {
+                    doc.Visib = true;
+                }
+
+            }
+            else if (IsToRegionChecked)
+            {
+                foreach (var doc in RegionComList)
+                {
+                    if (doc.Direction == "To Region")
+                    {
+                        doc.Visib = true;
+                    }
+                    else if (doc.Direction == "From Region")
+                    {
+                        doc.Visib = false;
+                    }
+                }
+
+            }
+            else if (IsFromRegionChecked)
+            {
+                foreach (var doc in RegionComList)
+                {
+                    if (doc.Direction == "From Region")
+                    {
+                        doc.Visib = true;
+                    }
+                    else if (doc.Direction == "To Region")
+                    {
+                        doc.Visib = false;
+                    }
+
+                }
+
+            }
+
+
+
+        }
+
+
+        #endregion
+
         #region Show Add To Region Form
         private RelayCommand showAddToRegion;
 
@@ -93,6 +203,8 @@ namespace OSA_File_Management_System.ViewModel
 
             // Bind ViewModel to the popup window
             popup.DataContext = this;
+            popup.Top = 10;
+            popup.Left = 100;
 
             // Show the popup window
             popup.ShowDialog();
@@ -194,6 +306,9 @@ namespace OSA_File_Management_System.ViewModel
 
             // Bind ViewModel to the popup window
             popupAddFrom.DataContext = this;
+
+            popupAddFrom.Top = 10;
+            popupAddFrom.Left = 100;
 
             // Show the popup window
             popupAddFrom.ShowDialog();
@@ -359,10 +474,11 @@ namespace OSA_File_Management_System.ViewModel
 
                     // Bind ViewModel to the popup window
                     popupEditToRegion.DataContext = this;
+                    popupEditToRegion.Top = 10;
+                    popupEditToRegion.Left = 100;
 
                     // Show the popup window
                     popupEditToRegion.ShowDialog();
-                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
 
                 }
                 else if (documentToEdit.Direction == "From Region")
@@ -373,12 +489,14 @@ namespace OSA_File_Management_System.ViewModel
 
                     // Bind ViewModel to the popup window
                     popupEditFromRegion.DataContext = this;
+                    popupEditFromRegion.Top = 10;
+                    popupEditFromRegion.Left = 100;
 
                     // Show the popup window
                     popupEditFromRegion.ShowDialog();
-                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
 
-                } else
+                }
+                else
                 {
                     MessageBox.Show(" Direction not found");
                 }
@@ -564,7 +682,6 @@ namespace OSA_File_Management_System.ViewModel
 
         #region Show Full Details (From Region or To Region )
 
-
         private RegionComModel fromRegionFullData;
 
         public RegionComModel FromRegionFullData
@@ -594,6 +711,17 @@ namespace OSA_File_Management_System.ViewModel
         public string ActionableDocDisplayFrom => FromRegionFullData.ActionableDoc == true ? "Yes" : FromRegionFullData.ActionableDoc == false ? "No" : "N/A"; //This is to display Yes or No in the textbox instead of True or False
         public string ActionableDocDisplayTo => ToRegionFullData.ActionableDoc == true ? "Yes" : ToRegionFullData.ActionableDoc == false ? "No" : "N/A"; //This is to display Yes or No in the textbox instead of True or False
 
+        //This data is for dispalying all related document to datagrid
+        private ObservableCollection<RegionComModel> filteredDocs;
+        public ObservableCollection<RegionComModel> FilteredDocs
+        {
+            get { return filteredDocs; }
+            set { filteredDocs = value; OnPropertyChanged("FilteredDocs"); }
+        }
+
+
+
+        //Display the Full Details Window 
         private void OpenFullDetailsForm(object parameter)
         {
             if (parameter is RegionComModel documentToShow)
@@ -606,12 +734,30 @@ namespace OSA_File_Management_System.ViewModel
 
                     // Bind ViewModel to the popup window
                     popupFullDetailsToRegion.DataContext = this;
+                    popupFullDetailsToRegion.Top = 10;
+                    popupFullDetailsToRegion.Left = 100;
 
+                    // Filter RegionComList by TrackingID
+                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == ToRegionFullData.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (ToRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
 
                     // Show the popup window
                     popupFullDetailsToRegion.ShowDialog();
                     ToRegionFullData = new RegionComModel(); //to refresh or empty the value of toRegionFullData after closing
-                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+                    FilteredDocs = new ObservableCollection<RegionComModel>();
 
                 }
                 else if (documentToShow.Direction == "From Region")
@@ -622,11 +768,31 @@ namespace OSA_File_Management_System.ViewModel
 
                     // Bind ViewModel to the popup window
                     popupFullDetailsFromRegion.DataContext = this;
+                    popupFullDetailsFromRegion.Top = 10;
+                    popupFullDetailsFromRegion.Left = 100;
+
+                    // Filter RegionComList by TrackingID
+                    var filteredListFrom = RegionComList.Where(doc => doc.TrackingCode == FromRegionFullData.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredListFrom);
+
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (FromRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
 
                     // Show the popup window
                     popupFullDetailsFromRegion.ShowDialog();
                     FromRegionFullData = new RegionComModel(); //to refresh or empty the value of fromRegionFullData after closing
-                    LoadAllRegionCom(); // after closing the popup this will load again the whole data
+                    FilteredDocs = new ObservableCollection<RegionComModel>();
+
 
                 }
                 else
@@ -653,18 +819,16 @@ namespace OSA_File_Management_System.ViewModel
         {
             try
             {
-                if (ToRegionFullData.ScannedCopy == null && FromRegionFullData.ScannedCopy != null)
+                if (string.IsNullOrEmpty(ToRegionFullData.ScannedCopy) && !string.IsNullOrEmpty(FromRegionFullData.ScannedCopy))
                 {
                     // Use Process.Start to open the PDF file
-                    string pdfPath = FromRegionFullData.ScannedCopy.ToString();
+                    string pdfPath = FromRegionFullData.ScannedCopy;
                     Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
-                    
-
                 }
-                else if (ToRegionFullData.ScannedCopy != null && FromRegionFullData.ScannedCopy == null)
+                else if (!string.IsNullOrEmpty(ToRegionFullData.ScannedCopy) && string.IsNullOrEmpty(FromRegionFullData.ScannedCopy))
                 {
                     // Use Process.Start to open the PDF file
-                    string pdfPath = ToRegionFullData.ScannedCopy.ToString();
+                    string pdfPath = ToRegionFullData.ScannedCopy;
                     Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
                 }
                 else
@@ -675,7 +839,7 @@ namespace OSA_File_Management_System.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                
+
             }
 
 
@@ -700,11 +864,11 @@ namespace OSA_File_Management_System.ViewModel
             RegionComModel parameterModel = null;
 
             // Check which full data is available and set the parameter model accordingly
-            if (FromRegionFullData.Direction != null && ToRegionFullData.Direction == null)
+            if (!string.IsNullOrEmpty(FromRegionFullData.Direction) && string.IsNullOrEmpty(ToRegionFullData.Direction))
             {
                 parameterModel = FromRegionFullData;
             }
-            else if (ToRegionFullData.Direction != null && FromRegionFullData.Direction == null)
+            else if (!string.IsNullOrEmpty(ToRegionFullData.Direction) && string.IsNullOrEmpty(FromRegionFullData.Direction))
             {
                 parameterModel = ToRegionFullData;
             }
@@ -724,8 +888,77 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Delete From Full Data Window
+        private RelayCommand deleteFromFullData;
 
-        
+        public RelayCommand DeleteFromFullData
+        {
+            get { return deleteFromFullData; }
+            set { deleteFromFullData = value; }
+        }
+
+        private void DeleteFromFullDataCommand()
+        {
+            RegionComModel parameterModel = null;
+
+            // Check which full data is available and set the parameter model accordingly
+            if (!string.IsNullOrEmpty(FromRegionFullData.Direction) && string.IsNullOrEmpty(ToRegionFullData.Direction))
+            {
+                parameterModel = FromRegionFullData;
+                // Confirm the deletion 
+                var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Call your documentServices to delete the document from the database
+                    bool isDeleted = regionComServices.DeleteData(parameterModel);
+
+                    // If deletion was successful, remove it from the ObservableCollection
+                    if (isDeleted)
+                    {
+                        LoadAllRegionCom();
+                        MessageBox.Show("Document deleted successfully.");
+                        popupFullDetailsFromRegion.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error deleting document.");
+                    }
+                }
+
+            }
+            else if (!string.IsNullOrEmpty(ToRegionFullData.Direction) && string.IsNullOrEmpty(FromRegionFullData.Direction))
+            {
+                parameterModel = ToRegionFullData;
+                // Confirm the deletion 
+                var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Call your documentServices to delete the document from the database
+                    bool isDeleted = regionComServices.DeleteData(parameterModel);
+
+                    // If deletion was successful, remove it from the ObservableCollection
+                    if (isDeleted)
+                    {
+                        LoadAllRegionCom();
+                        MessageBox.Show("Document deleted successfully.");
+                        popupFullDetailsToRegion.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error deleting document.");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Problem Deleting Data");
+            }
+
+        }
+
+        #endregion
+
+
 
 
 

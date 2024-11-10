@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -87,7 +88,7 @@ namespace OSA_File_Management_System.Model
         public bool addToRegionCom(RegionComModel objRegionCom)
         {
             objRegionCom.Direction = "To Region";
-            if (objRegionCom.TrackingCode == null)
+            if (string.IsNullOrEmpty(objRegionCom.TrackingCode))
             {
                 objRegionCom.TrackingCode = Guid.NewGuid().ToString();
             }
@@ -138,7 +139,7 @@ namespace OSA_File_Management_System.Model
         public bool addFromRegionCom(RegionComModel objRegionCom)
         {
             objRegionCom.Direction = "From Region";
-            if (objRegionCom.TrackingCode == null)
+            if (string.IsNullOrEmpty(objRegionCom.TrackingCode))
             {
                 objRegionCom.TrackingCode = Guid.NewGuid().ToString();
             }
@@ -216,6 +217,11 @@ namespace OSA_File_Management_System.Model
         #region Save Edited ToRegion
         public bool SaveEditedToRegion(RegionComModel ToRegionData)
         {
+            if (string.IsNullOrEmpty(ToRegionData.TrackingCode))
+            {
+                ToRegionData.TrackingCode = Guid.NewGuid().ToString();
+            }
+
             try
             {
                 if (connection.State == ConnectionState.Closed)
@@ -223,7 +229,7 @@ namespace OSA_File_Management_System.Model
                     connection.Open();
                 }
 
-                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, numberOfCopies = @numberOfCopies, dateSignBySA = @dateSignBySA, dateSentOutToRegion = @dateSentOutToRegion, subjectParticulars = @subjectParticulars, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, dateReceiveByRegion = @dateReceiveByRegion, location = @location, lbcRefNumber = @lbcRefNumber, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction  WHERE id = @id";
+                string query = "UPDATE regioncom SET dateReceived = @dateReceived, documentDate = @documentDate, typeOfDocs = @typeOfDocs, refNumber = @refNumber, receivedFrom = @receivedFrom, numberOfCopies = @numberOfCopies, dateSignBySA = @dateSignBySA, dateSentOutToRegion = @dateSentOutToRegion, subjectParticulars = @subjectParticulars, dateSentOutToTeam = @dateSentOutToTeam, receiver = @receiver, dateReceiveByRegion = @dateReceiveByRegion, location = @location, lbcRefNumber = @lbcRefNumber, remarks = @remarks, scannedCopy = @scannedCopy, direction = @direction, trackingCode = @trackingCode  WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", ToRegionData.Id);
                 cmd.Parameters.AddWithValue("@dateReceived", ToRegionData.DateReceived);
@@ -243,6 +249,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@scannedCopy", ToRegionData.ScannedCopy);
                 cmd.Parameters.AddWithValue("@lbcRefNumber", ToRegionData.LbcRefNumber);
                 cmd.Parameters.AddWithValue("@direction", ToRegionData.Direction);
+                cmd.Parameters.AddWithValue("@trackingCode", ToRegionData.TrackingCode);
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }
@@ -260,7 +267,7 @@ namespace OSA_File_Management_System.Model
         #region Save Edited FromRegion
         public bool SaveEditedFromRegion(RegionComModel FromRegionData)
         {
-            if (FromRegionData.TrackingCode == null)
+            if (string.IsNullOrEmpty(FromRegionData.TrackingCode))
             {
                 FromRegionData.TrackingCode = Guid.NewGuid().ToString();
             }

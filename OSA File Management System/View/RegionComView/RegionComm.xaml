@@ -100,15 +100,19 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="20*"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Button Content="Search" Margin="3" Width="100" Padding="3" Grid.Column="0" Command="{Binding Path=RegionComViewModel.BtnSearchRegionCom}" />
             <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=RegionComViewModel.SearchTextRegionCom , Mode=TwoWay}"/>
-            <StackPanel Orientation="Horizontal" Margin="3" Grid.Column="2">
-                <RadioButton Content="All" GroupName="RegionOptions" Margin="5"/>
-                <RadioButton Content="From Region" GroupName="RegionOptions" Margin="5"
-            />
-                <RadioButton Content="To Region" GroupName="RegionOptions" Margin="5"
-             />
+            <Button  Margin="3" Padding="1" Grid.Column="2"  Command="{Binding Path=RegionComViewModel.BtnLoadData}" Background="Transparent" BorderBrush="Transparent">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/images/icons/refresh.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                 </StackPanel>
+            </Button>
+            <StackPanel Orientation="Horizontal" Margin="3" Grid.Column="3">
+                <RadioButton Content="All" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsAllChecked}" Margin="5" ClickMode="Press"/>
+                <RadioButton Content="From Region" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsFromRegionChecked}" Margin="5" ClickMode="Press"/>
+                <RadioButton Content="To Region" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsToRegionChecked}" Margin="5" ClickMode="Press"/>
             </StackPanel>
         </Grid>
 
@@ -122,6 +126,21 @@
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                 </Style>
             </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <!-- Hide row based on some condition in the model (e.g. IsHidden property) -->
+                        <DataTrigger Binding="{Binding Visib}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Visib}" Value="true">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+
             <!-- Define the columns of the DataGrid -->
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="5*" Header="Date Received" SortMemberPath="DateReceived">

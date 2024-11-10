@@ -14,7 +14,12 @@
     <None Remove="images\coa_logo.png" />
     <None Remove="images\header.png" />
     <None Remove="images\icons\add.png" />
+    <None Remove="images\icons\addFull.png" />
+    <None Remove="images\icons\delete.png" />
+    <None Remove="images\icons\edit.png" />
+    <None Remove="images\icons\pdf.png" />
     <None Remove="images\icons\printer.png" />
+    <None Remove="images\icons\refresh.png" />
     <None Remove="images\Inventory.png" />
     <None Remove="images\RegionCom.png" />
   </ItemGroup>
@@ -24,7 +29,12 @@
     <Resource Include="images\coa_logo.png" />
     <Resource Include="images\header.png" />
     <Resource Include="images\icons\add.png" />
+    <Resource Include="images\icons\addFull.png" />
+    <Resource Include="images\icons\delete.png" />
+    <Resource Include="images\icons\edit.png" />
+    <Resource Include="images\icons\pdf.png" />
     <Resource Include="images\icons\printer.png" />
+    <Resource Include="images\icons\refresh.png" />
     <Resource Include="images\Inventory.png" />
     <Resource Include="images\RegionCom.png" />
   </ItemGroup>

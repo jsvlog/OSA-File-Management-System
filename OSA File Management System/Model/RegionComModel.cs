@@ -221,6 +221,22 @@ namespace OSA_File_Management_System.Model
             set { lbcRefNumber = value; OnPropertyChanged("LbcRefNumber"); }
         }
 
+        private bool? isHighlighted;
+
+        public bool? IsHighlighted
+        {
+            get { return isHighlighted; }
+            set { isHighlighted = value; OnPropertyChanged("IsHighlighted"); }
+        }
+
+        private bool? visib;
+
+        public bool? Visib
+        {
+            get { return visib; }
+            set { visib = value; OnPropertyChanged("Visib"); }
+        }
+
 
 
 
