@@ -169,7 +169,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
                             <!--highlight the current doc-->
-                            <DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                            <DataTrigger Binding="{Binding IsHighlighted, Mode=TwoWay}" Value="true">
                                 <Setter Property="Background" Value="#219B9D"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -190,7 +190,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding DateReceived, StringFormat=MM-dd-yyyy}" 
+                                <TextBlock Text="{Binding DateReceived, StringFormat=MM-dd-yyyy, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -209,7 +209,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" 
+                                <TextBlock Text="{Binding DocumentDate, StringFormat=MM-dd-yyyy, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -228,7 +228,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding TypeOfDocs}" 
+                                <TextBlock Text="{Binding TypeOfDocs, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -247,7 +247,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate >
-                                <TextBlock Text="{Binding SubjectParticulars}" 
+                                <TextBlock Text="{Binding SubjectParticulars, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -266,7 +266,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding RefNumber}" 
+                                <TextBlock Text="{Binding RefNumber, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -285,7 +285,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ReceivedFrom}" 
+                                <TextBlock Text="{Binding ReceivedFrom, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -304,7 +304,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Remarks}" 
+                                <TextBlock Text="{Binding Remarks, Mode=TwoWay}" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Center" 
                  HorizontalAlignment="Left"/>
@@ -317,7 +317,7 @@ HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding 
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem x:Name="ViewDetails" Header="View Full Details"
-                            Command="{Binding RegionComViewModel.ShowFullData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                            Command="{Binding ShowFullDatailsFromFullData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>

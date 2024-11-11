@@ -59,6 +59,7 @@ namespace OSA_File_Management_System.ViewModel
             viewPdfFullData = new RelayCommand(ViewPdfFullDataCommand);
             showEditFromFullData = new RelayCommand(ShowEditFromFullDataCommand);
             deleteFromFullData = new RelayCommand(DeleteFromFullDataCommand);
+            showFullDatailsFromFullData = new RelayCommand(OpenFullDetailsFromFullData);
             LoadAllRegionCom();
         }
 
@@ -958,7 +959,37 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Show Full Details from Full Data Window
+        private RelayCommand showFullDatailsFromFullData;
 
+        public RelayCommand ShowFullDatailsFromFullData
+        {
+            get { return showFullDatailsFromFullData; }
+        }
+
+        private void OpenFullDetailsFromFullData(object parameter)
+        {
+
+
+            if (popupFullDetailsToRegion != null && popupFullDetailsToRegion.IsLoaded)
+            {
+                popupFullDetailsToRegion.Close();
+            }
+            if (popupFullDetailsFromRegion != null && popupFullDetailsFromRegion.IsLoaded)
+            {
+                popupFullDetailsFromRegion.Close();
+            }
+            if (parameter is RegionComModel documentToShow)
+            {
+                FromRegionFullData = new RegionComModel();//to still edit in full data window after it was open from full data window
+                ToRegionFullData = new RegionComModel();//to still edit in full data window after it was open from full data window
+                OpenFullDetailsForm(documentToShow);
+
+            }
+        }
+
+
+        #endregion
 
 
 
