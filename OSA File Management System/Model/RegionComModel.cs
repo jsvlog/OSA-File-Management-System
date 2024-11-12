@@ -234,7 +234,7 @@ namespace OSA_File_Management_System.Model
         public bool? Visib
         {
             get { return visib; }
-            set { visib = value;  }
+            set { visib = value; OnPropertyChanged("Visib"); }
         }
 
 
