@@ -31,7 +31,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateReceived
         {
             get { return dateReceived; }
-            set { dateReceived = value; OnPropertyChanged("Date"); }
+            set { dateReceived = value;  }
         }
 
         private DateTime? documentDate;
@@ -39,7 +39,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DocumentDate
         {
             get { return documentDate; }
-            set { documentDate = value; OnPropertyChanged("DocumentDate"); }
+            set { documentDate = value;}
         }
 
         private string? typeOfDocs;
@@ -47,7 +47,7 @@ namespace OSA_File_Management_System.Model
         public string? TypeOfDocs
         {
             get { return typeOfDocs; }
-            set { typeOfDocs = value; OnPropertyChanged("TypeOfDocs"); }
+            set { typeOfDocs = value;  }
         }
 
         private string? addressee;
@@ -55,7 +55,7 @@ namespace OSA_File_Management_System.Model
         public string? Addressee
         {
             get { return addressee; }
-            set { addressee = value; OnPropertyChanged("Addressee"); }
+            set { addressee = value; }
         }
 
         private string? subjectParticulars;
@@ -63,7 +63,7 @@ namespace OSA_File_Management_System.Model
         public string? SubjectParticulars
         {
             get { return subjectParticulars; }
-            set { subjectParticulars = value; OnPropertyChanged("SubjectParticulars"); }
+            set { subjectParticulars = value; }
         }
 
         private string? details;
@@ -71,7 +71,7 @@ namespace OSA_File_Management_System.Model
         public string? Details
         {
             get { return details; }
-            set { details = value; OnPropertyChanged("Details"); }
+            set { details = value; }
         }
 
         private string? refNumber;
@@ -79,7 +79,7 @@ namespace OSA_File_Management_System.Model
         public string? RefNumber
         {
             get { return refNumber; }
-            set { refNumber = value; OnPropertyChanged("RefNumber"); }
+            set { refNumber = value; }
         }
 
         private string? municipality;
@@ -87,7 +87,7 @@ namespace OSA_File_Management_System.Model
         public string? Municipality
         {
             get { return municipality; }
-            set { municipality = value; OnPropertyChanged("Municipality"); }
+            set { municipality = value; }
         }
 
         private string? barangay;
@@ -95,7 +95,7 @@ namespace OSA_File_Management_System.Model
         public string? Barangay
         {
             get { return barangay; }
-            set { barangay = value; OnPropertyChanged("Barangay"); }
+            set { barangay = value; }
         }
 
         private string? receivedFrom;
@@ -103,7 +103,7 @@ namespace OSA_File_Management_System.Model
         public string? ReceivedFrom
         {
             get { return receivedFrom; }
-            set { receivedFrom = value; OnPropertyChanged("ReceivedFrom"); }
+            set { receivedFrom = value;  }
         }
 
         private DateTime? dateSentOutToTeam;
@@ -111,7 +111,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateSentOutToTeam
         {
             get { return dateSentOutToTeam; }
-            set { dateSentOutToTeam = value; OnPropertyChanged("DateSentOutToTeam"); }
+            set { dateSentOutToTeam = value;  }
         }
 
         private string? receiver;
@@ -119,7 +119,7 @@ namespace OSA_File_Management_System.Model
         public string? Receiver
         {
             get { return receiver; }
-            set { receiver = value; OnPropertyChanged("Receiver"); }
+            set { receiver = value;  }
         }
 
         private string? location;
@@ -127,7 +127,7 @@ namespace OSA_File_Management_System.Model
         public string? Location
         {
             get { return location; }
-            set { location = value; OnPropertyChanged("Location"); }
+            set { location = value;  }
         }
 
         private bool? actionableDoc;
@@ -135,7 +135,7 @@ namespace OSA_File_Management_System.Model
         public bool? ActionableDoc
         {
             get { return actionableDoc; }
-            set { actionableDoc = value; OnPropertyChanged("ActionableDoc"); }
+            set { actionableDoc = value; }
         }
 
         private DateTime? dateDeadline;
@@ -143,7 +143,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateDeadline
         {
             get { return dateDeadline; }
-            set { dateDeadline = value; OnPropertyChanged("DateDeadline"); }
+            set { dateDeadline = value;  }
         }
 
         private string? remarks;
@@ -151,7 +151,7 @@ namespace OSA_File_Management_System.Model
         public string? Remarks
         {
             get { return remarks; }
-            set { remarks = value; OnPropertyChanged("Remarks"); }
+            set { remarks = value; }
         }
 
         private string? trackingCode;
@@ -159,7 +159,7 @@ namespace OSA_File_Management_System.Model
         public string? TrackingCode
         {
             get { return trackingCode; }
-            set { trackingCode = value; OnPropertyChanged("TrackingCode"); }
+            set { trackingCode = value;  }
         }
 
         private string? direction;
@@ -167,7 +167,7 @@ namespace OSA_File_Management_System.Model
         public string? Direction
         {
             get { return direction; }
-            set { direction = value; OnPropertyChanged("Direction"); }
+            set { direction = value;  }
         }
 
         private string? scannedCopy;
@@ -175,7 +175,7 @@ namespace OSA_File_Management_System.Model
         public string? ScannedCopy
         {
             get { return scannedCopy; }
-            set { scannedCopy = value; OnPropertyChanged("ScannedCopy"); }
+            set { scannedCopy = value;  }
         }
 
 
@@ -186,7 +186,7 @@ namespace OSA_File_Management_System.Model
         public string? NumberOfCopies
         {
             get { return numberOfCopies; }
-            set { numberOfCopies = value; OnPropertyChanged("NumberOfCopies"); }
+            set { numberOfCopies = value; }
         }
 
         private DateTime? dateSignBySA;
@@ -194,7 +194,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateSignBySA
         {
             get { return dateSignBySA; }
-            set { dateSignBySA = value; OnPropertyChanged("DateSignBySA"); }
+            set { dateSignBySA = value;  }
         }
 
         private DateTime? dateReceiveByRegion;
@@ -202,7 +202,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateReceiveByRegion
         {
             get { return dateReceiveByRegion; }
-            set { dateReceiveByRegion = value; OnPropertyChanged("DateReceiveByRegion"); }
+            set { dateReceiveByRegion = value; }
         }
 
         private DateTime? dateSentOutToRegion;
@@ -210,7 +210,7 @@ namespace OSA_File_Management_System.Model
         public DateTime? DateSentOutToRegion
         {
             get { return dateSentOutToRegion; }
-            set { dateSentOutToRegion = value; OnPropertyChanged("DateSentOutToRegion"); }
+            set { dateSentOutToRegion = value; }
         }
 
         private string? lbcRefNumber;
@@ -218,7 +218,7 @@ namespace OSA_File_Management_System.Model
         public string? LbcRefNumber
         {
             get { return lbcRefNumber; }
-            set { lbcRefNumber = value; OnPropertyChanged("LbcRefNumber"); }
+            set { lbcRefNumber = value;}
         }
 
         private bool? isHighlighted;
@@ -226,7 +226,7 @@ namespace OSA_File_Management_System.Model
         public bool? IsHighlighted
         {
             get { return isHighlighted; }
-            set { isHighlighted = value; OnPropertyChanged("IsHighlighted"); }
+            set { isHighlighted = value; }
         }
 
         private bool? visib;
@@ -234,7 +234,7 @@ namespace OSA_File_Management_System.Model
         public bool? Visib
         {
             get { return visib; }
-            set { visib = value; OnPropertyChanged("Visib"); }
+            set { visib = value;  }
         }
 
 

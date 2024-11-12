@@ -481,9 +481,32 @@ namespace OSA_File_Management_System.ViewModel
                     // Show the popup window
                     popupEditToRegion.ShowDialog();
 
+
+
+
+                    // To Refresh the List of Related Docs in Full details Window after clicking the edit button in full details window
+                    LoadAllRegionCom();
+                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                    ToRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (ToRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
+
+
                 }
                 else if (documentToEdit.Direction == "From Region")
                 {
+
                     EditFromRegionData = documentToEdit;
                     // Create the popup window
                     popupEditFromRegion = new EditFromRegion();
@@ -496,11 +519,36 @@ namespace OSA_File_Management_System.ViewModel
                     // Show the popup window
                     popupEditFromRegion.ShowDialog();
 
+
+
+                    // To Refresh the List of Related Docs in Full details Window after clicking the edit button in full details window
+                    LoadAllRegionCom();
+                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                    FromRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (FromRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
+
                 }
                 else
                 {
                     MessageBox.Show(" Direction not found");
                 }
+
+
+                
+
+
 
             }
 
@@ -857,7 +905,6 @@ namespace OSA_File_Management_System.ViewModel
         public RelayCommand ShowEditFromFullData
         {
             get { return showEditFromFullData; }
-            set { showEditFromFullData = value; }
         }
 
         private void ShowEditFromFullDataCommand()
@@ -981,9 +1028,11 @@ namespace OSA_File_Management_System.ViewModel
             }
             if (parameter is RegionComModel documentToShow)
             {
+                RegionComModel para = documentToShow;
                 FromRegionFullData = new RegionComModel();//to still edit in full data window after it was open from full data window
                 ToRegionFullData = new RegionComModel();//to still edit in full data window after it was open from full data window
-                OpenFullDetailsForm(documentToShow);
+                OpenFullDetailsForm(para);
+
 
             }
         }
