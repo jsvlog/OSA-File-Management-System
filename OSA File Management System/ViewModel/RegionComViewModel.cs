@@ -960,7 +960,7 @@ namespace OSA_File_Management_System.ViewModel
             }
             else
             {
-                MessageBox.Show("Problem Showing Edit Form" + parameterModel.Details.ToString());
+                MessageBox.Show("Problem Showing Edit Form");
             }
 
         }
