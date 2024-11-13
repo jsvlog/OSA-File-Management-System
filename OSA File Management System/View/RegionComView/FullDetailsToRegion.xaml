@@ -138,7 +138,7 @@
             <Border Height="4" Background="#257180" Margin="10" Grid.Row="5" Grid.ColumnSpan="8"/>
             <!-- This Part is for data grid that are related to the viewd Doc-->
             <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" Text="Data Related to the Current Document" FontWeight="Bold" FontSize="18" Foreground="#257180"/>
-            <Button  Command="{Binding }" Background="Transparent" Padding="0" Grid.Row="6" Grid.Column="4" HorizontalAlignment="Right" ToolTip="Add Document Related to this Documents">
+            <Button  Command="{Binding AddFromFullData}" Background="Transparent" Padding="0" Grid.Row="6" Grid.Column="4" HorizontalAlignment="Right" ToolTip="Add Document Related to this Documents">
                 <StackPanel Orientation="Horizontal"  >
                     <Image Source="pack://application:,,,/images/icons/addFull.png" Width="30" Height="35" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                 </StackPanel>

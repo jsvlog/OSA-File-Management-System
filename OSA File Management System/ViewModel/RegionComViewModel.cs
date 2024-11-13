@@ -60,6 +60,7 @@ namespace OSA_File_Management_System.ViewModel
             showEditFromFullData = new RelayCommand(ShowEditFromFullDataCommand);
             deleteFromFullData = new RelayCommand(DeleteFromFullDataCommand);
             showFullDatailsFromFullData = new RelayCommand(OpenFullDetailsFromFullData);
+            addFromFullData = new RelayCommand(AddFromFullDataCommand);
             LoadAllRegionCom();
         }
 
@@ -209,6 +210,7 @@ namespace OSA_File_Management_System.ViewModel
 
             // Show the popup window
             popup.ShowDialog();
+            AddToRegionData = new RegionComModel();
         }
 
         #endregion
@@ -313,6 +315,7 @@ namespace OSA_File_Management_System.ViewModel
 
             // Show the popup window
             popupAddFrom.ShowDialog();
+            AddFromRegionData = new RegionComModel();
         }
 
         #endregion
@@ -777,6 +780,9 @@ namespace OSA_File_Management_System.ViewModel
             {
                 if (documentToShow.Direction == "To Region")
                 {
+                    //For adding Docs after clicking the plus button in full Details Window
+                    TrackingIdOfCurrentDoc = documentToShow;
+
                     ToRegionFullData = documentToShow;
                     // Create the popup window
                     popupFullDetailsToRegion = new FullDetailsToRegion();
@@ -807,10 +813,14 @@ namespace OSA_File_Management_System.ViewModel
                     popupFullDetailsToRegion.ShowDialog();
                     ToRegionFullData = new RegionComModel(); //to refresh or empty the value of toRegionFullData after closing
                     FilteredDocs = new ObservableCollection<RegionComModel>();
+                    TrackingIdOfCurrentDoc = new RegionComModel();
 
                 }
                 else if (documentToShow.Direction == "From Region")
                 {
+                    //For adding Docs after clicking the plus button in full Details Window
+                    TrackingIdOfCurrentDoc = documentToShow;
+
                     FromRegionFullData = documentToShow;
                     // Create the popup window
                     popupFullDetailsFromRegion = new FullDetailsFromRegion();
@@ -841,6 +851,7 @@ namespace OSA_File_Management_System.ViewModel
                     popupFullDetailsFromRegion.ShowDialog();
                     FromRegionFullData = new RegionComModel(); //to refresh or empty the value of fromRegionFullData after closing
                     FilteredDocs = new ObservableCollection<RegionComModel>();
+                    TrackingIdOfCurrentDoc = new RegionComModel();
 
 
                 }
@@ -1040,6 +1051,53 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Add Document from Full Data Window (If Related to the currently viewd doc 
+        private RelayCommand addFromFullData;
+
+        public RelayCommand AddFromFullData
+        {
+            get { return addFromFullData; }
+        }
+
+
+        private RegionComModel trackingIdOfCurrentDoc;
+
+        public RegionComModel TrackingIdOfCurrentDoc
+        {
+            get { return trackingIdOfCurrentDoc; }
+            set { trackingIdOfCurrentDoc = value; OnPropertyChanged("TrackingIdOfCurrentDoc"); }
+        }
+
+        private void AddFromFullDataCommand()
+        {
+            if (TrackingIdOfCurrentDoc.Direction == "To Region")
+            {
+                RegionComModel forTrackingId = new RegionComModel(); 
+                forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
+                forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
+                forTrackingId.Id = TrackingIdOfCurrentDoc.Id;   
+                AddToRegionData = forTrackingId;
+                OpenAddDocumentForm();
+
+            }
+            else if (TrackingIdOfCurrentDoc.Direction == "From Region")
+            {
+                RegionComModel forTrackingId = new RegionComModel();
+                forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
+                forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
+                forTrackingId.Id = TrackingIdOfCurrentDoc.Id;
+                AddFromRegionData = forTrackingId;
+                OpenAddFromRegionForm();
+
+            }
+
+
+
+        }
+
+
+
+        #endregion
 
 
 

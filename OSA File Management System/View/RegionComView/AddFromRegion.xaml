@@ -144,7 +144,7 @@
         <Border Grid.Row="10" Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="Gray" Margin="5" HorizontalAlignment="Left" Background="#219B9D">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Tracking ID for Related Docs" FontWeight="Bold" VerticalAlignment="Center" Margin="5"/>
-                <TextBox Width="350" Margin="5" Text="{Binding Path=AddFromRegionData.TrackingCode}"/>
+                <TextBox Width="350" Margin="5" Text="{Binding Path=AddFromRegionData.TrackingCode, Mode=TwoWay}"/>
             </StackPanel>
         </Border>
 

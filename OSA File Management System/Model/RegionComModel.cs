@@ -159,7 +159,7 @@ namespace OSA_File_Management_System.Model
         public string? TrackingCode
         {
             get { return trackingCode; }
-            set { trackingCode = value;  }
+            set { trackingCode = value; }
         }
 
         private string? direction;
