@@ -1,0 +1,22 @@
+﻿<Window x:Class="OSA_File_Management_System.View.RegionComView.FromToChoices"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
+        mc:Ignorable="d"
+        Title="FromToChoices" Height="120" Width="250"
+                WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize" WindowStyle="SingleBorderWindow" Background="Gray"
+        ShowInTaskbar="False" Topmost="True">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Background="#219B9D">
+            <TextBlock Text="Add Related Document" HorizontalAlignment="Center" Margin="0,5,0,10" Foreground="#133E87" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="From Region" Width="100" Margin="5" Command="{Binding ChosenFrom}" Foreground="#133E87" />
+                <Button Content="To Region" Width="100" Margin="5" Command="{Binding ChosenTo}" Foreground="#133E87" />
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Window>

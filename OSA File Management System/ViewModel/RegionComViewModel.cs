@@ -61,6 +61,9 @@ namespace OSA_File_Management_System.ViewModel
             deleteFromFullData = new RelayCommand(DeleteFromFullDataCommand);
             showFullDatailsFromFullData = new RelayCommand(OpenFullDetailsFromFullData);
             addFromFullData = new RelayCommand(AddFromFullDataCommand);
+            chosenFrom = new RelayCommand(chosenFromCommand);
+            chosenTo = new RelayCommand(chosenToCommand);
+            trackingIdOfCurrentDoc = new RegionComModel();
             LoadAllRegionCom();
         }
 
@@ -210,7 +213,13 @@ namespace OSA_File_Management_System.ViewModel
 
             // Show the popup window
             popup.ShowDialog();
-            AddToRegionData = new RegionComModel();
+            if (!string.IsNullOrEmpty(TrackingIdOfCurrentDoc.Direction))
+            {
+                var filteredList = RegionComList.Where(doc => doc.TrackingCode == TrackingIdOfCurrentDoc.TrackingCode).ToList();
+                FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                AddToRegionData = new RegionComModel();
+            }
+
         }
 
         #endregion
@@ -315,7 +324,14 @@ namespace OSA_File_Management_System.ViewModel
 
             // Show the popup window
             popupAddFrom.ShowDialog();
-            AddFromRegionData = new RegionComModel();
+            if (!string.IsNullOrEmpty(TrackingIdOfCurrentDoc.Direction))
+            {
+                var filteredList = RegionComList.Where(doc => doc.TrackingCode == TrackingIdOfCurrentDoc.TrackingCode).ToList();
+                FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                AddFromRegionData = new RegionComModel();
+            }
+
+
         }
 
         #endregion
@@ -484,14 +500,15 @@ namespace OSA_File_Management_System.ViewModel
                     // Show the popup window
                     popupEditToRegion.ShowDialog();
 
-
-
-
                     // To Refresh the List of Related Docs in Full details Window after clicking the edit button in full details window
                     LoadAllRegionCom();
                     var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
                     FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
-                    ToRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    if (!string.IsNullOrEmpty(documentToEdit.Direction))
+                    {
+                        ToRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    }
+
                     //this is to highlight the current document from filtered docs
                     foreach (var item in FilteredDocs)
                     {
@@ -528,7 +545,11 @@ namespace OSA_File_Management_System.ViewModel
                     LoadAllRegionCom();
                     var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
                     FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
-                    FromRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    if (!string.IsNullOrEmpty(documentToEdit.Direction))
+                    {
+                        FromRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
+                    }
+
                     //this is to highlight the current document from filtered docs
                     foreach (var item in FilteredDocs)
                     {
@@ -939,7 +960,7 @@ namespace OSA_File_Management_System.ViewModel
             }
             else
             {
-                MessageBox.Show("Problem Showing Edit Form");
+                MessageBox.Show("Problem Showing Edit Form" + parameterModel.Details.ToString());
             }
 
         }
@@ -1068,33 +1089,60 @@ namespace OSA_File_Management_System.ViewModel
             set { trackingIdOfCurrentDoc = value; OnPropertyChanged("TrackingIdOfCurrentDoc"); }
         }
 
+        //window for choices of "To Region" or "From Region
+        private FromToChoices choices;
+
         private void AddFromFullDataCommand()
         {
-            if (TrackingIdOfCurrentDoc.Direction == "To Region")
-            {
-                RegionComModel forTrackingId = new RegionComModel(); 
-                forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
-                forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
-                forTrackingId.Id = TrackingIdOfCurrentDoc.Id;   
-                AddToRegionData = forTrackingId;
-                OpenAddDocumentForm();
 
-            }
-            else if (TrackingIdOfCurrentDoc.Direction == "From Region")
-            {
-                RegionComModel forTrackingId = new RegionComModel();
-                forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
-                forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
-                forTrackingId.Id = TrackingIdOfCurrentDoc.Id;
-                AddFromRegionData = forTrackingId;
-                OpenAddFromRegionForm();
+            choices = new FromToChoices();
+            choices.DataContext = this;
+            choices.ShowDialog();
 
-            }
+        }
 
+
+        private RelayCommand chosenFrom;
+
+        public RelayCommand ChosenFrom
+        {
+            get { return chosenFrom; }
+        }
+
+
+        private void chosenFromCommand()
+        {
+            choices.Close();
+            RegionComModel forTrackingId = new RegionComModel();
+            forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
+            forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
+            forTrackingId.Id = TrackingIdOfCurrentDoc.Id;
+            AddFromRegionData = forTrackingId;
+            OpenAddFromRegionForm();
 
 
         }
 
+
+        private RelayCommand chosenTo;
+
+        public RelayCommand ChosenTo
+        {
+            get { return chosenTo; }
+
+        }
+
+        private void chosenToCommand()
+        {
+            choices.Close();
+            RegionComModel forTrackingId = new RegionComModel();
+            forTrackingId.TrackingCode = TrackingIdOfCurrentDoc.TrackingCode;
+            forTrackingId.Direction = TrackingIdOfCurrentDoc.Direction;
+            forTrackingId.Id = TrackingIdOfCurrentDoc.Id;
+            AddToRegionData = forTrackingId;
+            OpenAddDocumentForm();
+
+        }
 
 
         #endregion
