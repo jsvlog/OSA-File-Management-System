@@ -1,0 +1,113 @@
+﻿<Window x:Class="OSA_File_Management_System.View.RegionComView.ArrangePrintToRegion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
+        mc:Ignorable="d"
+        Title="ArrangePrintToRegion" Height="600" Width="1100">
+    <Grid>
+
+        <DataGrid 
+        ItemsSource="{Binding ListToPrint}" 
+        AutoGenerateColumns="False" 
+        CanUserAddRows="False" 
+        CanUserReorderColumns="False" 
+        CanUserResizeColumns="True" 
+        CanUserSortColumns="False"
+        SelectionMode="Single"
+        AllowDrop="True"
+        PreviewMouseMove="DataGrid_PreviewMouseMove"
+        Drop="DataGrid_Drop"
+        Margin="10">
+
+            <!-- Define the columns -->
+            <DataGrid.Columns>
+                <!-- Date Received -->
+                <DataGridTemplateColumn Header="Date Received" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateReceived, StringFormat=MM/dd/yyyy}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Document Date -->
+                <DataGridTemplateColumn Header="Document Date" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DocumentDate, StringFormat=MM/dd/yyyy}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Type of Docs -->
+                <DataGridTemplateColumn Header="Type of Docs" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TypeOfDocs}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Subject Particulars -->
+                <DataGridTemplateColumn Header="Subject Particulars" Width="30*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding SubjectParticulars}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Ref Number -->
+                <DataGridTemplateColumn Header="Ref Number" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RefNumber}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Received From -->
+                <DataGridTemplateColumn Header="Received From" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ReceivedFrom}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Remarks -->
+                <DataGridTemplateColumn Header="Remarks" Width="6*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Remarks}" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+
+
+
+
+
+    </Grid>
+</Window>

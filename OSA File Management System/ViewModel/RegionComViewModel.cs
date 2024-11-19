@@ -7,12 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
 using OSA_File_Management_System.View.RegionCom;
 using OSA_File_Management_System.View.RegionComView;
+
+
 
 namespace OSA_File_Management_System.ViewModel
 {
@@ -64,6 +67,9 @@ namespace OSA_File_Management_System.ViewModel
             chosenFrom = new RelayCommand(chosenFromCommand);
             chosenTo = new RelayCommand(chosenToCommand);
             trackingIdOfCurrentDoc = new RegionComModel();
+            chooseToPrintToRegion = new RelayCommand(ChooseToPrintToRegionCommand);
+            printPreviewTransmittalToRegion = new RelayCommand(printPreviewTransmittalToRegionCommand);
+            arrangeList = new RelayCommand(ArrangeListCommand);
             LoadAllRegionCom();
         }
 
@@ -502,25 +508,6 @@ namespace OSA_File_Management_System.ViewModel
 
                     // To Refresh the List of Related Docs in Full details Window after clicking the edit button in full details window
                     LoadAllRegionCom();
-                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
-                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
-                    if (!string.IsNullOrEmpty(documentToEdit.Direction))
-                    {
-                        ToRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
-                    }
-
-                    //this is to highlight the current document from filtered docs
-                    foreach (var item in FilteredDocs)
-                    {
-                        if (ToRegionFullData.Id == item.Id)
-                        {
-                            item.IsHighlighted = true;
-                        }
-                        else
-                        {
-                            item.IsHighlighted = false;
-                        }
-                    }
 
 
                 }
@@ -545,23 +532,8 @@ namespace OSA_File_Management_System.ViewModel
                     LoadAllRegionCom();
                     var filteredList = RegionComList.Where(doc => doc.TrackingCode == documentToEdit.TrackingCode).ToList();
                     FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
-                    if (!string.IsNullOrEmpty(documentToEdit.Direction))
-                    {
-                        FromRegionFullData = RegionComList.FirstOrDefault(x => x.Id == documentToEdit.Id);
-                    }
 
-                    //this is to highlight the current document from filtered docs
-                    foreach (var item in FilteredDocs)
-                    {
-                        if (FromRegionFullData.Id == item.Id)
-                        {
-                            item.IsHighlighted = true;
-                        }
-                        else
-                        {
-                            item.IsHighlighted = false;
-                        }
-                    }
+
 
                 }
                 else
@@ -957,6 +929,44 @@ namespace OSA_File_Management_System.ViewModel
             if (parameterModel != null)
             {
                 OpenEditFromOrTo(parameterModel);
+                if (parameterModel.Direction == "To Region")
+                {
+                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == parameterModel.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                    ToRegionFullData = RegionComList.FirstOrDefault(x => x.Id == parameterModel.Id);
+
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (ToRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
+                }
+                else
+                {
+                    var filteredList = RegionComList.Where(doc => doc.TrackingCode == parameterModel.TrackingCode).ToList();
+                    FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
+                    FromRegionFullData = RegionComList.FirstOrDefault(x => x.Id == parameterModel.Id);
+
+                    //this is to highlight the current document from filtered docs
+                    foreach (var item in FilteredDocs)
+                    {
+                        if (FromRegionFullData.Id == item.Id)
+                        {
+                            item.IsHighlighted = true;
+                        }
+                        else
+                        {
+                            item.IsHighlighted = false;
+                        }
+                    }
+                }
             }
             else
             {
@@ -1143,6 +1153,94 @@ namespace OSA_File_Management_System.ViewModel
             OpenAddDocumentForm();
 
         }
+
+
+        #endregion
+
+        #region Choose What To Print in Transmittal to Region
+        private RelayCommand chooseToPrintToRegion;
+
+        public RelayCommand ChooseToPrintToRegion
+        {
+            get { return chooseToPrintToRegion; }
+        }
+
+        private string transNumber;
+
+        public string TransNumber
+        {
+            get { return transNumber; }
+            set { transNumber = value; OnPropertyChanged("TransNumber"); }
+        }
+
+
+        private void ChooseToPrintToRegionCommand()
+        {
+            ChoosePrintToRegion choose = new ChoosePrintToRegion();
+            choose.DataContext = this;
+            choose.ShowDialog();
+        }
+        #endregion
+
+
+
+        #region Arrange Order of Document To Print (To Region)
+        private RelayCommand arrangeList;
+
+        public RelayCommand ArrangeList
+        {
+            get { return arrangeList; }
+        }
+
+        private ObservableCollection<RegionComModel> listToPrint;
+
+        public ObservableCollection<RegionComModel> ListToPrint
+        {
+            get { return listToPrint; }
+            set { listToPrint = value; OnPropertyChanged("ListToPrint"); }
+        }
+
+
+        private void ArrangeListCommand()
+        {
+            //Fetch List Document to Print
+            RegionComServices listFetch = new RegionComServices();
+            ListToPrint = listFetch.GetToRegionToPrint(TransNumber);
+
+            ArrangePrintToRegion arrangeTable = new ArrangePrintToRegion();
+            arrangeTable.DataContext = this;
+            arrangeTable.ShowDialog();
+
+        }
+
+
+        #endregion
+
+
+        #region Print Transmittal to Region
+        private RelayCommand printPreviewTransmittalToRegion;
+
+        public RelayCommand PrintPreviewTransmittalToRegion
+        {
+            get { return printPreviewTransmittalToRegion; }
+
+        }
+
+
+        private void printPreviewTransmittalToRegionCommand()
+        {
+            // Create the FlowDocument
+            FlowDocument doc = null;
+
+            // Show the preview window
+            PrintToRegion previewToRegionTransmittal = new PrintToRegion();
+            previewToRegionTransmittal.DataContext = this;
+            previewToRegionTransmittal.TransmittalToRegion.Document = doc;
+            previewToRegionTransmittal.ShowDialog();
+        }
+
+
+
 
 
         #endregion

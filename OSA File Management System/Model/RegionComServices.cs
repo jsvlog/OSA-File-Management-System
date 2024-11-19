@@ -313,6 +313,66 @@ namespace OSA_File_Management_System.Model
         }
         #endregion
 
+        #region Get Data To Print (To Region)
+        public ObservableCollection<RegionComModel> GetToRegionToPrint(string toPrint)
+        {
+            var toRegionTransmit = new ObservableCollection<RegionComModel>();
+
+            try
+            {
+                connection.Open();
+                string query = "SELECT * FROM regioncom WHERE refNumber = @refNumber";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@refNumber", toPrint);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    toRegionTransmit.Add(new RegionComModel
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        DateReceived = reader["dateReceived"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateReceived"]),
+                        DocumentDate = reader["documentDate"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["documentDate"]),
+                        TypeOfDocs = reader["typeOfDocs"] is DBNull ? null : reader["typeOfDocs"].ToString(),
+                        Addressee = reader["addressee"] is DBNull ? null : reader["addressee"].ToString(),
+                        SubjectParticulars = reader["subjectParticulars"] is DBNull ? null : reader["subjectParticulars"].ToString(),
+                        Details = reader["details"] is DBNull ? null : reader["details"].ToString(),
+                        RefNumber = reader["refNumber"] is DBNull ? null : reader["refNumber"].ToString(),
+                        Municipality = reader["municipality"] is DBNull ? null : reader["municipality"].ToString(),
+                        Barangay = reader["barangay"] is DBNull ? null : reader["barangay"].ToString(),
+                        ReceivedFrom = reader["receivedFrom"] is DBNull ? null : reader["receivedFrom"].ToString(),
+                        DateSentOutToTeam = reader["dateSentOutToTeam"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSentOutToTeam"]),
+                        Receiver = reader["receiver"] is DBNull ? null : reader["receiver"].ToString(),
+                        Location = reader["location"] is DBNull ? null : reader["location"].ToString(),
+                        ActionableDoc = reader["actionableDoc"] is DBNull ? (bool?)null : Convert.ToBoolean(reader["actionableDoc"]),
+                        DateDeadline = reader["dateDeadline"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateDeadline"]),
+                        Remarks = reader["remarks"] is DBNull ? null : reader["remarks"].ToString(),
+                        TrackingCode = reader["trackingCode"] is DBNull ? null : reader["trackingCode"].ToString(),
+                        Direction = reader["direction"] is DBNull ? null : reader["direction"].ToString(),
+                        NumberOfCopies = reader["numberOfCopies"] is DBNull ? null : reader["numberOfCopies"].ToString(),
+                        DateSignBySA = reader["dateSignBySA"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSignBySA"]),
+                        DateReceiveByRegion = reader["dateReceiveByRegion"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateReceiveByRegion"]),
+                        DateSentOutToRegion = reader["dateSentOutToRegion"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSentOutToRegion"]),
+                        LbcRefNumber = reader["lbcRefNumber"] is DBNull ? null : reader["lbcRefNumber"].ToString(),
+                        ScannedCopy = reader["scannedCopy"] is DBNull ? null : reader["scannedCopy"].ToString(),
+
+                    });
+                }
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return toRegionTransmit;
+
+        }
+
+
+        #endregion
+
 
     }
 }

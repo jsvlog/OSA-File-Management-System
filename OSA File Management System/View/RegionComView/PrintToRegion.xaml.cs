@@ -10,24 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace OSA_File_Management_System.View.RegionComView
 {
     /// <summary>
-    /// Interaction logic for RegionComm.xaml
+    /// Interaction logic for PrintToRegion.xaml
     /// </summary>
-    public partial class RegionComm : UserControl
+    public partial class PrintToRegion : Window
     {
-        public RegionComm()
+        public PrintToRegion()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

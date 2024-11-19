@@ -389,8 +389,9 @@ namespace OSA_File_Management_System.ViewModel
             // Show the preview window
             InventoryPrintPreview previewWindow = new InventoryPrintPreview();
             previewWindow.DataContext = this;
-            previewWindow.DocumentReader.Document = doc;
+            previewWindow.DocumentReaderInventory.Document = doc;
             previewWindow.ShowDialog();
+
         }
 
         private FlowDocument CreateDocumentForPrint()
@@ -398,9 +399,9 @@ namespace OSA_File_Management_System.ViewModel
             FlowDocument doc = new FlowDocument();
 
             // Set page dimensions (adjust as needed)
-            doc.PageWidth = 800;  // Width in device-independent units (1/96 inch)
-            doc.PageHeight = 1100; // Height in device-independent units
-            doc.ColumnWidth = 600; // Width of a single column
+            doc.PageWidth = 816;  // Width in device-independent units (1/96 inch)
+            doc.PageHeight = 1248; // Height in device-independent units
+
 
 
             // Create an image for the header
@@ -411,7 +412,7 @@ namespace OSA_File_Management_System.ViewModel
             headerImage.HorizontalAlignment = HorizontalAlignment.Center;
 
             BlockUIContainer imageContainer = new BlockUIContainer(headerImage);
-            doc.Blocks.Add(imageContainer);
+            doc.Blocks.Add(imageContainer); //first Block image header----------------------------->>>>>>>>>>>
 
             Table table = new Table();
             table.CellSpacing = 5;
@@ -444,7 +445,7 @@ namespace OSA_File_Management_System.ViewModel
                 table.RowGroups[0].Rows.Add(dataRow);
             }
 
-            doc.Blocks.Add(table);
+            doc.Blocks.Add(table); //Second Block image header----------------------------->>>>>>>>>>>
             doc.PagePadding = new Thickness(50);
             return doc;
         }
