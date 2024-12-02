@@ -7,7 +7,12 @@
         mc:Ignorable="d"
         Title="ArrangePrintToRegion" Height="600" Width="1100">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        
+        
         <DataGrid 
         ItemsSource="{Binding ListToPrint}" 
         AutoGenerateColumns="False" 
@@ -19,7 +24,8 @@
         AllowDrop="True"
         PreviewMouseMove="DataGrid_PreviewMouseMove"
         Drop="DataGrid_Drop"
-        Margin="10">
+        Margin="10"
+        Grid.Row="0">
 
             <!-- Define the columns -->
             <DataGrid.Columns>
@@ -103,8 +109,30 @@
 
         </DataGrid>
 
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
 
+            <TextBlock Text="Prepared by: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" Foreground="#133E87"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValuePath="Tag" Width="200" Name="PreparedByComboBox" SelectedValue="{Binding Path=PreparedBy.Name}">
+                <ComboBoxItem Content="Johnson Lizardo" Tag="Johnson C. Lizardo" />
+                <ComboBoxItem Content="Chris Calonge" Tag="Chris Calonge" />
+                <ComboBoxItem Content="Katreen Caringal" Tag="Katreen Caringal" />
+            </ComboBox>
+
+            <Button Content="Proceed and Print" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="200" Grid.Row="1" FontSize="14" Padding="5" Margin="5" Background="#2196F3" Foreground="White" Command="{Binding PreviewPrintToRegion}"/>
+
+        </Grid>
+        
+
+            
 
 
 

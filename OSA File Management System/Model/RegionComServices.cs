@@ -14,6 +14,8 @@ namespace OSA_File_Management_System.Model
     class RegionComServices
     {
 
+
+
         private MySqlConnection connection;
 
         public RegionComServices()
@@ -367,6 +369,40 @@ namespace OSA_File_Management_System.Model
                 MessageBox.Show(ex.Message);
             }
             return toRegionTransmit;
+
+        }
+
+
+        #endregion
+
+        #region Get all Signatories
+        public ObservableCollection<Signatories> GetAllSignatories()
+        {
+            var signatoryList = new ObservableCollection<Signatories>();
+            try
+            {
+                connection.Open();
+                string query = "SELECT * FROM signatories";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    signatoryList.Add(new Signatories()
+                    {
+                        Name = reader["name"] is DBNull ? null : reader["name"].ToString(),
+                        Position = reader["position"] is DBNull ? null : reader["position"].ToString()
+                    });
+                }
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            return signatoryList;
 
         }
 

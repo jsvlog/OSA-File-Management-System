@@ -8,12 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
 using OSA_File_Management_System.View.RegionCom;
 using OSA_File_Management_System.View.RegionComView;
+
+using System.Windows.Controls;
 
 
 
@@ -68,8 +72,9 @@ namespace OSA_File_Management_System.ViewModel
             chosenTo = new RelayCommand(chosenToCommand);
             trackingIdOfCurrentDoc = new RegionComModel();
             chooseToPrintToRegion = new RelayCommand(ChooseToPrintToRegionCommand);
-            printPreviewTransmittalToRegion = new RelayCommand(printPreviewTransmittalToRegionCommand);
             arrangeList = new RelayCommand(ArrangeListCommand);
+            previewPrintToRegion = new RelayCommand(PreviewPrintToRegionCommand);
+            preparedBy = new Signatories();
             LoadAllRegionCom();
         }
 
@@ -1182,8 +1187,6 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-
-
         #region Arrange Order of Document To Print (To Region)
         private RelayCommand arrangeList;
 
@@ -1217,20 +1220,42 @@ namespace OSA_File_Management_System.ViewModel
         #endregion
 
 
-        #region Print Transmittal to Region
-        private RelayCommand printPreviewTransmittalToRegion;
+        #region Preview Print To Region
+        private RelayCommand previewPrintToRegion;
 
-        public RelayCommand PrintPreviewTransmittalToRegion
+        public RelayCommand PreviewPrintToRegion
         {
-            get { return printPreviewTransmittalToRegion; }
-
+            get { return previewPrintToRegion; }
+            set { previewPrintToRegion = value; OnPropertyChanged("PreviewPrintToRegion"); }
         }
 
+        private Signatories preparedBy;
 
-        private void printPreviewTransmittalToRegionCommand()
+        public Signatories PreparedBy
         {
+            get { return preparedBy; }
+            set { preparedBy = value; OnPropertyChanged("PreparedBy"); }
+        }
+
+        private void PreviewPrintToRegionCommand()
+        {
+
+            if (PreparedBy.Name == "Johnson C. Lizardo")
+            {
+                PreparedBy.Position = "Administrative Aide VI - OSA Staff";
+            }
+            else if (PreparedBy.Name == "Chris Calonge")
+            {
+                PreparedBy.Position = "Administrative Officer IV - OSA Staff";
+            }
+            else if (PreparedBy.Name == "Katreen Caringal")
+            {
+                PreparedBy.Position = "State Auditor II - OSA Staff";
+            }
+
+
             // Create the FlowDocument
-            FlowDocument doc = null;
+            FlowDocument doc = PageToPrintToRegion();
 
             // Show the preview window
             PrintToRegion previewToRegionTransmittal = new PrintToRegion();
@@ -1238,6 +1263,110 @@ namespace OSA_File_Management_System.ViewModel
             previewToRegionTransmittal.TransmittalToRegion.Document = doc;
             previewToRegionTransmittal.ShowDialog();
         }
+
+        private FlowDocument PageToPrintToRegion()
+        {
+            FlowDocument doc = new FlowDocument();
+
+            // Set page dimensions (adjust as needed)
+            doc.PageWidth = 816;  // Width in device-independent units (1/96 inch)
+            doc.PageHeight = 1248; // Height in device-independent units
+
+
+
+            // Create an image for the header
+            Image headerImage = new Image();
+            headerImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/header.png"));
+            headerImage.Width = 700;
+            headerImage.Height = 200;
+            headerImage.HorizontalAlignment = HorizontalAlignment.Center;
+
+            BlockUIContainer imageContainer = new BlockUIContainer(headerImage);
+            doc.Blocks.Add(imageContainer); //first Block image header----------------------------->>>>>>>>>>>
+
+            Table table = new Table();
+            table.CellSpacing = 0;
+            table.BorderBrush = Brushes.Black;
+            table.BorderThickness = new Thickness(1);
+
+            // Define columns with specific widths
+            table.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Star) }); 
+            table.Columns.Add(new TableColumn { Width = new GridLength(3, GridUnitType.Star) }); 
+            table.Columns.Add(new TableColumn { Width = new GridLength(3, GridUnitType.Star) }); 
+            table.Columns.Add(new TableColumn { Width = new GridLength(6, GridUnitType.Star) }); 
+            table.Columns.Add(new TableColumn { Width = new GridLength(3, GridUnitType.Star) }); 
+
+
+
+            TableRow headerRow = new TableRow();
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("No.")))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("Document Type")))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("Date")))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("Particulars")))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("No. of Copies")))));
+            table.RowGroups.Add(new TableRowGroup());
+            table.RowGroups[0].Rows.Add(headerRow);
+
+            for (int i = 1; i <= ListToPrint.Count; i++)
+            {
+                var docItem = ListToPrint[i - 1];
+                TableRow dataRow = new TableRow();
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(i.ToString())))); // Add current index
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.TypeOfDocs))));
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.DocumentDate.ToString()))));
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.SubjectParticulars))));
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.NumberOfCopies))));
+                table.RowGroups[0].Rows.Add(dataRow);
+            }
+
+            foreach (TableRowGroup rowGroup in table.RowGroups)
+            {
+                foreach (TableRow row in rowGroup.Rows)
+                {
+                    foreach (TableCell cell in row.Cells)
+                    {
+                        cell.BorderBrush = Brushes.Black; // Black lines between cells
+                        cell.BorderThickness = new Thickness(1); // Set thickness for lines
+                        cell.Padding = new Thickness(5); // Optional: Padding for content
+                    }
+                }
+            }
+
+
+            doc.Blocks.Add(table); //Second Block the Table----------------------------->>>>>>>>>>>
+
+            //"Prepared by"
+            Paragraph preparedByParagraph = new Paragraph(new Run("Prepared by:"));
+            preparedByParagraph.TextAlignment = TextAlignment.Left; // Align text to the left
+            preparedByParagraph.Margin = new Thickness(0, 100, 0, 0); // Add top margin (100 units)
+
+            //Who prepared
+            Paragraph whoPrepared = new Paragraph(new Run(PreparedBy.Name.ToString()));
+            whoPrepared.TextAlignment = TextAlignment.Left;
+            whoPrepared.Margin = new Thickness(0, 50, 0, 0);
+
+            // Create a new paragraph for "Approved by"
+            Paragraph approvedByParagraph = new Paragraph(new Run("Noted by:"));
+            approvedByParagraph.TextAlignment = TextAlignment.Left; // Align text to the left
+            approvedByParagraph.Margin = new Thickness(0, 50, 0, 0); // Add top margin (50 units)
+
+            // Add these paragraphs to the document
+            doc.Blocks.Add(preparedByParagraph);
+            doc.Blocks.Add(whoPrepared);
+            doc.Blocks.Add(approvedByParagraph);
+
+            doc.PagePadding = new Thickness(50);
+            return doc;
+        }
+
+
+    
+
+
+        #endregion
+
+        #region Print Transmittal to Region
+
 
 
 
