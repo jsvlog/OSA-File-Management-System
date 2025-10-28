@@ -29,5 +29,10 @@ namespace OSA_File_Management_System.View.RegionComView
         {
 
         }
+
+        private void RegionComDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

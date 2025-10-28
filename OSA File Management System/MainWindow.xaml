@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Background="CadetBlue">
@@ -73,7 +74,9 @@
             </ListBoxItem>
         </ListBox>
 
-        <ContentControl x:Name="ContentArea" Grid.Column="1" Grid.RowSpan="2"/>
+        <ContentControl x:Name="ContentArea" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"/>
+
+        <Button Content="Backup Database" Grid.Row="2" Padding="5" Margin="10" Background="#22177A" Foreground="White" Command="{Binding BackupDatabaseBtn}"/>
 
 
 

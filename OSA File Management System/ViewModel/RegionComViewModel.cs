@@ -75,6 +75,9 @@ namespace OSA_File_Management_System.ViewModel
             arrangeList = new RelayCommand(ArrangeListCommand);
             previewPrintToRegion = new RelayCommand(PreviewPrintToRegionCommand);
             preparedBy = new Signatories();
+            approvedBy = new Signatories();
+            doc = new FlowDocument();
+            finalPrintTransmittalToRegion = new RelayCommand(PrintTransToRegion);
             LoadAllRegionCom();
         }
 
@@ -230,6 +233,7 @@ namespace OSA_File_Management_System.ViewModel
                 FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
                 AddToRegionData = new RegionComModel();
             }
+            AddToRegionData = new RegionComModel();
 
         }
 
@@ -341,6 +345,7 @@ namespace OSA_File_Management_System.ViewModel
                 FilteredDocs = new ObservableCollection<RegionComModel>(filteredList);
                 AddFromRegionData = new RegionComModel();
             }
+            AddFromRegionData = new RegionComModel();
 
 
         }
@@ -1219,7 +1224,6 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
-
         #region Preview Print To Region
         private RelayCommand previewPrintToRegion;
 
@@ -1237,8 +1241,20 @@ namespace OSA_File_Management_System.ViewModel
             set { preparedBy = value; OnPropertyChanged("PreparedBy"); }
         }
 
+        private Signatories approvedBy;
+
+        public Signatories ApprovedBy
+        {
+            get { return approvedBy; }
+            set { approvedBy = value; OnPropertyChanged("ApprovedBy"); }
+        }
+
+        public FlowDocument doc;
+
         private void PreviewPrintToRegionCommand()
         {
+            ApprovedBy.Name = "Atty. Emmerly Jane D. Masangkay";
+            ApprovedBy.Position = "State Auditor V" + Environment.NewLine + "Supervising Auditor-LGAS Oriental Mindoro";
 
             if (PreparedBy.Name == "Johnson C. Lizardo")
             {
@@ -1255,7 +1271,7 @@ namespace OSA_File_Management_System.ViewModel
 
 
             // Create the FlowDocument
-            FlowDocument doc = PageToPrintToRegion();
+            doc = PageToPrintToRegion();
 
             // Show the preview window
             PrintToRegion previewToRegionTransmittal = new PrintToRegion();
@@ -1269,8 +1285,8 @@ namespace OSA_File_Management_System.ViewModel
             FlowDocument doc = new FlowDocument();
 
             // Set page dimensions (adjust as needed)
-            doc.PageWidth = 816;  // Width in device-independent units (1/96 inch)
-            doc.PageHeight = 1248; // Height in device-independent units
+            doc.PageWidth = 8 * 96;  
+            doc.PageHeight = 13 * 96; 
 
 
 
@@ -1278,7 +1294,6 @@ namespace OSA_File_Management_System.ViewModel
             Image headerImage = new Image();
             headerImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/header.png"));
             headerImage.Width = 700;
-            headerImage.Height = 200;
             headerImage.HorizontalAlignment = HorizontalAlignment.Center;
 
             BlockUIContainer imageContainer = new BlockUIContainer(headerImage);
@@ -1287,7 +1302,11 @@ namespace OSA_File_Management_System.ViewModel
             Table table = new Table();
             table.CellSpacing = 0;
             table.BorderBrush = Brushes.Black;
-            table.BorderThickness = new Thickness(1);
+            table.BorderThickness = new Thickness(0.5);
+            table.Resources.Add(typeof(Paragraph), new Style
+            {
+                Setters = { new Setter(Paragraph.FontSizeProperty, 10.0) } // Set font size to 12
+            });
 
             // Define columns with specific widths
             table.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Star) }); 
@@ -1313,7 +1332,7 @@ namespace OSA_File_Management_System.ViewModel
                 TableRow dataRow = new TableRow();
                 dataRow.Cells.Add(new TableCell(new Paragraph(new Run(i.ToString())))); // Add current index
                 dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.TypeOfDocs))));
-                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.DocumentDate.ToString()))));
+                dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.DocumentDate?.ToString("MM/dd/yyyy") ?? "N/A")))); //it has N/A to handle nullable
                 dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.SubjectParticulars))));
                 dataRow.Cells.Add(new TableCell(new Paragraph(new Run(docItem.NumberOfCopies))));
                 table.RowGroups[0].Rows.Add(dataRow);
@@ -1326,47 +1345,84 @@ namespace OSA_File_Management_System.ViewModel
                     foreach (TableCell cell in row.Cells)
                     {
                         cell.BorderBrush = Brushes.Black; // Black lines between cells
-                        cell.BorderThickness = new Thickness(1); // Set thickness for lines
-                        cell.Padding = new Thickness(5); // Optional: Padding for content
+                        cell.BorderThickness = new Thickness(0.25); // Set thickness for lines
+                        cell.Padding = new Thickness(1); // Optional: Padding for content
                     }
                 }
             }
 
-
             doc.Blocks.Add(table); //Second Block the Table----------------------------->>>>>>>>>>>
 
-            //"Prepared by"
+            //this part is for signatories
             Paragraph preparedByParagraph = new Paragraph(new Run("Prepared by:"));
             preparedByParagraph.TextAlignment = TextAlignment.Left; // Align text to the left
             preparedByParagraph.Margin = new Thickness(0, 100, 0, 0); // Add top margin (100 units)
+            preparedByParagraph.FontSize = 10;
 
-            //Who prepared
+
             Paragraph whoPrepared = new Paragraph(new Run(PreparedBy.Name.ToString()));
             whoPrepared.TextAlignment = TextAlignment.Left;
             whoPrepared.Margin = new Thickness(0, 50, 0, 0);
+            whoPrepared.FontSize = 10;
 
-            // Create a new paragraph for "Approved by"
+
+            Paragraph positionOfWhoPrepared = new Paragraph(new Run(PreparedBy.Position.ToString()));
+            positionOfWhoPrepared.TextAlignment = TextAlignment.Left;
+            positionOfWhoPrepared.Margin = new Thickness(0, 5, 0, 0);
+            positionOfWhoPrepared.FontSize = 10;
+
+
             Paragraph approvedByParagraph = new Paragraph(new Run("Noted by:"));
-            approvedByParagraph.TextAlignment = TextAlignment.Left; // Align text to the left
-            approvedByParagraph.Margin = new Thickness(0, 50, 0, 0); // Add top margin (50 units)
+            approvedByParagraph.TextAlignment = TextAlignment.Left; 
+            approvedByParagraph.Margin = new Thickness(0, 50, 0, 0);
+            approvedByParagraph.FontSize = 10;
+
+            Paragraph whoApproved = new Paragraph(new Run(ApprovedBy.Name.ToString()));
+            whoApproved.TextAlignment = TextAlignment.Left;
+            whoApproved.Margin = new Thickness(0, 50, 0, 0);
+            whoApproved.FontSize = 10;
+
+            Paragraph positionOfWhoApproved = new Paragraph(new Run(ApprovedBy.Position.ToString()));
+            positionOfWhoApproved.TextAlignment = TextAlignment.Left;
+            positionOfWhoApproved.Margin = new Thickness(0, 5, 0, 0);
+            positionOfWhoApproved.FontSize= 10;
 
             // Add these paragraphs to the document
             doc.Blocks.Add(preparedByParagraph);
             doc.Blocks.Add(whoPrepared);
+            doc.Blocks.Add(positionOfWhoPrepared);
             doc.Blocks.Add(approvedByParagraph);
+            doc.Blocks.Add(whoApproved);
+            doc.Blocks.Add(positionOfWhoApproved);
 
-            doc.PagePadding = new Thickness(50);
+            doc.ColumnWidth = double.PositiveInfinity;
+            doc.PagePadding = new Thickness(20);
             return doc;
         }
 
 
-    
+
 
 
         #endregion
 
         #region Print Transmittal to Region
+        private RelayCommand finalPrintTransmittalToRegion;
 
+        public RelayCommand FinalPrintTransmittalToRegion
+        {
+            get { return finalPrintTransmittalToRegion; }
+        }
+
+        private void PrintTransToRegion()
+        {
+            PrintDialog printDlg = new PrintDialog();
+            if (printDlg.ShowDialog() == true)
+            {
+                IDocumentPaginatorSource idpSource = doc;
+                printDlg.PrintDocument(idpSource.DocumentPaginator, "Document Report");
+            }
+        }
 
 
 

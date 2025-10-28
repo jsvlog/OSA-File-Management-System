@@ -24,7 +24,7 @@
                 HorizontalAlignment="Center" 
                 Margin="10" 
                 Width="100" 
-                Command="{Binding}"
+                Command="{Binding FinalPrintTransmittalToRegion}"
                 Grid.Row="1" />
 
 

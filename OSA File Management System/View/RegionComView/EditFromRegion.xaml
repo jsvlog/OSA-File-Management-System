@@ -133,10 +133,8 @@
         <TextBlock Grid.Row="8" Grid.Column="3" Text="Scanned Copy" FontWeight="Bold"/>
         <Grid Grid.Row="9" Grid.Column="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFileFromRegion}"/>
             <TextBox Grid.Column="1" Text="{Binding Path=EditFromRegionData.ScannedCopy}"/>
         </Grid>
 

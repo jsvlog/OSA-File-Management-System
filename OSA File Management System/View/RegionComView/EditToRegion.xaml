@@ -118,10 +118,8 @@
             <TextBlock Grid.Row="8" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
             <Grid Grid.Row="9" Grid.Column="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFile}"/>
                 <TextBox Grid.Column="1" Text="{Binding Path=EditToRegionData.ScannedCopy}"/>
             </Grid>
 
