@@ -123,6 +123,7 @@
             <TextBlock Text="Prepared by: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" Foreground="#133E87"/>
             <ComboBox Grid.Row="0" Grid.Column="1" SelectedValuePath="Tag" Width="200" Name="PreparedByComboBox" SelectedValue="{Binding Path=PreparedBy.Name}">
                 <ComboBoxItem Content="Johnson Lizardo" Tag="Johnson C. Lizardo" />
+                <ComboBoxItem Content="Patrick Aquino" Tag="Patrick C. Aquino" />
                 <ComboBoxItem Content="Chris Calonge" Tag="Chris Calonge" />
                 <ComboBoxItem Content="Katreen Caringal" Tag="Katreen Caringal" />
             </ComboBox>
