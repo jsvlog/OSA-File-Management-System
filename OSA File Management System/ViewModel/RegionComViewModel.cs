@@ -1262,7 +1262,7 @@ namespace OSA_File_Management_System.ViewModel
 
             if (PreparedBy.Name == "Johnson C. Lizardo")
             {
-                PreparedBy.Position = "Administrative Aide VI - OSA Staff";
+                PreparedBy.Position = "Administrative Assistant III - OSA Staff";
             }
             else if (PreparedBy.Name == "Chris Calonge")
             {
@@ -1271,6 +1271,10 @@ namespace OSA_File_Management_System.ViewModel
             else if (PreparedBy.Name == "Katreen Caringal")
             {
                 PreparedBy.Position = "State Auditor II - OSA Staff";
+            }
+            else if (PreparedBy.Name == "Patrick C. Aquino")
+            {
+                PreparedBy.Position = "Administrative Aide VI - OSA Staff";
             }
 
 
