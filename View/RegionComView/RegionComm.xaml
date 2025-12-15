@@ -1,0 +1,28 @@
+<UserControl x:Class="OSA_File_Management_System.View.RegionComView.RegionComm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="Auto" Width="Auto">
+    <Grid Background="Transparent">
+        <!-- Keep your top controls but use modern styles -->
+        <!-- Example: Search row uses SearchBox style -->
+        <Grid Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Search" Style="{StaticResource PrimaryButton}" Margin="4" Grid.Column="0" Command="{Binding BtnSearchRegionCom}"/>
+            <TextBox Grid.Column="1" Style="{StaticResource SearchBox}" Margin="6" Text="{Binding SearchTextRegionCom, Mode=TwoWay}" />
+            <Button Grid.Column="2" Margin="4" Padding="6" Background="Transparent" BorderBrush="Transparent" Command="{Binding BtnLoadData}">
+                <Image Source="pack://application:,,,/images/icons/refresh.png" Width="20" Height="20"/>
+            </Button>
+        </Grid>
+
+        <DataGrid x:Name="RegionComDataGrid" Grid.Row="1" AutoGenerateColumns="False" Margin="0,56,0,0"
+                  CanUserSortColumns="True" ItemsSource="{Binding RegionComList}"
+                  Style="{StaticResource ModernDataGrid}">
+            <!-- columns unchanged; keeps your SortMemberPath on DateReceived -->
+        </DataGrid>
+    </Grid>
+</UserControl>

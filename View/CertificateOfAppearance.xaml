@@ -1,0 +1,66 @@
+<UserControl x:Class="OSA_File_Management_System.View.CertificateOfAppearance"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:OSA_File_Management_System.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{StaticResource SurfaceBrush}">
+
+    <UserControl.DataContext>
+        <viewModel:CertificateViewModel />
+    </UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="FormLabel" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="FormInput" BasedOn="{StaticResource SearchBox}">
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border Background="{StaticResource CardBrush}"
+                CornerRadius="8"
+                Width="450"
+                Padding="24"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="1" BlurRadius="10" Color="#000" Opacity="0.08"/>
+            </Border.Effect>
+            
+            <StackPanel>
+                <TextBlock Text="Certificate of Appearance" 
+                           FontSize="20" FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryBrush}"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Center"/>
+                
+                <!-- Name Field -->
+                <TextBlock Text="Full Name" Style="{StaticResource FormLabel}"/>
+                <TextBox Style="{StaticResource FormInput}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                
+                <!-- Position Field -->
+                <TextBlock Text="Position / Designation" Style="{StaticResource FormLabel}"/>
+                <TextBox Style="{StaticResource FormInput}" Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- Purpose Field -->
+                <TextBlock Text="Purpose" Style="{StaticResource FormLabel}"/>
+                <TextBox Style="{StaticResource FormInput}" Text="{Binding Purpose, UpdateSourceTrigger=PropertyChanged}"
+                         AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"/>
+                
+                <!-- Generate Button -->
+                <Button Content="Generate Certificate"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding GenerateCertificateCommand}"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,16,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

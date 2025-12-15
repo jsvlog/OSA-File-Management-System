@@ -78,6 +78,10 @@ namespace OSA_File_Management_System.ViewModel
             approvedBy = new Signatories();
             doc = new FlowDocument();
             finalPrintTransmittalToRegion = new RelayCommand(PrintTransToRegion);
+            showFilterWindow = new RelayCommand(OpenFilterWindowCommand);
+            applyYearFilter = new RelayCommand(ApplyYearFilterCommand);
+            clearYearFilter = new RelayCommand(ClearYearFilterCommand);
+            closeFilterWindow = new RelayCommand(CloseFilterWindowCommand);
             LoadAllRegionCom();
         }
 
@@ -160,48 +164,48 @@ namespace OSA_File_Management_System.ViewModel
         //to show if you want to show To region, From Region or All
         private void FilterDocs()
         {
-            if (IsAllChecked)
-            {
-                foreach (var doc in RegionComList)
-                {
-                    doc.Visib = true;
-                }
+            // 1. Start with the Master List (All Data)
+            IEnumerable<RegionComModel> query = RegionComList;
 
+            // 2. Apply Year Filter (if one is selected)
+            if (SelectedFilterYear > 0)
+            {
+                query = query.Where(d => d.DateReceived.HasValue && d.DateReceived.Value.Year == SelectedFilterYear);
             }
-            else if (IsToRegionChecked)
-            {
-                foreach (var doc in RegionComList)
-                {
-                    if (doc.Direction == "To Region")
-                    {
-                        doc.Visib = true;
-                    }
-                    else if (doc.Direction == "From Region")
-                    {
-                        doc.Visib = false;
-                    }
-                }
 
+            // 3. Apply Radio Button Filters (Direction)
+            if (IsToRegionChecked)
+            {
+                query = query.Where(d => d.Direction == "To Region");
             }
             else if (IsFromRegionChecked)
             {
-                foreach (var doc in RegionComList)
-                {
-                    if (doc.Direction == "From Region")
-                    {
-                        doc.Visib = true;
-                    }
-                    else if (doc.Direction == "To Region")
-                    {
-                        doc.Visib = false;
-                    }
+                query = query.Where(d => d.Direction == "From Region");
+            }
+            // Note: If IsAllChecked is true, we do nothing (keep both directions)
 
-                }
-
+            // 4. Apply Search Text (if typed)
+            if (!string.IsNullOrEmpty(SearchTextRegionCom))
+            {
+                query = query.Where(d =>
+                    (d.SubjectParticulars != null && d.SubjectParticulars.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.RefNumber != null && d.RefNumber.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.ReceivedFrom != null && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
+                );
             }
 
+            // 5. Finally, update the Visibility property
+            // First, hide everything
+            foreach (var doc in RegionComList)
+            {
+                doc.Visib = false;
+            }
 
-
+            // Then, show only the ones that passed ALL filters above
+            foreach (var doc in query)
+            {
+                doc.Visib = true;
+            }
         }
 
 
@@ -1430,6 +1434,89 @@ namespace OSA_File_Management_System.ViewModel
 
         #endregion
 
+        #region Filter By Year Logic
+
+        // 1. The List of Years to display in the popup
+        private ObservableCollection<int> yearList;
+        public ObservableCollection<int> YearList
+        {
+            get { return yearList; }
+            set { yearList = value; OnPropertyChanged("YearList"); }
+        }
+
+        // 2. The Year the user selects in the popup
+        private int selectedFilterYear;
+        public int SelectedFilterYear
+        {
+            get { return selectedFilterYear; }
+            set { selectedFilterYear = value; OnPropertyChanged("SelectedFilterYear"); }
+        }
+
+        // 3. Command to OPEN the window
+        private RelayCommand showFilterWindow;
+        public RelayCommand ShowFilterWindow
+        {
+            get { return showFilterWindow; }
+        }
+
+        private FilterByYearWindow filterPopup;
+
+        private void OpenFilterWindowCommand()
+        {
+            // Get unique years from your database list
+            var years = regionComServices.GetAllRegionCom()
+                .Where(x => x.DateReceived.HasValue)
+                .Select(x => x.DateReceived.Value.Year)
+                .Distinct()
+                .OrderByDescending(y => y) // Newest first
+                .ToList();
+
+            YearList = new ObservableCollection<int>(years);
+
+            filterPopup = new FilterByYearWindow();
+            filterPopup.DataContext = this;
+            filterPopup.ShowDialog();
+        }
+
+        // 4. Command to APPLY the filter
+        private RelayCommand applyYearFilter;
+        public RelayCommand ApplyYearFilter
+        {
+            get { return applyYearFilter; }
+        }
+
+        private void ApplyYearFilterCommand()
+        {
+            FilterDocs(); // Run the main filter logic
+            if (filterPopup != null) filterPopup.Close();
+        }
+
+        // 5. Command to CLEAR the filter (Show All)
+        private RelayCommand clearYearFilter;
+        public RelayCommand ClearYearFilter
+        {
+            get { return clearYearFilter; }
+        }
+
+        private void ClearYearFilterCommand()
+        {
+            SelectedFilterYear = 0; // 0 means "No year selected"
+            FilterDocs();
+            if (filterPopup != null) filterPopup.Close();
+        }
+
+        // 6. Command to Close Window without doing anything
+        private RelayCommand closeFilterWindow;
+        public RelayCommand CloseFilterWindow
+        {
+            get { return closeFilterWindow; }
+        }
+        private void CloseFilterWindowCommand()
+        {
+            if (filterPopup != null) filterPopup.Close();
+        }
+
+        #endregion
 
 
     }
