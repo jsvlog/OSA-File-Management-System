@@ -5,100 +5,269 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OSA_File_Management_System.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="AliceBlue">
+             d:DesignHeight="700" d:DesignWidth="1100">
+
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernBtn" TargetType="Button">
+            <Setter Property="Background" Value="#257180"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1A5F6E"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowHeight" Value="45"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#131842"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EAF6F8"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#257180"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F5F7FA">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Buttons and Commands Section -->
-        
-        <Grid Grid.Row="0" Margin="2" >
+        <Grid Grid.Row="0" Margin="10,10,10,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Search" Margin="3" Padding="3" Grid.Column="0" Command="{Binding DocumentViewModel.BtnSearchInventory}" />
-            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding DocumentViewModel.SearchTextInventory}"/>
-            <Button x:Name="YearButton" Content="Filter" Margin="3" Padding="3" Click="YearButton_Click" Grid.Column="2"  />
-            <Popup Name="YearPopup" PlacementTarget="{Binding ElementName=YearButton}" StaysOpen="False">
-                <Border BorderBrush="Gray" BorderThickness="1" Background="White">
-                    <StackPanel>
-                        <!-- ListBox with ListBoxItems containing CheckBoxes -->
-                        <ListBox>
-                            <ListBoxItem>
-                                <CheckBox Content="2016" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2017" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2018" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2019" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2020" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2021" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2022" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2023" />
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <CheckBox Content="2024" />
-                            </ListBoxItem>
-                        </ListBox>
-                    </StackPanel>
-                </Border>
-            </Popup>
-            <Button Content="Add" Margin="3" Padding="3" Grid.Column="3" Command="{Binding DocumentViewModel.ShowAddForm}"/>
-            <Button Content="Create Turn Over Report" Margin="3" Padding="3" Grid.Column="4" Command="{Binding Path=DocumentViewModel.PrintPreview}" />
+
+            <Button Grid.Column="0" Style="{StaticResource ModernBtn}" 
+                    Command="{Binding DocumentViewModel.ShowAddForm}" 
+                    Height="80" Margin="5" Background="White">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="White" CornerRadius="10" Cursor="Hand">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="➕" FontSize="24" Margin="0,0,15,0" Foreground="#257180"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Add New Item" FontSize="16" FontWeight="Bold" Foreground="#131842"/>
+                                    <TextBlock Text="Register new equipment or supplies" FontSize="11" Foreground="Gray"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Grid.Column="1" Style="{StaticResource ModernBtn}" 
+                    Command="{Binding DocumentViewModel.PrintPreview}" 
+                    Height="80" Margin="5" Background="White">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="White" CornerRadius="10" Cursor="Hand">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="📋" FontSize="24" Margin="0,0,15,0" Foreground="#257180"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Turn Over Report" FontSize="16" FontWeight="Bold" Foreground="#131842"/>
+                                    <TextBlock Text="Generate PDF report for inventory" FontSize="11" Foreground="Gray"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
 
-        <!-- DataGrid Section -->
-        <DataGrid x:Name="InventoryDataGrid" Grid.Row="1" AutoGenerateColumns="False"  Margin="2" 
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DocumentViewModel.DocumentList, Mode=TwoWay}" >
-            <!-- Define the columns of the DataGrid -->
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Width="5*" Binding="{Binding Date, StringFormat=MM-dd-yyyy}"/>
-                <DataGridTextColumn Header="Type"  Width="5*" Binding="{Binding Type}"/>
-                <DataGridTemplateColumn Header="Description" Width="30*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Description}" 
-                           TextWrapping="Wrap" 
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Status"  Width="5*" Binding="{Binding Status}"/>
-                <DataGridTextColumn Header="Location"  Width="5*" Binding="{Binding Location}"/>
-                <DataGridTextColumn Header="Remarks"  Width="5*" Binding="{Binding Remarks}"/>
-                
-            </DataGrid.Columns>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="Edit" Header="Edit"
-                              Command="{Binding DocumentViewModel.ShowEditForm}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-                    <MenuItem x:Name="parameter" Header="Delete"
-                              Command="{Binding DocumentViewModel.DeleteDocument}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-                    <MenuItem x:Name="param" Header="View Pdf" 
-                              Command="{Binding DocumentViewModel.ViewPdf}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="15,5,15,5" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
+                <Grid Grid.Column="0" Margin="0,0,10,0">
+                    <TextBox Height="40" VerticalContentAlignment="Center" Padding="10,0" FontSize="14"
+                             Text="{Binding DocumentViewModel.SearchTextInventory, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock Text="🔍 Search Inventory..." IsHitTestVisible="False" VerticalAlignment="Center" Margin="12,0,0,0" Foreground="#AAA">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DocumentViewModel.SearchTextInventory}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+
+                <Button Grid.Column="1" Content="Search" Width="100" Margin="5,0" Style="{StaticResource ModernBtn}"
+                        Command="{Binding DocumentViewModel.BtnSearchInventory}"/>
+
+                <Grid Grid.Column="2">
+                    <Button Grid.Column="2" Content="📅 Filter Year" Width="130" Margin="5,0" 
+                        Style="{StaticResource ModernBtn}" Background="#131842"
+                        Command="{Binding DocumentViewModel.ShowInventoryFilterWindow}"/>
+
+                    <Popup Name="YearPopup" PlacementTarget="{Binding ElementName=YearButton}" 
+                           StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide">
+                        <Border Background="White" CornerRadius="8" BorderBrush="#EEE" BorderThickness="1" Margin="0,5,0,0">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="3" Opacity="0.2"/>
+                            </Border.Effect>
+                            <StackPanel Width="150">
+                                <TextBlock Text="Select Year" FontWeight="Bold" Margin="10" Foreground="#257180"/>
+                                <ListBox BorderThickness="0" Background="Transparent" MaxHeight="200">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Padding" Value="5"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <Border Background="{TemplateBinding Background}" Padding="5">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#F0F7F9"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+
+                                    <ListBoxItem>
+                                        <CheckBox Content="2024"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2023"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2022"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2021"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2020"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2019"/>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <CheckBox Content="2018"/>
+                                    </ListBoxItem>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,5,15,15" Padding="0">
+            <DataGrid x:Name="InventoryDataGrid" 
+                      AutoGenerateColumns="False" 
+                      ItemsSource="{Binding DocumentViewModel.DocumentList, Mode=TwoWay}"
+                      CanUserSortColumns="True"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Width="1.5*" Binding="{Binding Date, StringFormat=MM-dd-yyyy}"/>
+                    <DataGridTextColumn Header="Type" Width="1.5*" Binding="{Binding Type}"/>
+
+                    <DataGridTemplateColumn Header="Description" Width="5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="5,0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Status" Width="1.5*" Binding="{Binding Status}"/>
+                    <DataGridTextColumn Header="Location" Width="1.5*" Binding="{Binding Location}"/>
+                    <DataGridTextColumn Header="Remarks" Width="2*" Binding="{Binding Remarks}"/>
+                </DataGrid.Columns>
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="✏️ Edit" Command="{Binding DocumentViewModel.ShowEditForm}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                        <MenuItem Header="🗑️ Delete" Command="{Binding DocumentViewModel.DeleteDocument}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                        <MenuItem Header="📄 View PDF" Command="{Binding DocumentViewModel.ViewPdf}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </Border>
 
     </Grid>
 </UserControl>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+// 1. FIX: The namespace MUST now include the "CertificateView" folder name.
 namespace OSA_File_Management_System.View
 {
     /// <summary>
@@ -22,6 +23,7 @@ namespace OSA_File_Management_System.View
     {
         public CertificateOfAppearance()
         {
+            // 2. This should now compile correctly!
             InitializeComponent();
         }
     }

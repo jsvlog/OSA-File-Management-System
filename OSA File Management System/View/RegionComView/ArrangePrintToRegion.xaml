@@ -5,138 +5,148 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
         mc:Ignorable="d"
-        Title="ArrangePrintToRegion" Height="600" Width="1100">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="2*"/>
-        </Grid.RowDefinitions>
-        
-        
-        <DataGrid 
-        ItemsSource="{Binding ListToPrint}" 
-        AutoGenerateColumns="False" 
-        CanUserAddRows="False" 
-        CanUserReorderColumns="False" 
-        CanUserResizeColumns="True" 
-        CanUserSortColumns="False"
-        SelectionMode="Single"
-        AllowDrop="True"
-        PreviewMouseMove="DataGrid_PreviewMouseMove"
-        Drop="DataGrid_Drop"
-        Margin="10"
-        Grid.Row="0">
+        Title="Arrange Documents" Height="650" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
-            <!-- Define the columns -->
-            <DataGrid.Columns>
-                <!-- Date Received -->
-                <DataGridTemplateColumn Header="Date Received" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DateReceived, StringFormat=MM/dd/yyyy}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+    <Window.Resources>
+        <Style x:Key="ModernBtn" TargetType="Button">
+            <Setter Property="Background" Value="#131842"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1F2A63"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-                <!-- Document Date -->
-                <DataGridTemplateColumn Header="Document Date" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DocumentDate, StringFormat=MM/dd/yyyy}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+        </Style>
 
-                <!-- Type of Docs -->
-                <DataGridTemplateColumn Header="Type of Docs" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding TypeOfDocs}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#257180"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
 
-                <!-- Subject Particulars -->
-                <DataGridTemplateColumn Header="Subject Particulars" Width="30*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding SubjectParticulars}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F0F7F9"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E0F7FA"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
-                <!-- Ref Number -->
-                <DataGridTemplateColumn Header="Ref Number" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RefNumber}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+    <Border CornerRadius="15" Background="White" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="5" Opacity="0.3" Color="Black"/>
+        </Border.Effect>
 
-                <!-- Received From -->
-                <DataGridTemplateColumn Header="Received From" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding ReceivedFrom}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <!-- Remarks -->
-                <DataGridTemplateColumn Header="Remarks" Width="6*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Remarks}" 
-                               TextWrapping="Wrap" 
-                               VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-
-        </DataGrid>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
 
+            <Border Grid.Row="0" CornerRadius="15,15,0,0" Background="#257180">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0">
+                        <TextBlock Text="📄" FontSize="18" Margin="0,0,10,0"/>
+                        <TextBlock Text="Arrange Documents for Printing" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
 
-            <TextBlock Text="Prepared by: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" Foreground="#133E87"/>
-            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValuePath="Tag" Width="200" Name="PreparedByComboBox" SelectedValue="{Binding Path=PreparedBy.Name}">
-                <ComboBoxItem Content="Johnson Lizardo" Tag="Johnson C. Lizardo" />
-                <ComboBoxItem Content="Patrick Aquino" Tag="Patrick C. Aquino" />
-                <ComboBoxItem Content="Chris Calonge" Tag="Chris Calonge" />
-                <ComboBoxItem Content="Katreen Caringal" Tag="Katreen Caringal" />
-            </ComboBox>
+                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                            Margin="0,0,15,0" Width="30" Height="30" 
+                            Foreground="White" Background="Transparent" BorderThickness="0" 
+                            FontSize="14" Cursor="Hand" IsCancel="True"/>
+                </Grid>
+            </Border>
 
-            <Button Content="Proceed and Print" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="200" Grid.Row="1" FontSize="14" Padding="5" Margin="5" Background="#2196F3" Foreground="White" Command="{Binding PreviewPrintToRegion}"/>
+            <Border Grid.Row="1" Margin="20" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5">
+                <DataGrid ItemsSource="{Binding ListToPrint}" 
+                          AutoGenerateColumns="False" 
+                          CanUserReorderColumns="False" 
+                          CanUserResizeColumns="True" 
+                          CanUserSortColumns="False"
+                          SelectionMode="Single"
+                          AllowDrop="True"
+                          PreviewMouseMove="DataGrid_PreviewMouseMove"
+                          Drop="DataGrid_Drop">
 
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date Received" Binding="{Binding DateReceived, StringFormat=MM/dd/yyyy}" Width="1.5*"/>
+                        <DataGridTextColumn Header="Doc Date" Binding="{Binding DocumentDate, StringFormat=MM/dd/yyyy}" Width="1.5*"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding TypeOfDocs}" Width="1.5*"/>
+                        <DataGridTextColumn Header="Subject / Particulars" Binding="{Binding SubjectParticulars}" Width="5*"/>
+                        <DataGridTextColumn Header="Ref No." Binding="{Binding RefNumber}" Width="1.5*"/>
+                        <DataGridTextColumn Header="From" Binding="{Binding ReceivedFrom}" Width="1.5*"/>
+                        <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="2*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <Border Grid.Row="2" Background="#F9F9F9" CornerRadius="0,0,15,15" BorderBrush="#EEE" BorderThickness="0,1,0,0">
+                <Grid Margin="20,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Prepared By:" FontSize="12" Foreground="Gray" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <ComboBox Grid.Column="1" Width="250" Height="35" VerticalContentAlignment="Center"
+                              SelectedValuePath="Tag" Name="PreparedByComboBox" 
+                              SelectedValue="{Binding Path=PreparedBy.Name}">
+                        <ComboBoxItem Content="Johnson Lizardo" Tag="Johnson C. Lizardo" />
+                        <ComboBoxItem Content="Patrick Aquino" Tag="Patrick C. Aquino" />
+                        <ComboBoxItem Content="Chris Calonge" Tag="Chris Calonge" />
+                        <ComboBoxItem Content="Katreen Caringal" Tag="Katreen Caringal" />
+                    </ComboBox>
+
+                    <Button Grid.Column="3" Style="{StaticResource ModernBtn}"
+                            Command="{Binding PreviewPrintToRegion}" Width="200">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🖨️ Proceed &amp; Print" FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
         </Grid>
-        
-
-            
-
-
-
-
-    </Grid>
+    </Border>
 </Window>

@@ -5,81 +5,187 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System.View"
         mc:Ignorable="d"
-        Title="EditFormInventory" Height="450" Width="800">
+        Title="Edit Inventory Item" Height="650" Width="850"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#2196F3" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Cursor" Value="Hand" />
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="White">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="10" />
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="BorderBrush" Value="Gray" />
-            <Setter Property="BorderThickness" Value="1" />
+
+        <Style TargetType="DatePicker">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="38"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="Margin" Value="2,0,0,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style x:Key="ModernBtn" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="10*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- Date -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Date" FontWeight="Bold"/>
-        <DatePicker Grid.Row="1" Grid.Column="0" FontSize="15" SelectedDate="{Binding Path=EditFormData.Date, Mode=TwoWay}"/>
+    <Border CornerRadius="15" Background="#F4F6F9" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.4" Color="Black"/>
+        </Border.Effect>
 
-        <!-- Type -->
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Type" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EditFormData.Type, Mode=TwoWay}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
 
-        <!-- Status -->
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="Status" FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=EditFormData.Status, Mode=TwoWay}" />
+            <Border Grid.Row="0" CornerRadius="15,15,0,0" Background="#257180">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="25,0">
+                        <TextBlock Text="✏️" FontSize="20" Foreground="White" Margin="0,0,10,0"/>
+                        <TextBlock Text="Edit Inventory Item" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
 
-        <!-- Location -->
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Location" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Path=EditFormData.Location, Mode=TwoWay}" />
+                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
+                            Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0"
+                            Command="{Binding Path=CloseEditForm}" FontSize="16"/>
+                </Grid>
+            </Border>
 
-        <!-- Remarks -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="Remarks" FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EditFormData.Remarks, Mode=TwoWay}" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="25">
+                <StackPanel>
 
-        <!-- Scanned Copy -->
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Scanned Copy" FontWeight="Bold"/>
-        <Grid Grid.Row="3" Grid.Column="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Select PDF" Grid.Column="0" Margin="3" Command="{Binding SelectFile}"/>
-            <TextBox Grid.Column="1" Text="{Binding Path=EditFormData.ScannedCopy}"/>
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,15">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Item Information" FontSize="16" FontWeight="Bold" Foreground="#131842" Margin="0,0,0,15"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Date Acquired" Style="{StaticResource LabelStyle}"/>
+                                    <DatePicker SelectedDate="{Binding Path=EditFormData.Date, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Type / Category" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.Type, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Current Status" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.Status, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" CornerRadius="10" Padding="20">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Location &amp; Details" FontSize="16" FontWeight="Bold" Foreground="#131842" Margin="0,0,0,15"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Location" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.Location, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Remarks" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.Remarks, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="Description" Style="{StaticResource LabelStyle}" Margin="0,15,0,5"/>
+                            <TextBox Text="{Binding Path=EditFormData.Description}" TextWrapping="Wrap" Height="60" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+
+                            <TextBlock Text="Scanned Document" Style="{StaticResource LabelStyle}" Margin="0,15,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="120"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" Text="{Binding Path=EditFormData.ScannedCopy}" IsReadOnly="True" Background="#F9F9F9"/>
+                                <Button Grid.Column="1" Content="📂 Browse" Command="{Binding SelectFile}" Margin="10,0,0,0" Style="{StaticResource ModernBtn}" Background="#888"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border Grid.Row="2" Background="White" CornerRadius="0,0,15,15" BorderBrush="#EEE" BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="25,0">
+                    <Button Content="Cancel" Width="120" Margin="0,0,10,0"
+                            Command="{Binding Path=CloseEditForm}"
+                            Style="{StaticResource ModernBtn}" Background="#E0E0E0" Foreground="#333">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="20"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="💾 Save Changes" Width="160"
+                            Command="{Binding Path=SaveEditedDocument}"
+                            Style="{StaticResource ModernBtn}" Background="#131842">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="20"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+            </Border>
+
         </Grid>
-
-
-        <!-- Description -->
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Description" FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Path=EditFormData.Description}" TextWrapping="Wrap"/>
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="6" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Command="{Binding Path=SaveEditedDocument}"/>
-            <Button Content="Cancel" Width="100" Command="{Binding Path=CloseEditForm}"/>
-        </StackPanel>
-    </Grid>
+    </Border>
 </Window>

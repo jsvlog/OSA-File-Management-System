@@ -25,6 +25,8 @@ namespace OSA_File_Management_System.View.RegionComView
         public ArrangePrintToRegion()
         {
             InitializeComponent();
+            // Inside the Constructor or Window_Loaded event
+            this.MouseLeftButtonDown += (s, e) => this.DragMove();
         }
 
 

@@ -5,309 +5,268 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="AliceBlue">
+             d:DesignHeight="700" d:DesignWidth="1100">
+
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernBtn" TargetType="Button">
+            <Setter Property="Background" Value="#257180"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1A5F6E"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+
+            <Setter Property="GridLinesVisibility" Value="All"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E5E5E5"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#E5E5E5"/>
+
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowHeight" Value="45"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#131842"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+            <Setter Property="BorderBrush" Value="#2C3E75"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EAF6F8"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding Visib}" Value="false">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter VerticalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#257180"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F5F7FA">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-        <!--Area for two border at the top-->
-        <Grid Grid.Row="0" Margin="2" >
+        <Grid Grid.Row="0" Margin="10,10,10,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="8" Margin="20,15,3,3" Grid.Column="0" Background="#257180">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20*"/>
-                        <ColumnDefinition Width="20*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20*" />
-                        <RowDefinition Height="20*" />
-                    </Grid.RowDefinitions>
 
-                    <Button Width="200" Height="40" Margin="5" Grid.Column="0" Grid.Row="0" Command="{Binding RegionComViewModel.ShowAddFromRegion}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="pack://application:,,,/images/icons/add.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                            <TextBlock Text="From Region" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Width="200" Height="40" Margin="5" Grid.Column="1" Grid.Row="0" Command="{Binding Path=RegionComViewModel.ShowAddToRegion}" Click="Button_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="pack://application:,,,/images/icons/add.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                            <TextBlock Text="To Region" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Width="200" Height="40" Margin="5" Grid.Column="0" Grid.Row="1" Command="{Binding RegionComViewModel.ChooseToPrintToRegion}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="pack://application:,,,/images/icons/printer.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                            <TextBlock Text="Transmittal to Region" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Width="200" Height="40" Margin="5" Grid.Column="1" Grid.Row="1">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="pack://application:,,,/images/icons/printer.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                            <TextBlock Text="Transmittal to Teams" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Quick Actions" FontWeight="Bold" Foreground="#888" Margin="0,0,0,10"/>
+
+                    <UniformGrid Grid.Row="1" Columns="2" Rows="2">
+                        <Button Style="{StaticResource ModernBtn}" Command="{Binding RegionComViewModel.ShowAddFromRegion}" Margin="0,0,5,5">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="➕ From Region" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Add Incoming" FontSize="10" Opacity="0.7" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource ModernBtn}" Command="{Binding RegionComViewModel.ShowAddToRegion}" Margin="5,0,0,5">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="➕ To Region" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Add Outgoing" FontSize="10" Opacity="0.7" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource ModernBtn}" Command="{Binding RegionComViewModel.ChooseToPrintToRegion}" Margin="0,5,5,0" Background="#555">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="🖨️ Transmittal" HorizontalAlignment="Center"/>
+                                <TextBlock Text="(Region Copy)" FontSize="10" Opacity="0.7" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource ModernBtn}" Margin="5,5,0,0" Background="#555">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="🖨️ Transmittal" HorizontalAlignment="Center"/>
+                                <TextBlock Text="(Teams Copy)" FontSize="10" Opacity="0.7" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
                 </Grid>
             </Border>
 
-
-
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="8" Margin="20,15,3,3" Grid.Column="1" Background="#257180">
-                <Grid>
+            <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                <Grid Margin="15">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70*"/>
-                        <ColumnDefinition Width="20*"/>
-                        <ColumnDefinition Width="70*"/>
-                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20*" />
-                        <RowDefinition Height="20*" />
-                        <RowDefinition Height="20*" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Latest transmittal to region:" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Foreground="WhiteSmoke"/>
-                    <TextBlock Text="Latest transmittal to teams:" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Foreground="WhiteSmoke"/>
-                    <TextBlock Text="Latest documents from region:" FontWeight="Bold" Grid.Column="0" Grid.Row="2" Foreground="WhiteSmoke"/>
-                    <TextBlock Text="No. of actionable document this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="0" Foreground="WhiteSmoke"/>
-                    <TextBlock Text="No. of documents sent this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="1" Foreground="WhiteSmoke"/>
-                    <TextBlock Text="No. of documents received this month:" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="Recent Activity" FontWeight="Bold" Foreground="#888" Margin="0,0,0,10" Grid.ColumnSpan="2"/>
 
-                    <TextBlock Text="N/A"  Grid.Column="1" Grid.Row="0"/>
-                    <TextBlock Text="N/A"  Grid.Column="1" Grid.Row="1"/>
-                    <TextBlock Text="N/A"  Grid.Column="1" Grid.Row="2"/>
-                    <TextBlock Text="N/A"  Grid.Column="3" Grid.Row="0"/>
-                    <TextBlock Text="N/A"  Grid.Column="3" Grid.Row="1"/>
-                    <TextBlock Text="N/A"  Grid.Column="3" Grid.Row="2"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Latest Transmittal (Region):" Foreground="#555" Margin="0,8"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
 
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Latest Transmittal (Teams):" Foreground="#555" Margin="0,8"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Pending Actionable Docs:" Foreground="#555" Margin="0,8"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#D32F2F" HorizontalAlignment="Right"/>
                 </Grid>
             </Border>
-
         </Grid>
 
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="15,0,15,5" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <!--Area for Search-->
-        <Grid Grid.Row="1" Margin="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Search" Margin="3" Width="100" Padding="3" Grid.Column="0" Command="{Binding Path=RegionComViewModel.BtnSearchRegionCom}" />
-            <TextBox Margin="3" Padding="3" Width="300" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=RegionComViewModel.SearchTextRegionCom , Mode=TwoWay}"/>
-            <Button Margin="3" Padding="5" Grid.Column="4" 
-        Command="{Binding RegionComViewModel.ShowFilterWindow}" 
-        Background="#257180" BorderBrush="Transparent">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📅" Foreground="White" Margin="0,0,5,0"/>
-                    <TextBlock Text="Filter Year" Foreground="White" FontWeight="Bold"/>
+                <TextBox Grid.Column="0" Width="300" Height="35" VerticalContentAlignment="Center" Padding="5,0"
+                         Text="{Binding RegionComViewModel.SearchTextRegionCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <Button Grid.Column="1" Content="🔍 Search" Style="{StaticResource ModernBtn}" 
+                        Command="{Binding RegionComViewModel.BtnSearchRegionCom}" Margin="5,0" Width="80"/>
+
+                <Button Grid.Column="2" Content="🔄" Style="{StaticResource ModernBtn}" Background="Transparent" Foreground="#555"
+                        Command="{Binding RegionComViewModel.BtnLoadData}" ToolTip="Refresh Data"/>
+
+                <Button Grid.Column="4" Style="{StaticResource ModernBtn}" Margin="10,0" Width="110"
+                        Command="{Binding RegionComViewModel.ShowFilterWindow}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📅 Filter Year"/>
+                    </StackPanel>
+                </Button>
+
+                <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
+                    <RadioButton Content="All" GroupName="FilterGroup" IsChecked="{Binding RegionComViewModel.IsAllChecked}" Margin="5"/>
+                    <RadioButton Content="From Region" GroupName="FilterGroup" IsChecked="{Binding RegionComViewModel.IsFromRegionChecked}" Margin="5"/>
+                    <RadioButton Content="To Region" GroupName="FilterGroup" IsChecked="{Binding RegionComViewModel.IsToRegionChecked}" Margin="5"/>
                 </StackPanel>
+            </Grid>
+        </Border>
 
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <Button  Margin="3" Padding="1" Grid.Column="2"  Command="{Binding Path=RegionComViewModel.BtnLoadData}" Background="Transparent" BorderBrush="Transparent">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/icons/refresh.png" Width="25" Height="25" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                 </StackPanel>
-            </Button>
-            <StackPanel Orientation="Horizontal" Margin="3" Grid.Column="3">
-                <RadioButton Content="All" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsAllChecked}" Margin="5" ClickMode="Press"/>
-                <RadioButton Content="From Region" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsFromRegionChecked}" Margin="5" ClickMode="Press"/>
-                <RadioButton Content="To Region" GroupName="RegionOptions" IsChecked="{Binding RegionComViewModel.IsToRegionChecked}" Margin="5" ClickMode="Press"/>
-            </StackPanel>
-        </Grid>
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,5,15,15" Padding="0">
+            <DataGrid x:Name="RegionComDataGrid" 
+                      ItemsSource="{Binding RegionComViewModel.RegionComList, Mode=TwoWay}"
+                      AutoGenerateColumns="False" 
+                      CanUserSortColumns="True"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
 
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date Received" Binding="{Binding DateReceived, StringFormat=MM-dd-yyyy}" Width="1.5*"/>
 
+                    <DataGridTextColumn Header="Doc Date" Binding="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" Width="1.5*"/>
 
-        <DataGrid x:Name="RegionComDataGrid" Grid.Row="2" AutoGenerateColumns="False"  Margin="2" CanUserSortColumns="True"
-      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding RegionComViewModel.RegionComList, Mode=TwoWay}">
-            <DataGrid.Resources>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Style.Triggers>
-                        <!-- Hide row based on some condition in the model (e.g. IsHidden property) -->
-                        <DataTrigger Binding="{Binding Visib}" Value="false">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Visib}" Value="true">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
+                    <DataGridTextColumn Header="Type" Binding="{Binding TypeOfDocs}" Width="1.5*"/>
 
+                    <DataGridTemplateColumn Header="Particulars" Width="5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SubjectParticulars}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="5,0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-            <!-- Define the columns of the DataGrid -->
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Width="5*" Header="Date Received" SortMemberPath="DateReceived">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Date Received" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DateReceived, StringFormat=MM-dd-yyyy}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Control No." Binding="{Binding RefNumber}" Width="1.2*"/>
 
-                <DataGridTemplateColumn Width="5*" Header="Document Date">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Document Date" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Received From" Binding="{Binding ReceivedFrom}" Width="1.5*"/>
 
-                <DataGridTemplateColumn Width="5*" Header="Type of Document">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Type of Document" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding TypeOfDocs}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="2*"/>
+                </DataGrid.Columns>
 
-                <DataGridTemplateColumn Width="30*" Header="Subject / Particulars" >
-                    <DataGridTemplateColumn.HeaderTemplate >
-                        <DataTemplate>
-                            <TextBlock Text="Subject / Particulars" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate >
-                            <TextBlock Text="{Binding SubjectParticulars}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="5*" Header="Ref. No. / Transmittal No.">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Control No." 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RefNumber}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="5*" Header="Received From">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Received From" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding ReceivedFrom}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="8*" Header="Remarks">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="Remarks" 
-                       TextWrapping="Wrap" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Remarks}" 
-                       TextWrapping="Wrap" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-
-
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="Edit" Header="Edit"
-                  Command="{Binding RegionComViewModel.ShowEditFromOrTo}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-                    <MenuItem x:Name="parameter" Header="Delete"
-                  Command="{Binding RegionComViewModel.DeleteData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-                    <MenuItem x:Name="param" Header="View Pdf" 
-                  Command="{Binding RegionComViewModel.ViewPdfToRegion}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-                    <MenuItem x:Name="ViewDetails" Header="View Full Details"
-                  Command="{Binding RegionComViewModel.ShowFullData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
-
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="✏️ Edit" Command="{Binding RegionComViewModel.ShowEditFromOrTo}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                        <MenuItem Header="🗑️ Delete" Command="{Binding RegionComViewModel.DeleteData}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                        <MenuItem Header="📄 View PDF" Command="{Binding RegionComViewModel.ViewPdfToRegion}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                        <Separator/>
+                        <MenuItem Header="👁️ View Full Details" Command="{Binding RegionComViewModel.ShowFullData}" 
+                                  CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </Border>
 
     </Grid>
 </UserControl>

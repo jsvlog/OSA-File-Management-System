@@ -22,6 +22,14 @@ namespace OSA_File_Management_System.View.RegionComView
         public FullDetailsToRegion()
         {
             InitializeComponent();
+            // 1. Make the window draggable (since we removed the title bar)
+            this.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) this.DragMove(); };
         }
+        // 2. The logic for the "X" button
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }

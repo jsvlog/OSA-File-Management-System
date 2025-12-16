@@ -5,24 +5,83 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
         mc:Ignorable="d"
-        Title="ChoosePrintToRegion" Height="200" Width="300">
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
+        Title="Print Transmittal" Height="250" Width="350"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
+    <Border CornerRadius="15" Background="White" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="5" Opacity="0.3" Color="Black"/>
+        </Border.Effect>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Transmittal No." FontWeight="Bold" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,0" Foreground="#133E87"/>
-        <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Text="{Binding TransNumber}"/>
-        <Button Content="Print" Grid.Row="1" Grid.ColumnSpan="2" Background="#2196F3" Foreground="White" Margin="10"  Width="100" Command="{Binding ArrangeList}"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
 
+            <Border Grid.Row="0" CornerRadius="15,15,0,0" Background="#257180">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="🖨️" FontSize="18" Margin="0,0,10,0"/>
+                        <TextBlock Text="Print Transmittal" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
 
+                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                            Margin="0,0,15,0" Width="30" Height="30" 
+                            Foreground="White" Background="Transparent" BorderThickness="0" 
+                            FontSize="14" Cursor="Hand"
+                            IsCancel="True">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Border>
 
-    </Grid>
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="30,0">
+                <TextBlock Text="Enter Transmittal No." Foreground="#555" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+                <TextBox Text="{Binding TransNumber, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="40" VerticalContentAlignment="Center" Padding="10,0"
+                         FontSize="14" BorderBrush="#DDD" BorderThickness="1">
+                    <TextBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <TextBlock Text="Example: R-2025-001" Foreground="#999" FontSize="11" Margin="2,5,0,0" FontStyle="Italic"/>
+            </StackPanel>
+
+            <Grid Grid.Row="2" Margin="0,0,0,15">
+                <Button Content="Proceed to Arrange" Width="180" Height="45"
+                        Command="{Binding ArrangeList}"
+                        Background="#131842" Foreground="White" FontWeight="Bold" FontSize="14"
+                        Cursor="Hand" BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="22"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1F2A63"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+
+        </Grid>
+    </Border>
 </Window>

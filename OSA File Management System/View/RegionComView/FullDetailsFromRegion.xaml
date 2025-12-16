@@ -5,333 +5,357 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
         mc:Ignorable="d"
-        Title="FullDetailsFromRegion" Height="700" Width="1100" Background="#E9EED9">
+        Title="Document Full Details (From Region)" Height="750" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#2196F3" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Cursor" Value="Hand" />
+        <Style x:Key="LabelTxt" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#777"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
         </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="10,10,3,10" />
-            <Setter Property="Foreground" Value="#133E87"/>
-            <Setter Property="TextWrapping" Value="Wrap" />
+
+        <Style x:Key="ValueTxt" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#131842"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
-        <Style x:Key="AlternateTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="3,10" />
-            <Setter Property="Foreground" Value="Black"/>
+
+        <Style x:Key="DetailCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <Style x:Key="ActionBtn" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                    <Setter Property="BorderBrush" Value="#257180"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#257180"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="15" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="10*"/>
-            </Grid.ColumnDefinitions>
+    <Border CornerRadius="15" Background="#F4F6F9" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.4" Color="Black"/>
+        </Border.Effect>
+
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            
-            <!--1 Date Received-->
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Date Received:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateReceived, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--2 Document Date-->
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="Document Date:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DocumentDate, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--3 Typre of Documenmt-->
-            <TextBlock Grid.Row="0" Grid.Column="4" Text="Type of Document:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.TypeOfDocs}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--4 Control No.-->
-            <TextBlock Grid.Row="0" Grid.Column="6" Text="Control No.:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="0" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.RefNumber}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--5 Received From-->
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Received From:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.ReceivedFrom}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--6 Addressee-->
-            <TextBlock Grid.Row="1" Grid.Column="2" Text="Addressee:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Addressee}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--7 Details-->
-            <TextBlock Grid.Row="1" Grid.Column="4" Text="Details:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Details}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--8 Municipality-->
-            <TextBlock Grid.Row="1" Grid.Column="6" Text="Municipality:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="1" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Municipality}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--9 Subject / Particulars-->
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Subject / Particulars :" FontWeight="Bold"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="7" Text="{Binding FromRegionFullData.SubjectParticulars}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--10 Barangay-->
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Barangay:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Barangay}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--11 Date Sent Out to Teams-->
-            <TextBlock Grid.Row="3" Grid.Column="2" Text="Date Sent Out to Teams:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateSentOutToTeam, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--12 Receiver-->
-            <TextBlock Grid.Row="3" Grid.Column="4" Text="Receiver:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Receiver}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--13 Location-->
-            <TextBlock Grid.Row="3" Grid.Column="6" Text="Location:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Location}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--14 Actionable Doc?-->
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Actionable Document:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding ActionableDocDisplayFrom}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--15 Date Deadline-->
-            <TextBlock Grid.Row="4" Grid.Column="2" Text="Date Deadline:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.DateDeadline, StringFormat=MM-dd-yyyy}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!--16 Remarks-->
-            <TextBlock Grid.Row="4" Grid.Column="4" Text="Remarks:" FontWeight="Bold"/>
-            <TextBlock Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding FromRegionFullData.Remarks}" Style="{StaticResource AlternateTextBlockStyle}"/>
-
-            <!-- Buttons -->
-            <StackPanel Grid.Row="4" Grid.Column="6" Grid.ColumnSpan="2" Margin="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                <Button Command="{Binding ViewPdfFullData}" Padding="0" Background="Transparent" ToolTip="View PDF">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/images/icons/pdf.png" Width="30" Height="35" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+            <Border Grid.Row="0" CornerRadius="15,15,0,0" Background="#257180">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="25,0">
+                        <TextBlock Text="📄" FontSize="20" Margin="0,0,10,0"/>
+                        <TextBlock Text="Document Full Details (From Region)" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
-                </Button>
-                <Button Command="{Binding ShowEditFromFullData}" Padding="0" Background="Transparent" ToolTip="Edit Document">
-                    <StackPanel Orientation="Horizontal" >
-                        <Image Source="pack://application:,,,/images/icons/edit.png" Width="30" Height="35" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    </StackPanel>
-                </Button>
-                <Button  Command="{Binding DeleteFromFullData}" Background="Transparent" Padding="0" ToolTip="Delete Document">
-                    <StackPanel Orientation="Horizontal"  >
-                        <Image Source="pack://application:,,,/images/icons/delete.png" Width="30" Height="35" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
 
-            <Border Height="4" Background="#257180" Margin="10" Grid.Row="5" Grid.ColumnSpan="8"/>
-            <!-- This Part is for data grid that are related to the viewd Doc-->
-            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" Text="Data Related to the Current Document" FontWeight="Bold" FontSize="18" Foreground="#257180"/>
-            <Button  Command="{Binding AddFromFullData}" Background="Transparent" Padding="0" Grid.Row="6" Grid.Column="4" HorizontalAlignment="Right" ToolTip="Add Document Related to this Documents">
-                <StackPanel Orientation="Horizontal"  >
-                    <Image Source="pack://application:,,,/images/icons/addFull.png" Width="30" Height="35" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                </StackPanel>
-            </Button>
-            <Border Grid.Row="6" Grid.Column="5" Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="Gray" Margin="5" HorizontalAlignment="Left" Background="#219B9D">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Tracking ID for Related Docs" FontWeight="Bold" VerticalAlignment="Center" Margin="5"/>
-                    <TextBox Width="240" Margin="5" Text="{Binding FromRegionFullData.TrackingCode}"/>
-                </StackPanel>
+                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
+        Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0"
+        Click="BtnClose_Click" FontSize="16"/>
+                </Grid>
             </Border>
 
-            
-            
-            
-            
-            <!--DAGRID STARTS HERE-->
-            <DataGrid x:Name="RegionComDataGrid" Grid.Row="7" Grid.ColumnSpan="8" AutoGenerateColumns="False"  Margin="2" CanUserSortColumns="True"
-HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding FilteredDocs, Mode=TwoWay}">
-                <DataGrid.Resources>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        <Setter Property="VerticalContentAlignment" Value="Center" />
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow">
-                        <Style.Triggers>
-                            <!--highlight the current doc-->
-                            <DataTrigger Binding="{Binding IsHighlighted}" Value="true">
-                                <Setter Property="Background" Value="#219B9D"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
-                
-                <!-- Define the columns of the DataGrid -->
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="5*" Header="Date Received" SortMemberPath="DateReceived">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Date Received" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DateReceived, StringFormat=MM-dd-yyyy}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+            <ScrollViewer Grid.Row="1" Padding="25" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
 
-                    <DataGridTemplateColumn Width="5*" Header="Document Date">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Document Date" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <DataGridTemplateColumn Width="5*" Header="Type of Document">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Type of Document" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding TypeOfDocs}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tracking ID: " Foreground="#888" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding FromRegionFullData.TrackingCode}" Foreground="#257180" FontWeight="Bold"/>
+                        </StackPanel>
 
-                    <DataGridTemplateColumn Width="30*" Header="Subject / Particulars" >
-                        <DataGridTemplateColumn.HeaderTemplate >
-                            <DataTemplate>
-                                <TextBlock Text="Subject / Particulars" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate >
-                                <TextBlock Text="{Binding SubjectParticulars}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding ViewPdfFullData}" ToolTip="View PDF">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/pdf.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="View PDF"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding ShowEditFromFullData}" ToolTip="Edit Document">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/edit.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Edit"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding DeleteFromFullData}" ToolTip="Delete Document">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/delete.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Delete" Foreground="#D32F2F"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
 
-                    <DataGridTemplateColumn Width="5*" Header="Ref. No. / Transmittal No.">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Control No." 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding RefNumber}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <Border Style="{StaticResource DetailCard}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <DataGridTemplateColumn Width="5*" Header="Received From">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Received From" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ReceivedFrom}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Control No." Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.RefNumber}" Style="{StaticResource ValueTxt}" FontWeight="Bold" Foreground="#257180"/>
+                            </StackPanel>
 
-                    <DataGridTemplateColumn Width="8*" Header="Remarks">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Remarks" 
-                 TextWrapping="Wrap" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Remarks}" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Center" 
-                 HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Date Received" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.DateReceived, StringFormat=MM-dd-yyyy}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
 
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Document Date" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.DocumentDate, StringFormat=MM-dd-yyyy}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
 
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem x:Name="ViewDetails" Header="View Full Details"
-                            Command="{Binding ShowFullDatailsFromFullData}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                            <StackPanel Grid.Column="3">
+                                <TextBlock Text="Type" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.TypeOfDocs}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
+                    <Border Style="{StaticResource DetailCard}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
+                            <StackPanel Grid.Row="0" Grid.ColumnSpan="3">
+                                <TextBlock Text="Subject / Particulars" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.SubjectParticulars}" Style="{StaticResource ValueTxt}" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
 
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Received From" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.ReceivedFrom}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
 
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="Addressee" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Addressee}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
 
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Extra Details" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Details}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
+                    <Border Style="{StaticResource DetailCard}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
+                            <TextBlock Grid.ColumnSpan="4" Text="Routing &amp; Location" FontWeight="Bold" Foreground="#257180" Margin="0,0,0,15"/>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Municipality" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Municipality}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="Barangay" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Barangay}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Location" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Location}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="3">
+                                <TextBlock Text="Receiver" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.Receiver}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right">
+                                <TextBlock Text="Sent to Team:" Style="{StaticResource LabelTxt}" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding FromRegionFullData.DateSentOutToTeam, StringFormat=MM-dd-yyyy}" Style="{StaticResource ValueTxt}" HorizontalAlignment="Right" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource DetailCard}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Is Actionable?" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding ActionableDocDisplayFrom}" Style="{StaticResource ValueTxt}" Foreground="#D32F2F" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Deadline" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding FromRegionFullData.DateDeadline, StringFormat=MM-dd-yyyy}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Remarks" Style="{StaticResource LabelTxt}"/>
+                                <Border Background="#FAFAFA" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Padding="10">
+                                    <TextBlock Text="{Binding FromRegionFullData.Remarks}" FontStyle="Italic" TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid Margin="0,10,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Linked Documents (Thread History)" FontSize="16" FontWeight="Bold" Foreground="#131842" VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="1" Command="{Binding AddFromFullData}" Style="{StaticResource ActionBtn}" Background="#257180" ToolTip="Add Reply/Related Doc">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="➕ Add Related Doc" Foreground="White" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <Border Background="White" CornerRadius="10" Padding="0" ClipToBounds="True">
+                        <DataGrid x:Name="RegionComDataGrid" AutoGenerateColumns="False"
+                                   ItemsSource="{Binding FilteredDocs, Mode=TwoWay}"
+                                   CanUserSortColumns="True" IsReadOnly="True"
+                                   SelectionMode="Single" SelectionUnit="FullRow">
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#F0F7F9"/>
+                                        </Trigger>
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                            <Setter Property="Background" Value="#E0F2F1"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="BorderBrush" Value="#257180"/>
+                                            <Setter Property="BorderThickness" Value="2,0,0,0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Date Received" Binding="{Binding DateReceived, StringFormat=MM-dd-yyyy}" Width="*"/>
+                                <DataGridTextColumn Header="Doc Date" Binding="{Binding DocumentDate, StringFormat=MM-dd-yyyy}" Width="*"/>
+                                <DataGridTextColumn Header="Type" Binding="{Binding TypeOfDocs}" Width="*"/>
+                                <DataGridTemplateColumn Header="Particulars" Width="3*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding SubjectParticulars}" TextTrimming="CharacterEllipsis" Margin="5,0"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Control No." Binding="{Binding RefNumber}" Width="*"/>
+                                <DataGridTextColumn Header="Direction" Binding="{Binding Direction}" Width="*"/>
+                            </DataGrid.Columns>
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="👁️ View Full Details" Command="{Binding ShowFullDatailsFromFullData}"
+                                              CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </Border>
+
+                    <Border Height="20"/>
+
+                </StackPanel>
+            </ScrollViewer>
 
         </Grid>
-    </ScrollViewer>
-
+    </Border>
 </Window>

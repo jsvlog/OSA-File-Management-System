@@ -5,10 +5,201 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OSA_File_Management_System.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="AliceBlue">
-        <TextBlock Text="Certificate of Appearance" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             d:DesignHeight="800" d:DesignWidth="1200">
 
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Padding" Value="25"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="Margin" Value="2,10,0,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="White">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+
+        <Style x:Key="PrimaryBtn" TargetType="Button">
+            <Setter Property="Background" Value="#131842"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1F2A63"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Background="#F5F7FA">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="30,25,30,10">
+            <TextBlock Text="📜 Certificate of Appearance Generator" FontSize="24" FontWeight="Bold" Foreground="#131842"/>
+            <TextBlock Text="Generate, Preview, and Print official Certificates for personnel." FontSize="14" Foreground="#888"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,0">
+            <StackPanel>
+
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="👤 Personnel Details" FontSize="18" FontWeight="SemiBold" Foreground="#257180" Margin="0,0,0,10"/>
+                        <Separator Margin="0,0,0,15" Background="#EEE"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Employee Name" Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.EmployeeName}" />
+
+                                <TextBlock Text="Office / Department" Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.OfficeDepartment}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Official Position" Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.EmployeePosition}" />
+
+                                <TextBlock Text="Personnel Contact No." Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.ContactNumber}" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="🗓️ Purpose of Appearance" FontSize="18" FontWeight="SemiBold" Foreground="#257180" Margin="0,0,0,10"/>
+                        <Separator Margin="0,0,0,15" Background="#EEE"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Date of Appearance (Start)" Style="{StaticResource LabelStyle}"/>
+                                <DatePicker SelectedDate="{Binding CertificateData.StartDate}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Date of Appearance (End)" Style="{StaticResource LabelStyle}"/>
+                                <DatePicker SelectedDate="{Binding CertificateData.EndDate}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Place of Appearance" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding CertificateData.PlaceOfAppearance}" />
+
+                        <TextBlock Text="Detailed Purpose of Appearance" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding CertificateData.Purpose}" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalContentAlignment="Top"/>
+
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="🖋️ Signatory" FontSize="18" FontWeight="SemiBold" Foreground="#257180" Margin="0,0,0,10"/>
+                        <Separator Margin="0,0,0,15" Background="#EEE"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Issuing Officer Name" Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.IssuingOfficerName}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Officer Position/Title" Style="{StaticResource LabelStyle}"/>
+                                <TextBox Text="{Binding CertificateData.IssuingOfficerPosition}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Date of Issuance" Style="{StaticResource LabelStyle}"/>
+                        <DatePicker SelectedDate="{Binding CertificateData.DateOfIssuance}" Width="300" HorizontalAlignment="Left" />
+
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,50">
+                    <Button Content="✅ Generate &amp; Preview Certificate" 
+                            Style="{StaticResource PrimaryBtn}" Width="350"
+                            Command="{Binding GenerateCertificateCommand}"/>
+
+                    <Button Content="Clear Form" Width="150" Margin="20,0,0,0"
+                            Background="#F0F0F0" Foreground="#666" FontWeight="SemiBold"
+                            Command="{Binding ClearFormCommand}"
+                            BorderThickness="0">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -5,82 +5,144 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSA_File_Management_System"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        WindowState="Maximized" d:DesignWidth="1117.49" d:DesignHeight="677.96">
-    <Grid>
+        Title="OSA Management System" 
+        WindowState="Maximized" 
+        WindowStartupLocation="CenterScreen"
+        d:DesignWidth="1200" d:DesignHeight="800">
+
+    <Window.Resources>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <ScrollContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NavResultItem" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0A0A0"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" 
+                                BorderThickness="4,0,0,0" 
+                                CornerRadius="0,5,5,0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1F2A50"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#257180"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#4FD1C5"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#F5F7FA">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <Grid Background="CadetBlue">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Image Source="pack://application:,,,/images/coa_logo.png" Margin="2,15,2,2"
-            Width="100" Height="100" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="0" VerticalAlignment="Center"/>
+        <Border Grid.Column="0" Background="#131842">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="OSA File Management System" 
-                    FontFamily="Arial"  
-                    FontSize="15"    
-                    FontWeight="Bold"    
-                    Foreground="White"   
-                    Margin="5"          
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    TextWrapping="Wrap"  
-                    TextAlignment="Center" Grid.Row="1" />
-            <TextBlock Text="LGAS-B, Oriental Mindoro"
-                    FontFamily="Arial"  
-                    FontSize="10"    
-                    FontWeight="ExtraLight"    
-                    Foreground="White"   
-                    Margin="0"          
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Top"
-                    TextWrapping="Wrap" 
-                    TextAlignment="Center" Grid.Row="2" />
-        </Grid>
+                <StackPanel Grid.Row="0" Margin="0,30,0,40">
+                    <Border Width="90" Height="90" CornerRadius="50" Background="White" Margin="0,0,0,15">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.2" Color="White"/>
+                        </Border.Effect>
+                        <Image Source="pack://application:,,,/images/coa_logo.png" Margin="5"
+                Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Border>
 
-        <ListBox x:Name="CategoryListBox" SelectionChanged="CategoryListBox_SelectionChanged" Grid.Column="0" Grid.Row="1" Background="CadetBlue">
+                    <TextBlock Text="OSA MANAGEMENT" 
+                Foreground="White" FontSize="16" FontWeight="Bold" 
+                HorizontalAlignment="Center"/>
 
-
-            <ListBoxItem Margin="5,20,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/RegionCom.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Region Communications" VerticalAlignment="Center" Margin="4" FontWeight="Bold" Foreground="#131842" />
+                    <TextBlock Text="LGAS-B, Oriental Mindoro" 
+                Foreground="#8892B0" FontSize="11" 
+                HorizontalAlignment="Center" Margin="0,5,0,0"/>
                 </StackPanel>
-            </ListBoxItem>
 
-            <ListBoxItem Margin="5,20,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/Inventory.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Inventory" VerticalAlignment="Center" Margin="4" FontWeight="Bold" Foreground="#131842"/>
+                <ListBox x:Name="CategoryListBox" 
+                         Grid.Row="1" 
+                         Background="Transparent" 
+                         BorderThickness="0" 
+                         SelectionChanged="CategoryListBox_SelectionChanged"
+                         ItemContainerStyle="{StaticResource NavResultItem}">
+
+                    <ListBoxItem Tag="RegionCom">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📬" FontSize="18" Margin="0,0,15,0"/>
+                            <TextBlock Text="Communications" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="Inventory">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📦" FontSize="18" Margin="0,0,15,0"/>
+                            <TextBlock Text="Inventory System" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="Certificates">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📜" FontSize="18" Margin="0,0,15,0"/>
+                            <TextBlock Text="Certificates" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+
+                <StackPanel Grid.Row="2" Margin="20,0,20,20">
+                    <Separator Background="#2C3452" Margin="0,0,0,15"/>
+
+                    <Button Command="{Binding BackupDatabaseBtn}" 
+                            Background="#257180" Foreground="White" BorderThickness="0"
+                            Padding="10" Cursor="Hand" FontWeight="Bold">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💾" Margin="0,0,10,0"/>
+                            <TextBlock Text="Backup Database"/>
+                        </StackPanel>
+                    </Button>
+
+                    <TextBlock Text="v1.0.2" Foreground="#444E75" FontSize="10" HorizontalAlignment="Center" Margin="0,10,0,0"/>
                 </StackPanel>
-            </ListBoxItem>
+            </Grid>
+        </Border>
 
-            <ListBoxItem Margin="5,20,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/images/Certificate.png" Width="40" Height="40" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Text="Certificate of Appearance" VerticalAlignment="Center" TextWrapping="NoWrap" Margin="4" FontWeight="Bold" Foreground="#131842"/>
-                </StackPanel>
-            </ListBoxItem>
-        </ListBox>
-
-        <ContentControl x:Name="ContentArea" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"/>
-
-        <Button Content="Backup Database" Grid.Row="2" Padding="5" Margin="10" Background="#22177A" Foreground="White" Command="{Binding BackupDatabaseBtn}"/>
-
-
-
-
+        <ContentControl x:Name="ContentArea" Grid.Column="1" Margin="0"/>
 
     </Grid>
 </Window>

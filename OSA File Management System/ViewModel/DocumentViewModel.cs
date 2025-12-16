@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-
+using System.Linq; // Make sure this is present for filtering
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -11,7 +12,6 @@ using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
-
 
 namespace OSA_File_Management_System.ViewModel
 {
@@ -27,11 +27,10 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-        //for sub ViewModel
+        // For sub ViewModel
         public RegionComViewModel regionComViewModel;
 
         private DocumentServices documentServices;
-
 
         private ObservableCollection<Document> documentList;
         public ObservableCollection<Document> DocumentList
@@ -40,6 +39,21 @@ namespace OSA_File_Management_System.ViewModel
             set { documentList = value; OnPropertyChanged("DocumentList"); }
         }
 
+        // --- FIX: ADDED MISSING PROPERTIES HERE ---
+        private ObservableCollection<int> inventoryYearList;
+        public ObservableCollection<int> InventoryYearList
+        {
+            get { return inventoryYearList; }
+            set { inventoryYearList = value; OnPropertyChanged("InventoryYearList"); }
+        }
+
+        private int selectedFilterYear;
+        public int SelectedFilterYear
+        {
+            get { return selectedFilterYear; }
+            set { selectedFilterYear = value; OnPropertyChanged("SelectedFilterYear"); }
+        }
+        // ------------------------------------------
 
         public DocumentViewModel()
         {
@@ -47,6 +61,7 @@ namespace OSA_File_Management_System.ViewModel
             addFormData = new Document();
             editFormData = new Document();
             documentServices = new DocumentServices();
+
             showAddForm = new RelayCommand(OpenAddDocumentForm);
             showEditForm = new RelayCommand(OpenEditDocumentForm);
             selectFile = new RelayCommand(OpenSelectFile);
@@ -55,10 +70,24 @@ namespace OSA_File_Management_System.ViewModel
             deleteDocument = new RelayCommand(DeleteDocumentMethod);
             viewPdf = new RelayCommand(OpenPdfFile);
             saveEditedDocument = new RelayCommand(SaveEditedCommand);
-            closeEditForm = new RelayCommand(CloseEditForms); 
+            closeEditForm = new RelayCommand(CloseEditForms);
             btnSearchInventory = new RelayCommand(ExecuteSearch);
             printPreview = new RelayCommand(ShowPrintPreview);
             printDocumentInventory = new RelayCommand(PrintDocument);
+
+            // Filter Commands
+            showInventoryFilterWindow = new RelayCommand(OpenInventoryFilterWindow);
+            applyYearFilterCommand = new RelayCommand(ApplyInventoryFilter);
+            clearYearFilterCommand = new RelayCommand(ClearInventoryFilter);
+
+            // Populate Year List (You can adjust the range here)
+            InventoryYearList = new ObservableCollection<int>();
+            int currentYear = DateTime.Now.Year;
+            for (int i = currentYear; i >= 2018; i--)
+            {
+                InventoryYearList.Add(i);
+            }
+
             LoadData();
         }
 
@@ -67,12 +96,8 @@ namespace OSA_File_Management_System.ViewModel
             DocumentList = documentServices.GetAllDocuments();
         }
 
-
-
-
         #region Show Add Form
         private RelayCommand showAddForm;
-
         public RelayCommand ShowAddForm
         {
             get { return showAddForm; }
@@ -81,20 +106,14 @@ namespace OSA_File_Management_System.ViewModel
         private AddFormInventory popup;
         private void OpenAddDocumentForm()
         {
-            // Create the popup window
             popup = new AddFormInventory();
-
-            // Bind ViewModel to the popup window
             popup.DataContext = this;
-
-            // Show the popup window
             popup.ShowDialog();
         }
         #endregion
 
         #region Add Document
         private Document addFormData;
-
         public Document AddFormData
         {
             get { return addFormData; }
@@ -102,7 +121,6 @@ namespace OSA_File_Management_System.ViewModel
         }
 
         private RelayCommand addDocument;
-
         public RelayCommand AddDocument
         {
             get { return addDocument; }
@@ -115,31 +133,22 @@ namespace OSA_File_Management_System.ViewModel
                 var IsSaved = documentServices.addDocument(AddFormData);
                 if (IsSaved)
                 {
-                    
-                    MessageBox.Show("Saving Successfull");
+                    MessageBox.Show("Saving Successful");
                     popup.Close();
                     LoadData();
-                    AddFormData = new Document(); //to clear the fields after saving
+                    AddFormData = new Document(); // to clear the fields after saving
                 }
-                else { MessageBox.Show("error saving"); }
-
+                else { MessageBox.Show("Error saving"); }
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
         }
-
-
-
-
-
         #endregion
 
         #region Select pdf Copy
         private RelayCommand selectFile;
-
         public RelayCommand SelectFile
         {
             get { return selectFile; }
@@ -154,7 +163,6 @@ namespace OSA_File_Management_System.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                // Set the selected file path
                 AddFormData.ScannedCopy = openFileDialog.FileName.ToString();
             }
         }
@@ -162,7 +170,6 @@ namespace OSA_File_Management_System.ViewModel
 
         #region Close Add Form
         private RelayCommand closeAddForm;
-
         public RelayCommand CloseAddForm
         {
             get { return closeAddForm; }
@@ -176,7 +183,6 @@ namespace OSA_File_Management_System.ViewModel
 
         #region Delete Document
         private RelayCommand deleteDocument;
-
         public RelayCommand DeleteDocument
         {
             get { return deleteDocument; }
@@ -187,14 +193,10 @@ namespace OSA_File_Management_System.ViewModel
         {
             if (parameter is Document documentToDelete)
             {
-                // Confirm the deletion 
                 var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Call your documentServices to delete the document from the database
                     bool isDeleted = documentServices.DeleteDocument(documentToDelete);
-
-                    // If deletion was successful, remove it from the ObservableCollection
                     if (isDeleted)
                     {
                         LoadData();
@@ -206,13 +208,11 @@ namespace OSA_File_Management_System.ViewModel
                     }
                 }
             }
-
         }
         #endregion
 
         #region View PDF Copy
         private RelayCommand viewPdf;
-
         public RelayCommand ViewPdf
         {
             get { return viewPdf; }
@@ -220,19 +220,16 @@ namespace OSA_File_Management_System.ViewModel
 
         private void OpenPdfFile(object parameter)
         {
-
             if (parameter is Document documentObj)
             {
                 try
                 {
-                    // Use Process.Start to open the PDF file
                     string pdfPath = documentObj.ScannedCopy.ToString();
                     Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {
-                    string pdfPath = documentObj.ScannedCopy.ToString();
-                    MessageBox.Show($"Failed to open PDF: {ex.Message} {pdfPath}");
+                    MessageBox.Show($"Failed to open PDF: {ex.Message}");
                 }
             }
             else
@@ -240,53 +237,40 @@ namespace OSA_File_Management_System.ViewModel
                 MessageBox.Show("No valid PDF file path provided.");
             }
         }
-
         #endregion
 
         #region Show edit Form
         private Document editFormData;
-
         public Document EditFormData
         {
             get { return editFormData; }
             set { editFormData = value; OnPropertyChanged("EditFormData"); }
         }
 
-
         private RelayCommand showEditForm;
-
         public RelayCommand ShowEditForm
         {
             get { return showEditForm; }
         }
 
-        private EditFormInventory popupEditForm; //put it outside the method to close from another method
+        private EditFormInventory popupEditForm;
 
         private void OpenEditDocumentForm(object parameter)
         {
-            // Create the popup window
             popupEditForm = new EditFormInventory();
-
-            // Bind ViewModel to the popup window
             popupEditForm.DataContext = this;
-
-
 
             if (parameter is Document documentToDelete)
             {
                 EditFormData = documentToDelete;
             }
-            // Show the popup window
             popupEditForm.ShowDialog();
-            LoadData(); // after closing the popup this will load again the whole data
-
+            LoadData();
         }
-
         #endregion
 
         #region save Edit Document
         private RelayCommand saveEditedDocument;
-
         public RelayCommand SaveEditedDocument
         {
             get { return saveEditedDocument; }
@@ -299,25 +283,21 @@ namespace OSA_File_Management_System.ViewModel
                 var isSaved = documentServices.SaveEditedDocument(EditFormData);
                 if (isSaved)
                 {
-                    MessageBox.Show("Edited Successfull");
+                    MessageBox.Show("Edited Successful");
                     popupEditForm.Close();
                     LoadData();
-                    EditFormData = new Document(); //to clear the fields after saving
+                    EditFormData = new Document();
                 }
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
         }
-
-
         #endregion
 
         #region Close Edit Form
         private RelayCommand closeEditForm;
-
         public RelayCommand CloseEditForm
         {
             get { return closeEditForm; }
@@ -327,21 +307,17 @@ namespace OSA_File_Management_System.ViewModel
         {
             popupEditForm.Close();
         }
-
         #endregion
 
         #region Search 
         private string searchTextInventory;
-
         public string SearchTextInventory
         {
             get { return searchTextInventory; }
-            set { searchTextInventory = value; OnPropertyChanged("SearchText"); }
+            set { searchTextInventory = value; OnPropertyChanged("SearchTextInventory"); }
         }
 
-
         private RelayCommand btnSearchInventory;
-
         public RelayCommand BtnSearchInventory
         {
             get { return btnSearchInventory; }
@@ -357,25 +333,21 @@ namespace OSA_File_Management_System.ViewModel
             {
                 LoadData();
                 var filteredDocuments = DocumentList.Where(d =>
-                d.Date.HasValue && d.Date.Value.ToString("yyyy-MM-dd").Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase) ||
-                d.Type.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase) ||
-                d.Description.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase) ||
-                d.Status.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase) ||
-                d.Location.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase) ||
-                d.Remarks.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase))
+                (d.Date.HasValue && d.Date.Value.ToString("yyyy-MM-dd").Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)) ||
+                (d.Type != null && d.Type.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)) ||
+                (d.Description != null && d.Description.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)) ||
+                (d.Status != null && d.Status.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)) ||
+                (d.Location != null && d.Location.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)) ||
+                (d.Remarks != null && d.Remarks.Contains(SearchTextInventory, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-                // Bind the filtered list to the DataGrid
                 DocumentList = new ObservableCollection<Document>(filteredDocuments);
             }
         }
-
-
         #endregion
 
-        #region print
+        #region Print
         private RelayCommand printPreview;
-
         public RelayCommand PrintPreview
         {
             get { return printPreview; }
@@ -383,28 +355,19 @@ namespace OSA_File_Management_System.ViewModel
 
         public void ShowPrintPreview()
         {
-            // Create the FlowDocument
             FlowDocument doc = CreateDocumentForPrint();
-
-            // Show the preview window
             InventoryPrintPreview previewWindow = new InventoryPrintPreview();
             previewWindow.DataContext = this;
             previewWindow.DocumentReaderInventory.Document = doc;
             previewWindow.ShowDialog();
-
         }
 
         private FlowDocument CreateDocumentForPrint()
         {
             FlowDocument doc = new FlowDocument();
+            doc.PageWidth = 816;
+            doc.PageHeight = 1248;
 
-            // Set page dimensions (adjust as needed)
-            doc.PageWidth = 816;  // Width in device-independent units (1/96 inch)
-            doc.PageHeight = 1248; // Height in device-independent units
-
-
-
-            // Create an image for the header
             Image headerImage = new Image();
             headerImage.Source = new BitmapImage(new Uri("pack://application:,,,/images/header.png"));
             headerImage.Width = 700;
@@ -412,7 +375,7 @@ namespace OSA_File_Management_System.ViewModel
             headerImage.HorizontalAlignment = HorizontalAlignment.Center;
 
             BlockUIContainer imageContainer = new BlockUIContainer(headerImage);
-            doc.Blocks.Add(imageContainer); //first Block image header----------------------------->>>>>>>>>>>
+            doc.Blocks.Add(imageContainer);
 
             Table table = new Table();
             table.CellSpacing = 5;
@@ -445,15 +408,12 @@ namespace OSA_File_Management_System.ViewModel
                 table.RowGroups[0].Rows.Add(dataRow);
             }
 
-            doc.Blocks.Add(table); //Second Block image header----------------------------->>>>>>>>>>>
+            doc.Blocks.Add(table);
             doc.PagePadding = new Thickness(50);
             return doc;
         }
 
-
-        //this is the part in final printing
         private RelayCommand printDocumentInventory;
-
         public RelayCommand PrintDocumentInventory
         {
             get { return printDocumentInventory; }
@@ -469,10 +429,72 @@ namespace OSA_File_Management_System.ViewModel
                 printDlg.PrintDocument(idpSource.DocumentPaginator, "Document Report");
             }
         }
-
         #endregion
 
-  
+        #region Inventory Filter Window
 
+        private RelayCommand showInventoryFilterWindow;
+        public RelayCommand ShowInventoryFilterWindow
+        {
+            get { return showInventoryFilterWindow; }
+        }
+
+        private RelayCommand applyYearFilterCommand;
+        public RelayCommand ApplyYearFilterCommand
+        {
+            get { return applyYearFilterCommand; }
+        }
+
+        private RelayCommand clearYearFilterCommand;
+        public RelayCommand ClearYearFilterCommand
+        {
+            get { return clearYearFilterCommand; }
+        }
+
+        private void OpenInventoryFilterWindow(object parameter)
+        {
+            // Ensure namespace path is correct here
+            var filterWin = new OSA_File_Management_System.View.InventoryFilterWindow();
+            filterWin.DataContext = this;
+            filterWin.ShowDialog();
+        }
+
+        private void ApplyInventoryFilter(object parameter)
+        {
+            if (SelectedFilterYear == 0)
+            {
+                MessageBox.Show("Please select a year first.");
+                return;
+            }
+
+            DocumentList = documentServices.GetAllDocuments();
+            var filtered = DocumentList.Where(d => d.Date.HasValue && d.Date.Value.Year == SelectedFilterYear).ToList();
+            DocumentList = new ObservableCollection<Document>(filtered);
+
+            if (parameter is DependencyObject obj)
+            {
+                Window.GetWindow(obj)?.Close();
+            }
+            else
+            {
+                Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+            }
+        }
+
+        private void ClearInventoryFilter(object parameter)
+        {
+            SelectedFilterYear = 0;
+            LoadData();
+
+            if (parameter is DependencyObject obj)
+            {
+                Window.GetWindow(obj)?.Close();
+            }
+            else
+            {
+                Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+            }
+        }
+        #endregion
     }
 }
