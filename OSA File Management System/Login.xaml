@@ -3,54 +3,93 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OSA_File_Management_System"
         mc:Ignorable="d"
-        Title="Login" Height="400" Width="600">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="4*"/>
-        </Grid.RowDefinitions>
+        Title="Login" Height="450" Width="700"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
 
+    <Border CornerRadius="20" Background="White">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Color="Gray" Opacity="0.3"/>
+        </Border.Effect>
 
+        <Grid ClipToBounds="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <Border Grid.Column="0" CornerRadius="20,0,0,20">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1e3c72" Offset="0"/>
+                        <GradientStop Color="#2a5298" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
 
+                <StackPanel VerticalAlignment="Center" Margin="20">
+                    <Image Source="pack://application:,,,/images/coa_logo.png" 
+                           Width="120" Height="120" 
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           Margin="0,0,0,20"/>
 
-        <Grid Grid.Column="0" Grid.RowSpan="2" Background="navy">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="4*"/>
-            </Grid.RowDefinitions>
+                    <TextBlock Text="OSA" 
+                               FontSize="32" FontWeight="Bold" Foreground="White" 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="File Management System" 
+                               FontSize="14" Foreground="#D1D1D1" 
+                               TextWrapping="Wrap" TextAlignment="Center" 
+                               FontFamily="Segoe UI Light"/>
+                </StackPanel>
+            </Border>
 
-            <Image Source="pack://application:,,,/images/coa_logo.png" 
-                        Width="100" Height="100" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="0"/>
+            <Grid Grid.Column="1" Margin="40,20">
+                <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Background="Transparent" BorderBrush="Transparent" Foreground="Gray"
+                        FontSize="16" Cursor="Hand" Click="CloseButton_Click"/>
 
-            <TextBlock Text="OSA File Management System"
-                   FontFamily="Arial"  
-                   FontSize="24"    
-                   FontWeight="Bold"    
-                   Foreground="White"   
-                   Margin="20"          
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top"
-                   TextWrapping="Wrap"  
-                   TextAlignment="Center" Grid.Row="1" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Welcome Back" FontSize="28" FontWeight="SemiBold" 
+                               Foreground="#333" Margin="0,0,0,10"/>
+                    <TextBlock Text="Please login to your account" FontSize="14" 
+                               Foreground="#888" Margin="0,0,0,30"/>
 
+                    <TextBlock Text="Username" Foreground="#555" Margin="0,0,0,5" FontSize="12" FontWeight="Medium"/>
+                    <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Margin="0,0,0,20">
+                        <TextBox Name="txtUsername" BorderThickness="0" Padding="10" Background="Transparent" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <TextBlock Text="Password" Foreground="#555" Margin="0,0,0,5" FontSize="12" FontWeight="Medium"/>
+                    <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Margin="0,0,0,25">
+                        <PasswordBox Name="txtPassword" BorderThickness="0" Padding="10" Background="Transparent" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <Button Name="btnLogin" Content="LOGIN" Height="45" Cursor="Hand"
+                            Click="btnLogin_Click" Foreground="White" FontWeight="Bold">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#2a5298"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1e3c72"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Grid>
-        <Grid Grid.Column="1" Grid.RowSpan="2" Background="AliceBlue">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Username:" Margin="10,5,10,5"/>
-                <TextBox Name="txtUsername" Width="200" Margin="10,5,10,5"/>
-                <TextBlock Text="Password:" Margin="10,5,10,5"/>
-                <PasswordBox Name="txtPassword" Width="200" Margin="10,5,10,5"/>
-                <Button Name="btnLogin" Content="Login" Width="200" Click="btnLogin_Click" Margin="10,5,10,5"/>
-            </StackPanel>
-        </Grid>
-
-
-    </Grid>
+    </Border>
 </Window>
