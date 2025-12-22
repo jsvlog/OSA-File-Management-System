@@ -57,7 +57,7 @@
                     </TextBox.Resources>
                 </TextBox>
 
-                <TextBlock Text="Example: R-2025-001" Foreground="#999" FontSize="11" Margin="2,5,0,0" FontStyle="Italic"/>
+                <TextBlock Text="Example: T-2025-001" Foreground="#999" FontSize="11" Margin="2,5,0,0" FontStyle="Italic"/>
             </StackPanel>
 
             <Grid Grid.Row="2" Margin="0,0,0,15">

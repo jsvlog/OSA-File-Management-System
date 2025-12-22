@@ -182,6 +182,11 @@ namespace OSA_File_Management_System.ViewModel
             {
                 query = query.Where(d => d.Direction == "From Region");
             }
+            else if (IsAllChecked)
+            {
+                query = RegionComList;
+            }
+
             // Note: If IsAllChecked is true, we do nothing (keep both directions)
 
             // 4. Apply Search Text (if typed)
@@ -190,8 +195,11 @@ namespace OSA_File_Management_System.ViewModel
                 query = query.Where(d =>
                     (d.SubjectParticulars != null && d.SubjectParticulars.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
                     (d.RefNumber != null && d.RefNumber.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                    (d.ReceivedFrom != null && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
-                );
+                    (d.ReceivedFrom != null && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.TypeOfDocs != null && d.TypeOfDocs.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
+
+                    );
+                
             }
 
             // 5. Finally, update the Visibility property
