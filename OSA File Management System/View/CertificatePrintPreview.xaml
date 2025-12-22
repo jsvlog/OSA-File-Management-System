@@ -1,0 +1,86 @@
+﻿<Window x:Class="OSA_File_Management_System.View.CertificatePrintPreview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Certificate of Appearance Preview" Height="800" Width="900"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#F0F0F0" >
+            <Button Name="btnPrint" Content="Print Certificate" Width="120" Height="30" Margin="5" Click="BtnPrint_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+            <Button Name="btnSave" Content="Save as PDF" Width="120" Height="30" Margin="5" Click="BtnSave_Click" Background="#28A745" Foreground="White" FontWeight="Bold"/>
+            <TextBlock Text="Review the certificate before printing." VerticalAlignment="Center" Margin="10,0,0,0" FontStyle="Italic" Foreground="Gray"/>
+        </StackPanel>
+
+        <FlowDocumentScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <FlowDocument PageWidth="816" PageHeight="1056" ColumnWidth="816" FontFamily="Times New Roman" PagePadding="50">
+
+                <BlockUIContainer>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="/OSA File Management System;component/images/coa_logo.png" Height="80" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="REPUBLIC OF THE PHILIPPINES" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="COMMISSION ON AUDIT" FontSize="14" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="REGIONAL OFFICE NO. IV-B" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="PROVINCE OF ORIENTAL MINDORO" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="PROVINCIAL SATELLITE AUDITING OFFICE" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="Brgy. Guinobatan, Calapan City" FontSize="11" TextAlignment="Center" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </BlockUIContainer>
+
+                <Paragraph TextAlignment="Center" Margin="0,20,0,0" FontSize="12">
+                    Office of the Supervising Auditor
+                    <LineBreak/>
+                    Local Government Audit Sector
+                </Paragraph>
+
+                <Paragraph TextAlignment="Center" Margin="0,40,0,30" FontSize="22" FontWeight="Bold" TextDecorations="Underline">
+                    CERTIFICATE OF APPEARANCE
+                </Paragraph>
+
+                <Paragraph FontSize="14" TextAlignment="Justify" LineHeight="25" Margin="20,0,20,0">
+                    <Run Text="This is to certify that "/>
+                    <Run Text="{Binding FullName, Mode=OneWay}" FontWeight="Bold" TextDecorations="Underline"/>
+                    <Run Text=", "/>
+                    <Run Text="{Binding Position, Mode=OneWay}" FontWeight="Bold"/>
+                    <Run Text=", "/>
+                    <Run Text="{Binding Office, Mode=OneWay}" FontWeight="Bold"/>
+                    <Run Text=", appeared in this Office on "/>
+                    <Run Text="{Binding AppearanceDateString, Mode=OneWay}" FontWeight="Bold"/>
+                    <Run Text=" to "/>
+                    <Run Text="{Binding Purpose, Mode=OneWay}"/>
+                    <Run Text=" at the PSAO Compound, Barangay Guinobatan, Calapan City, Oriental Mindoro."/>
+                </Paragraph>
+
+                <Paragraph FontSize="14" TextAlignment="Justify" LineHeight="25" Margin="20,20,20,0">
+                    <Run Text="Issued this "/>
+                    <Run Text="{Binding DayString, Mode=OneWay}"/>
+                    <Run Text=" day of "/>
+                    <Run Text="{Binding MonthYearString, Mode=OneWay}"/>
+                    <Run Text=" for whatever legal purpose it may serve."/>
+                </Paragraph>
+
+                <Paragraph Margin="0,60,20,0" TextAlignment="Right" FontSize="14" KeepTogether="True">
+                    <Run Text="Atty. EMMERLY JANE D. MASANGKAY" FontWeight="Bold" TextDecorations="Underline"/>
+                    <LineBreak/>
+                    <Run Text="Supervising Auditor"/>
+                </Paragraph>
+
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+    </Grid>
+</Window>
