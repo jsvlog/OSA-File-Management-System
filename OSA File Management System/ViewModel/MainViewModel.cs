@@ -30,13 +30,23 @@ namespace OSA_File_Management_System.ViewModel
 			set { regionComViewModel = value; }
 		}
 
+        private CertificateViewModel certificateViewModel;
+
+        public CertificateViewModel CertificateViewModel
+        {
+            get { return certificateViewModel; }
+            set { certificateViewModel = value; }
+        }
 
 
-		public MainViewModel()
+
+
+        public MainViewModel()
 		{
 			regionComViewModel = new RegionComViewModel();
 			documentViewModel = new DocumentViewModel();
-			backupDatabaseBtn = new RelayCommand(BackupDatabaseCommand);
+            certificateViewModel = new CertificateViewModel();
+            backupDatabaseBtn = new RelayCommand(BackupDatabaseCommand);
         }
 
 		#region Backup Database

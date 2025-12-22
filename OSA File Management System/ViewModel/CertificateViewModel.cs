@@ -1,44 +1,56 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Input;
 using System.Windows;
-using OSA_File_Management_System.Commands; // For RelayCommand
-using OSA_File_Management_System.View;     // For CertificatePrintPreview window
+using System.Windows.Input;
+using OSA_File_Management_System.Commands; // Refers to your RelayCommand.cs
+using OSA_File_Management_System.View;     // Refers to the new CertificatePrintPreview window
 
 namespace OSA_File_Management_System.ViewModel
 {
     public class CertificateViewModel : INotifyPropertyChanged
     {
-        #region INotifyPropertyChanged Implementation
+        // 1. INotifyPropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
-        #endregion
 
-        // Properties binding to your Input Form
+        // 2. Properties
         private string _fullName;
         public string FullName
         {
             get { return _fullName; }
-            set { _fullName = value; OnPropertyChanged(nameof(FullName)); }
+            set
+            {
+                _fullName = value;
+                OnPropertyChanged(nameof(FullName));
+            }
         }
 
         private string _position;
         public string Position
         {
             get { return _position; }
-            set { _position = value; OnPropertyChanged(nameof(Position)); }
+            set
+            {
+                _position = value;
+                OnPropertyChanged(nameof(Position));
+            }
         }
 
         private string _office;
         public string Office
         {
             get { return _office; }
-            set { _office = value; OnPropertyChanged(nameof(Office)); }
+            set
+            {
+                _office = value;
+                OnPropertyChanged(nameof(Office));
+            }
         }
 
         private DateTime _appearanceDate = DateTime.Now;
@@ -49,7 +61,7 @@ namespace OSA_File_Management_System.ViewModel
             {
                 _appearanceDate = value;
                 OnPropertyChanged(nameof(AppearanceDate));
-                OnPropertyChanged(nameof(AppearanceDateString)); // Update the formatted string automatically
+                OnPropertyChanged(nameof(AppearanceDateString)); // Updates the display text when date changes
             }
         }
 
@@ -57,16 +69,19 @@ namespace OSA_File_Management_System.ViewModel
         public string Purpose
         {
             get { return _purpose; }
-            set { _purpose = value; OnPropertyChanged(nameof(Purpose)); }
+            set
+            {
+                _purpose = value;
+                OnPropertyChanged(nameof(Purpose));
+            }
         }
 
-        // Helper properties for the Certificate Text formatting
+        // 3. Computed Properties (For the Certificate Text)
         public string AppearanceDateString
         {
             get { return AppearanceDate.ToString("MMMM dd, yyyy"); }
         }
 
-        // Issued Date (Current Date)
         public string DayString
         {
             get { return DateTime.Now.Day.ToString() + GetDaySuffix(DateTime.Now.Day); }
@@ -77,13 +92,18 @@ namespace OSA_File_Management_System.ViewModel
             get { return DateTime.Now.ToString("MMMM yyyy"); }
         }
 
+        // 4. Commands
+        // We use ICommand for the property type, and RelayCommand for the initialization
         public ICommand GenerateCertificateCommand { get; set; }
 
+        // 5. Constructor
         public CertificateViewModel()
         {
+            // Initialize the command using your RelayCommand class
             GenerateCertificateCommand = new RelayCommand(GenerateCertificate);
         }
 
+        // 6. Methods
         private void GenerateCertificate(object obj)
         {
             // Simple Validation
@@ -99,7 +119,7 @@ namespace OSA_File_Management_System.ViewModel
             previewWindow.ShowDialog();
         }
 
-        // Helper to add 'st', 'nd', 'rd', 'th' to the day
+        // Helper for "st", "nd", "rd", "th"
         private string GetDaySuffix(int day)
         {
             if (day % 100 >= 11 && day % 100 <= 13)

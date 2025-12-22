@@ -104,15 +104,15 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Employee Name" Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateData.EmployeeName}" />
+                                <TextBox Text="{Binding CertificateViewModel.FullName}" />
 
                                 <TextBlock Text="Office / Department" Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateData.OfficeDepartment}" />
+                                <TextBox Text="{Binding CertificateViewModel.Office}" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Official Position" Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateData.EmployeePosition}" />
+                                <TextBox Text="{Binding CertificateViewModel.Office}" />
 
                                 <TextBlock Text="Personnel Contact No." Style="{StaticResource LabelStyle}"/>
                                 <TextBox Text="{Binding CertificateData.ContactNumber}" />
@@ -135,7 +135,7 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Date of Appearance (Start)" Style="{StaticResource LabelStyle}"/>
-                                <DatePicker SelectedDate="{Binding CertificateData.StartDate}" />
+                                <DatePicker SelectedDate="{Binding CertificateViewModel.AppearanceDate}" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
@@ -148,7 +148,7 @@
                         <TextBox Text="{Binding CertificateData.PlaceOfAppearance}" />
 
                         <TextBlock Text="Detailed Purpose of Appearance" Style="{StaticResource LabelStyle}"/>
-                        <TextBox Text="{Binding CertificateData.Purpose}" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalContentAlignment="Top"/>
+                        <TextBox Text="{Binding CertificateViewModel.Purpose}" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalContentAlignment="Top"/>
 
                     </StackPanel>
                 </Border>
@@ -185,7 +185,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,50">
                     <Button Content="✅ Generate &amp; Preview Certificate" 
                             Style="{StaticResource PrimaryBtn}" Width="350"
-                            Command="{Binding GenerateCertificateCommand}"/>
+                            Command="{Binding CertificateViewModel.GenerateCertificateCommand}"/>
 
                     <Button Content="Clear Form" Width="150" Margin="20,0,0,0"
                             Background="#F0F0F0" Foreground="#666" FontWeight="SemiBold"
