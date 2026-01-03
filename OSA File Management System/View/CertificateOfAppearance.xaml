@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OSA_File_Management_System.View.CertificateOfAppearance"
+<UserControl x:Class="OSA_File_Management_System.View.CertificateOfAppearance"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -106,16 +106,12 @@
                                 <TextBlock Text="Employee Name" Style="{StaticResource LabelStyle}"/>
                                 <TextBox Text="{Binding CertificateViewModel.FullName}" />
 
-                                <TextBlock Text="Office / Department" Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateViewModel.Office}" />
+
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Official Position" Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateViewModel.Office}" />
-
-                                <TextBlock Text="Personnel Contact No." Style="{StaticResource LabelStyle}"/>
-                                <TextBox Text="{Binding CertificateData.ContactNumber}" />
+                                <TextBox Text="{Binding CertificateViewModel.Position}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
