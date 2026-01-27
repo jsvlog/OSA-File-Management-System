@@ -14,17 +14,15 @@ dotnet build "OSA File Management System.sln" -c Release
 ```
 
 ### Linting
-No explicit linting configuration (`.editorconfig`, StyleCop). Project uses default .NET SDK conventions. Follow existing code patterns and heed compiler warnings from `dotnet build`.
+No explicit linting configuration. Uses default .NET SDK conventions. Follow existing patterns and heed compiler warnings.
 
 ### Test Commands
-No test project currently exists. Recommended approach to add unit testing:
+No test project currently exists. Recommended approach:
 ```bash
 dotnet new xunit -n OSAFileManagementTests
 dotnet add reference ../OSA\ File\ Management\ System/OSA\ File\ Management\ System.csproj
 ```
-Write test classes following `[ComponentName]Tests.cs` pattern (e.g., `DocumentViewModelTests.cs`).
-
-Once tests exist:
+Write tests as `[ComponentName]Tests.cs`. Once tests exist:
 ```bash
 dotnet test                                                     # Run all tests
 dotnet test --filter "FullyQualifiedName~Namespace.Class.Method"  # Run specific test
@@ -36,75 +34,58 @@ dotnet test --filter "FullyQualifiedName~DocumentViewModel"     # Run all tests 
 ## 2. Code Style Guidelines
 
 ### Imports (Using Directives)
-Place `using` directives at top of file. Group in order: System namespaces → third-party → project namespaces. Sort alphabetically within groups. Blank line between groups.
+Place at top of file. Group: System → third-party → project. Blank line between groups. Sort alphabetically within groups.
 
 ### Formatting
 - **Indentation:** 4 spaces, not tabs
 - **Braces:** K&R style (opening brace on same line)
-- **Blank lines:** Separate logical sections between methods, properties, regions
-- **Line length:** ~120 characters max, break longer lines appropriately
-- **Spacing:** Spaces after commas, around operators: `if (x == 0)`, not `if(x==0)`
+- **Blank lines:** Separate methods, properties, regions
+- **Line length:** ~120 characters max
+- **Spacing:** Spaces after commas, around operators: `if (x == 0)`
 
 ### Naming Conventions
 - **Namespaces:** `PascalCase` with underscores: `OSA_File_Management_System`, `OSA_File_Management_System.Model`
 - **Classes/Interfaces/Enums:** `PascalCase`: `Document`, `INotifyPropertyChanged`, `RelayCommand`
-- **Methods:** `PascalCase`: `LoadData`, `OnPropertyChanged`, `OpenAddDocumentForm`
-- **Public Properties:** `PascalCase`: `Id`, `DocumentList`, `AddFormData`
+- **Methods:** `PascalCase`: `LoadData`, `OnPropertyChanged`
+- **Properties:** `PascalCase`: `Id`, `DocumentList`
 - **Private Fields:** `camelCase`: `id`, `documentList`, `addFormData`
-- **Local Variables:** `camelCase`: `selectedItem`, `filterResult`
 - **Commands:** `PascalCase` with "Command" suffix: `ShowAddFormCommand`, `DeleteDocumentCommand`
 
-### MVVM Pattern Implementation
+### MVVM Pattern
 
-**Models:** Implement `INotifyPropertyChanged` interface with `OnPropertyChanged(string propertyName)` method. All properties must raise property changed events on setters.
+**Models:** Implement `INotifyPropertyChanged` with `OnPropertyChanged(string propertyName)`. All properties raise changed events.
 
 ```csharp
 private int id;
-public int Id
-{
-    get { return id; }
-    set { id = value; OnPropertyChanged("Id"); }
-}
+public int Id { get { return id; } set { id = value; OnPropertyChanged("Id"); } }
 ```
 
-**ViewModels:** Expose `RelayCommand` properties for all UI actions. Initialize commands in constructor. Use `#region` blocks to organize related functionality (e.g., `#region Add Document`, `#region Search`).
+**ViewModels:** Expose `RelayCommand` properties. Initialize in constructor. Use `#region` blocks for features (`#region Add Document`, `#region Search`).
 
-**Views:** Keep code-behind minimal (only InitializeComponent). Set `DataContext` to ViewModel instance. Use XAML binding for all data display and user input.
+**Views:** Minimal code-behind (only InitializeComponent). Set `DataContext` to ViewModel. Use XAML binding.
 
-**Commands:** Use `RelayCommand` class which supports both parameterized and non-parameterized constructors.
+**Commands:** Use `RelayCommand` class with parameter/non-parameter support.
 
 ```csharp
 private RelayCommand addDocument;
 public RelayCommand AddDocument => addDocument ??= new RelayCommand(AddDocumentMethod);
-
-private void AddDocumentMethod() { /* implementation */ }
-private void EditMethod(object parameter) { /* implementation with parameter */ }
+private void AddDocumentMethod() { /* impl */ }
+private void EditMethod(object parameter) { /* impl with param */ }
 ```
 
 ### Error Handling
-Wrap I/O, database, and external operations in `try-catch` blocks. Display user-friendly error messages via `MessageBox.Show(ex.Message)`. Never silently catch exceptions.
+Wrap I/O, database, external ops in `try-catch`. Show messages via `MessageBox.Show(ex.Message)`. Never silently catch.
 
 ```csharp
-try
-{
-    var result = documentServices.addDocument(data);
-    if (result) MessageBox.Show("Success");
-    else MessageBox.Show("Error saving");
-}
-catch (Exception ex)
-{
-    MessageBox.Show(ex.Message);
-}
+try { var result = documentServices.addDocument(data); if (result) MessageBox.Show("Success"); }
+catch (Exception ex) { MessageBox.Show(ex.Message); }
 ```
 
 ### Regions and Organization
-Use `#region` directives extensively to organize code into logical blocks. Common patterns:
-- `#region INotify` or `#region Notify Property Change` for PropertyChanged implementation
-- `#region [Feature Name]` (e.g., `#region Add Document`, `#region Search`, `#region Print`)
-- Group related private fields, commands, and methods within each region
+Use `#region` extensively. Patterns: `#region INotify`/`#region Notify Property Change`, `#region [Feature Name]`. Group related fields, commands, methods.
 
 ### Nullability and Type Safety
-Project has `<Nullable>enable</Nullable>` in .csproj. Use nullable annotation (`?`) for nullable reference types. Check for null before accessing. Use pattern matching and null-coalescing.
+Project has `<Nullable>enable</Nullable>`. Use `?` annotation. Check for null. Use pattern matching and null-coalescing.
 
 ```csharp
 if (parameter is Document doc && doc.Type != null) { /* safe access */ }
@@ -112,24 +93,32 @@ string display = doc.Type ?? "N/A";
 ```
 
 ### Collections and LINQ
-Use `ObservableCollection<T>` for bindable lists in ViewModels. Prefer LINQ for filtering and querying. Use `StringComparison.OrdinalIgnoreCase` for case-insensitive string comparisons.
+Use `ObservableCollection<T>` for bindable lists. Prefer LINQ. Use `StringComparison.OrdinalIgnoreCase` for case-insensitive comparisons.
 
 ```csharp
 var filtered = DocumentList.Where(d => d.Date?.Year == 2024).ToList();
 DocumentList = new ObservableCollection<Document>(filtered);
 ```
 
+### Database Operations
+Check `connection.State == ConnectionState.Closed` before opening. Use `MySqlDataReader` for queries, `ExecuteNonQuery` for INSERT/UPDATE/DELETE. Handle DBNull values.
+
+```csharp
+if (connection.State == ConnectionState.Closed) connection.Open();
+Date = reader["date"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["date"]);
+```
+
 ### File Operations
-Use `OpenFileDialog` with appropriate filters for file selection. Example: `Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"`
+Use `OpenFileDialog` with filters: `Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"`
 
 ---
 
 ## 3. Dependencies
 
 - **MySql.Data** (9.1.0): MySQL database connectivity
-- **SSH.NET** (2025.1.0): SSH functionality for remote operations
+- **SSH.NET** (2025.1.0): SSH functionality
 
-Add new packages: `dotnet add package [PackageName]`
+Add packages: `dotnet add package [PackageName]`
 
 ---
 
@@ -137,19 +126,19 @@ Add new packages: `dotnet add package [PackageName]`
 
 ```
 OSA File Management System/
-├── Model/      # Data models with INotifyPropertyChanged
-├── ViewModel/  # ViewModels exposing commands and data
-├── View/       # XAML views and minimal code-behind
+├── Model/      # Data models + Service classes (INotifyPropertyChanged)
+├── ViewModel/  # ViewModels with commands and data
+├── View/       # XAML views (minimal code-behind)
 ├── Commands/   # RelayCommand implementation
-└── images/     # Application images and icons
+└── images/     # Application images/icons
 ```
 
-All code resides in root namespace: `OSA_File_Management_System`
+Root namespace: `OSA_File_Management_System`
 
 ---
 
 ## 5. Cursor/Copilot Rules
 
-No `.cursor/rules/`, `.cursorrules`, or `.github/copilot-instructions.md` files found. Follow guidelines above.
+No `.cursor/rules/`, `.cursorrules`, or `.github/copilot-instructions.md` files. Follow guidelines above.
 
 ---

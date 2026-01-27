@@ -1,0 +1,201 @@
+@model OSAWebAPI.Models.RegionComModel
+@{
+    ViewData["Title"] = $"Details - {Model.RefNumber}";
+}
+
+<div class="mb-6">
+    <a href="/RegionCom" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to List
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">@Model.RefNumber</h1>
+                @if (Model.Direction == "To Region")
+                {
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                        To Region
+                    </span>
+                }
+                else
+                {
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
+                        From Region
+                    </span>
+                }
+            </div>
+            
+            @if (Model.ActionableDoc == true)
+            {
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700 font-semibold">
+                                Actionable Document
+                            </p>
+                            <p class="text-sm text-red-600">
+                                Deadline: @(Model.DateDeadline?.ToString("MMMM dd, yyyy") ?? "No deadline set")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Subject & Details</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Subject Particulars</label>
+                    <p class="text-gray-900 mt-1">@Model.SubjectParticulars</p>
+                </div>
+                
+                @if (!string.IsNullOrEmpty(Model.Details))
+                {
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Details</label>
+                        <p class="text-gray-900 mt-1 whitespace-pre-wrap">@Model.Details</p>
+                    </div>
+                }
+                
+                @if (!string.IsNullOrEmpty(Model.Remarks))
+                {
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Remarks</label>
+                        <p class="text-gray-900 mt-1 whitespace-pre-wrap">@Model.Remarks</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ScannedCopy))
+        {
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Scanned Copy</h2>
+                <div class="flex space-x-4">
+                    <a href="@Model.ScannedCopy" target="_blank" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Open PDF
+                    </a>
+                    <button onclick="window.print()" 
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        </svg>
+                        Print Page
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="space-y-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Basic Information</h2>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Date Received</label>
+                    <p class="text-gray-900 mt-1">@(Model.DateReceived?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Document Date</label>
+                    <p class="text-gray-900 mt-1">@(Model.DocumentDate?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Document Type</label>
+                    <p class="text-gray-900 mt-1">@Model.TypeOfDocs ?? "N/A"</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Tracking Code</label>
+                    <p class="text-gray-900 mt-1 font-mono text-sm">@Model.TrackingCode ?? "N/A"</p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Direction == "To Region")
+        {
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">To Region Details</h2>
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Received From</label>
+                        <p class="text-gray-900 mt-1">@Model.ReceivedFrom ?? "N/A"</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Number of Copies</label>
+                        <p class="text-gray-900 mt-1">@Model.NumberOfCopies ?? "N/A"</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Date Signed by SA</label>
+                        <p class="text-gray-900 mt-1">@(Model.DateSignBySA?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Date Sent to Region</label>
+                        <p class="text-gray-900 mt-1">@(Model.DateSentOutToRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">LBC Reference #</label>
+                        <p class="text-gray-900 mt-1">@Model.LbcRefNumber ?? "N/A"</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.Direction == "From Region")
+        {
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">From Region Details</h2>
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Addressee</label>
+                        <p class="text-gray-900 mt-1">@Model.Addressee ?? "N/A"</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Municipality</label>
+                        <p class="text-gray-900 mt-1">@Model.Municipality ?? "N/A"</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Barangay</label>
+                        <p class="text-gray-900 mt-1">@Model.Barangay ?? "N/A"</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Date Sent to Team</label>
+                        <p class="text-gray-900 mt-1">@(Model.DateSentOutToTeam?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Receiver</label>
+                        <p class="text-gray-900 mt-1">@Model.Receiver ?? "N/A"</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Additional Information</h2>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Location</label>
+                    <p class="text-gray-900 mt-1">@Model.Location ?? "N/A"</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Date Received by Region</label>
+                    <p class="text-gray-900 mt-1">@(Model.DateReceiveByRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

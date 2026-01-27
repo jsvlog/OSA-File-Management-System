@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -40,6 +40,7 @@ namespace OSA_File_Management_System.ViewModel
         public RegionComViewModel()
         {
             regionComServices = new RegionComServices();
+            IsAllChecked = true;
             btnLoadData = new RelayCommand(LoadAllRegionCom);
             showAddToRegion = new RelayCommand(OpenAddDocumentForm);
             addToRegion = new RelayCommand(AddToRegionCommand);
@@ -82,7 +83,8 @@ namespace OSA_File_Management_System.ViewModel
             applyYearFilter = new RelayCommand(ApplyYearFilterCommand);
             clearYearFilter = new RelayCommand(ClearYearFilterCommand);
             closeFilterWindow = new RelayCommand(CloseFilterWindowCommand);
-            LoadAllRegionCom();
+            RegionComList = new ObservableCollection<RegionComModel>();
+            YearList = new ObservableCollection<int>();
         }
 
 
@@ -93,7 +95,14 @@ namespace OSA_File_Management_System.ViewModel
 
         public ObservableCollection<RegionComModel> RegionComList
         {
-            get { return regionComList; }
+            get
+            {
+                if (regionComList == null)
+                {
+                    regionComList = new ObservableCollection<RegionComModel>();
+                }
+                return regionComList;
+            }
             set { regionComList = value; OnPropertyChanged("RegionComList"); }
         }
 
@@ -164,6 +173,11 @@ namespace OSA_File_Management_System.ViewModel
         //to show if you want to show To region, From Region or All
         private void FilterDocs()
         {
+            if (RegionComList == null)
+            {
+                RegionComList = new ObservableCollection<RegionComModel>();
+            }
+
             // 1. Start with the Master List (All Data)
             IEnumerable<RegionComModel> query = RegionComList;
 
@@ -182,10 +196,6 @@ namespace OSA_File_Management_System.ViewModel
             {
                 query = query.Where(d => d.Direction == "From Region");
             }
-            else if (IsAllChecked)
-            {
-                query = RegionComList;
-            }
 
             // Note: If IsAllChecked is true, we do nothing (keep both directions)
 
@@ -196,8 +206,10 @@ namespace OSA_File_Management_System.ViewModel
                     (d.SubjectParticulars != null && d.SubjectParticulars.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
                     (d.RefNumber != null && d.RefNumber.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
                     (d.ReceivedFrom != null && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                    (d.TypeOfDocs != null && d.TypeOfDocs.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
-
+                    (d.TypeOfDocs != null && d.TypeOfDocs.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.DateReceived.HasValue && d.DateReceived.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.DocumentDate.HasValue && d.DocumentDate.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.Remarks != null && d.Remarks.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
                     );
                 
             }
@@ -711,7 +723,12 @@ namespace OSA_File_Management_System.ViewModel
         public string SearchTextRegionCom
         {
             get { return searchTextRegionCom; }
-            set { searchTextRegionCom = value; OnPropertyChanged("SearchTextRegionCom"); }
+            set 
+            { 
+                searchTextRegionCom = value; 
+                OnPropertyChanged("SearchTextRegionCom");
+                FilterDocs();
+            }
         }
 
 
@@ -724,26 +741,7 @@ namespace OSA_File_Management_System.ViewModel
 
         private void ExecuteSearch()
         {
-            if (string.IsNullOrEmpty(SearchTextRegionCom))
-            {
-                LoadAllRegionCom();
-            }
-            else
-            {
-                LoadAllRegionCom();
-                var filteredDocuments = RegionComList.Where(d =>
-                     (d.DateReceived.HasValue && d.DateReceived.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (d.DocumentDate.HasValue && d.DocumentDate.Value.ToString("MM-dd-yyyy").Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(d.TypeOfDocs) && d.TypeOfDocs.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(d.SubjectParticulars) && d.SubjectParticulars.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(d.RefNumber) && d.RefNumber.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(d.ReceivedFrom) && d.ReceivedFrom.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(d.Remarks) && d.Remarks.Contains(SearchTextRegionCom, StringComparison.OrdinalIgnoreCase))
-                 ).ToList();
-
-                // Bind the filtered list to the DataGrid
-                RegionComList = new ObservableCollection<RegionComModel>(filteredDocuments);
-            }
+            FilterDocs();
         }
         #endregion
 

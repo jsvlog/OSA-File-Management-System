@@ -1,0 +1,203 @@
+@model OSAWebAPI.Models.DashboardStats
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Total Records</p>
+                <p class="text-2xl font-bold text-gray-800">@Model.TotalRecords</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">To Region</p>
+                <p class="text-2xl font-bold text-gray-800">@Model.ToRegionCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">From Region</p>
+                <p class="text-2xl font-bold text-gray-800">@Model.FromRegionCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Actionable</p>
+                <p class="text-2xl font-bold text-gray-800">@Model.ActionableCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Documents by Type</h2>
+        <canvas id="typeChart" height="300"></canvas>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">To vs From Region</h2>
+        <canvas id="directionChart" height="300"></canvas>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Monthly Trend (Last 12 Months)</h2>
+        <canvas id="monthlyTrendChart" height="300"></canvas>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Top 10 Municipalities</h2>
+        <canvas id="municipalityChart" height="300"></canvas>
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">This Month Summary</h2>
+    <div class="flex items-center justify-center">
+        <div class="text-center">
+            <p class="text-6xl font-bold text-blue-600 mb-2">@Model.ThisMonthCount</p>
+            <p class="text-gray-500">Documents received this month</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const typeData = @Json.Serialize(Model.ByType);
+        const municipalityData = @Json.Serialize(Model.ByMunicipality);
+        const monthlyData = @Json.Serialize(Model.MonthlyTrend);
+        
+        new Chart(document.getElementById('typeChart'), {
+            type: 'pie',
+            data: {
+                labels: typeData.map(d => d.Type),
+                datasets: [{
+                    data: typeData.map(d => d.Count),
+                    backgroundColor: [
+                        '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+                        '#EC4899', '#6366F1', '#14B8A6', '#F97316', '#06B6D4'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('directionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['To Region', 'From Region'],
+                datasets: [{
+                    data: [@Model.ToRegionCount, @Model.FromRegionCount],
+                    backgroundColor: ['#10B981', '#8B5CF6']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        new Chart(document.getElementById('monthlyTrendChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyData.map(d => `${monthNames[d.Month - 1]} ${d.Year}`),
+                datasets: [{
+                    label: 'Documents',
+                    data: monthlyData.map(d => d.Count),
+                    backgroundColor: '#3B82F6'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('municipalityChart'), {
+            type: 'bar',
+            data: {
+                labels: municipalityData.map(d => d.Municipality),
+                datasets: [{
+                    label: 'Documents',
+                    data: municipalityData.map(d => d.Count),
+                    backgroundColor: '#8B5CF6'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+}

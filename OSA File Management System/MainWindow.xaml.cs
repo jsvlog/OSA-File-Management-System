@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -51,6 +51,7 @@ namespace OSA_File_Management_System
                     {
                         case "RegionCom":
                             ContentArea.Content = new View.RegionComView.RegionComm();
+                            MainViewModel.RegionComViewModel.LoadAllRegionCom();
                             break;
 
                         case "Inventory":
