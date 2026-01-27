@@ -18,6 +18,7 @@ namespace OSA_File_Management_System
     {
         DocumentViewModel ViewModel;
         MainViewModel MainViewModel;
+        private bool isSidebarExpanded = true;
 
         public MainWindow()
         {
@@ -34,6 +35,27 @@ namespace OSA_File_Management_System
             // 3. IMPORTANT: Tell the ListBox to visually highlight the first item (RegionCom)
             // This ensures the sidebar matches the content when you open the app.
             CategoryListBox.SelectedIndex = 0;
+        }
+
+        private void SidebarToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isSidebarExpanded)
+            {
+                MainGrid.ColumnDefinitions[0].Width = new GridLength(60);
+                SidebarContent.Opacity = 0;
+                SidebarContent.Visibility = Visibility.Collapsed;
+                SidebarFooter.Opacity = 0;
+                SidebarFooter.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MainGrid.ColumnDefinitions[0].Width = new GridLength(260);
+                SidebarContent.Visibility = Visibility.Visible;
+                SidebarContent.Opacity = 1;
+                SidebarFooter.Visibility = Visibility.Visible;
+                SidebarFooter.Opacity = 1;
+            }
+            isSidebarExpanded = !isSidebarExpanded;
         }
 
         private void CategoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
