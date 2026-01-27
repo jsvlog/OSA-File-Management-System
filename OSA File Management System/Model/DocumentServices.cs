@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace OSA_File_Management_System.Model
 
         private void ConnectToDatabase()
         {
-            string connectionString = "SERVER=localhost;DATABASE=osasystem;UID=root;PASSWORD=12345;";
+            string connectionString = "SERVER=172.16.42.118;DATABASE=osasystem;UID=osa_network;PASSWORD=OsaSystem0727;";
             connection = new MySqlConnection(connectionString);
         }
 
