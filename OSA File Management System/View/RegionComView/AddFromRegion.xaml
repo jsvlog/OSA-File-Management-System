@@ -175,6 +175,24 @@
                                     <TextBox Text="{Binding Path=AddFromRegionData.ReceivedFrom}" Height="40"/>
                                 </StackPanel>
                             </Grid>
+
+                            <Grid Margin="0,15,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Municipality" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=AddFromRegionData.Municipality}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Barangay" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=AddFromRegionData.Barangay}"/>
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </Border>
 
@@ -189,38 +207,29 @@
                                     <ColumnDefinition Width="15"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="15"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Municipality" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddFromRegionData.Municipality}"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Barangay" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddFromRegionData.Barangay}"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="4">
                                     <TextBlock Text="Specific Location" Style="{StaticResource LabelStyle}"/>
                                     <TextBox Text="{Binding Path=AddFromRegionData.Location}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="2" Grid.Column="0">
+                                <StackPanel Grid.Column="2">
                                     <TextBlock Text="Addressee" Style="{StaticResource LabelStyle}"/>
                                     <TextBox Text="{Binding Path=AddFromRegionData.Addressee}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="2" Grid.Column="2">
+                                <StackPanel Grid.Column="4">
                                     <TextBlock Text="Receiver" Style="{StaticResource LabelStyle}"/>
                                     <TextBox Text="{Binding Path=AddFromRegionData.Receiver}"/>
                                 </StackPanel>
+                            </Grid>
 
-                                <StackPanel Grid.Row="2" Grid.Column="4">
+                            <Grid Margin="0,15,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
                                     <TextBlock Text="Date Sent to Teams" Style="{StaticResource LabelStyle}"/>
                                     <DatePicker SelectedDate="{Binding Path=AddFromRegionData.DateSentOutToTeam, Mode=TwoWay}"/>
                                 </StackPanel>
