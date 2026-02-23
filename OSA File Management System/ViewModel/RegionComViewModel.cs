@@ -85,6 +85,10 @@ namespace OSA_File_Management_System.ViewModel
             closeFilterWindow = new RelayCommand(CloseFilterWindowCommand);
             RegionComList = new ObservableCollection<RegionComModel>();
             YearList = new ObservableCollection<int>();
+            ControlNumberYearList = new ObservableCollection<int>();
+            PopulateControlNumberYears();
+            ControlYear = DateTime.Now.Year;
+            ControlNumber = "001";
         }
 
 
@@ -298,6 +302,7 @@ namespace OSA_File_Management_System.ViewModel
         {
             try
             {
+                AddToRegionData.RefNumber = $"T-{ControlYear}-{ControlNumber}";
                 var IsSaved = regionComServices.addToRegionCom(AddToRegionData);
                 if (IsSaved)
                 {
@@ -305,7 +310,8 @@ namespace OSA_File_Management_System.ViewModel
                     MessageBox.Show("Saving Successfull");
                     popup.Close();
                     LoadAllRegionCom();
-                    AddToRegionData = new RegionComModel(); //to clear the fields after saving
+                    AddToRegionData = new RegionComModel();
+                    ControlNumber = "001";
                 }
                 else { MessageBox.Show("error saving"); }
 
@@ -412,6 +418,7 @@ namespace OSA_File_Management_System.ViewModel
             try
             {
                 AddFromRegionData.Direction = "From Region";
+                AddFromRegionData.RefNumber = $"R-{ControlYear}-{ControlNumber}";
                 var IsSaved = regionComServices.addFromRegionCom(AddFromRegionData);
                 if (IsSaved)
                 {
@@ -419,7 +426,8 @@ namespace OSA_File_Management_System.ViewModel
                     MessageBox.Show("Saving Successfull");
                     popupAddFrom.Close();
                     LoadAllRegionCom();
-                    AddFromRegionData = new RegionComModel(); //to clear the fields after saving
+                    AddFromRegionData = new RegionComModel();
+                    ControlNumber = "001";
                 }
                 else { MessageBox.Show("error saving"); }
 
@@ -1442,6 +1450,43 @@ namespace OSA_File_Management_System.ViewModel
 
 
 
+        #endregion
+
+        #region Control Number Properties
+        private ObservableCollection<int> controlNumberYearList;
+
+        public ObservableCollection<int> ControlNumberYearList
+        {
+            get { return controlNumberYearList; }
+            set { controlNumberYearList = value; OnPropertyChanged("ControlNumberYearList"); }
+        }
+
+        private int controlYear;
+
+        public int ControlYear
+        {
+            get { return controlYear; }
+            set { controlYear = value; OnPropertyChanged("ControlYear"); }
+        }
+
+        private string controlNumber = "001";
+
+        public string ControlNumber
+        {
+            get { return controlNumber; }
+            set { controlNumber = value; OnPropertyChanged("ControlNumber"); }
+        }
+
+        private void PopulateControlNumberYears()
+        {
+            int currentYear = DateTime.Now.Year;
+            var years = new List<int>();
+            for (int i = currentYear - 5; i <= currentYear + 1; i++)
+            {
+                years.Add(i);
+            }
+            ControlNumberYearList = new ObservableCollection<int>(years.OrderByDescending(y => y));
+        }
         #endregion
 
         #region Filter By Year Logic

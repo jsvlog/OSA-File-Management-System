@@ -1,46 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OSA_File_Management_System
 {
-    /// <summary>
-    /// Interaction logic for Login.xaml
-    /// </summary>
     public partial class Login : Window
     {
         public Login()
         {
             InitializeComponent();
         }
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             string username = txtUsername.Text;
             string password = txtPassword.Password;
 
-            // Replace with your actual login validation logic
-            if (username == "admin" && password == "password")
-            {
-                // If login is successful, show the MainWindow
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-                this.Close();  // Close the login window
-            }
-            else
-            {
-                MessageBox.Show("Invalid username or password.");
-            }
+            btnLogin.IsEnabled = false;
+            LoadingOverlay.Visibility = Visibility.Visible;
 
+            try
+            {
+                bool isValid = await Task.Run(() => ValidateLogin(username, password));
+
+                if (isValid)
+                {
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid username or password.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                LoadingOverlay.Visibility = Visibility.Collapsed;
+                btnLogin.IsEnabled = true;
+            }
+        }
+
+        private bool ValidateLogin(string username, string password)
+        {
+            return username == "admin" && password == "password";
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

@@ -1,4 +1,4 @@
-﻿<Window x:Class="OSA_File_Management_System.Login"
+<Window x:Class="OSA_File_Management_System.Login"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -15,7 +15,8 @@
             <DropShadowEffect BlurRadius="20" ShadowDepth="0" Color="Gray" Opacity="0.3"/>
         </Border.Effect>
 
-        <Grid ClipToBounds="True">
+        <Grid>
+            <Grid ClipToBounds="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="*"/>
@@ -91,5 +92,51 @@
                 </StackPanel>
             </Grid>
         </Grid>
-    </Border>
+        
+        <Grid Name="LoadingOverlay" Visibility="Collapsed" Background="#80000000">
+            <Border Background="White" CornerRadius="10" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Width="24" Height="24" Margin="0,0,15,0">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ContentControl">
+                                            <Grid>
+                                                <Ellipse Stroke="#2a5298" StrokeThickness="3" Width="24" Height="24"/>
+                                                <Ellipse Stroke="Transparent" StrokeThickness="3" Width="24" Height="24"
+                                                         StrokeDashArray="40 100" RenderTransformOrigin="0.5,0.5">
+                                                    <Ellipse.RenderTransform>
+                                                        <RotateTransform x:Name="RotateTransform"/>
+                                                    </Ellipse.RenderTransform>
+                                                    <Ellipse.Style>
+                                                        <Style TargetType="Ellipse">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Visibility, ElementName=LoadingOverlay}" Value="Visible">
+                                                                    <DataTrigger.EnterActions>
+                                                                        <BeginStoryboard>
+                                                                            <Storyboard>
+                                                                                <DoubleAnimation Storyboard.TargetProperty="(Ellipse.RenderTransform).(RotateTransform.Angle)"
+                                                                                                 From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever"/>
+                                                                            </Storyboard>
+                                                                        </BeginStoryboard>
+                                                                    </DataTrigger.EnterActions>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Ellipse.Style>
+                                                </Ellipse>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    <TextBlock Text="Logging in..." VerticalAlignment="Center" FontSize="16" Foreground="#333"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Border>
 </Window>
