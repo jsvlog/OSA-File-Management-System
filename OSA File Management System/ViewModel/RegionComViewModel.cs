@@ -89,6 +89,8 @@ namespace OSA_File_Management_System.ViewModel
             PopulateControlNumberYears();
             ControlYear = DateTime.Now.Year;
             ControlNumber = "001";
+            copyTrackingIdFromRegion = new RelayCommand(CopyTrackingIdFromRegionCommand);
+            copyTrackingIdToRegion = new RelayCommand(CopyTrackingIdToRegionCommand);
         }
 
 
@@ -113,6 +115,61 @@ namespace OSA_File_Management_System.ViewModel
         public void LoadAllRegionCom()
         {
             RegionComList = regionComServices.GetAllRegionCom();
+        }
+        #endregion
+
+        #region Copy Tracking ID Commands
+        private RelayCommand copyTrackingIdFromRegion;
+        private RelayCommand copyTrackingIdToRegion;
+
+        public RelayCommand CopyTrackingIdFromRegion
+        {
+            get { return copyTrackingIdFromRegion; }
+        }
+
+        public RelayCommand CopyTrackingIdToRegion
+        {
+            get { return copyTrackingIdToRegion; }
+        }
+
+        private void CopyTrackingIdFromRegionCommand()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(FromRegionFullData.TrackingCode))
+                {
+                    Clipboard.SetText(FromRegionFullData.TrackingCode);
+                    MessageBox.Show("Tracking ID copied to clipboard!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No Tracking ID to copy.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void CopyTrackingIdToRegionCommand()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ToRegionFullData.TrackingCode))
+                {
+                    Clipboard.SetText(ToRegionFullData.TrackingCode);
+                    MessageBox.Show("Tracking ID copied to clipboard!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No Tracking ID to copy.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         #endregion
 

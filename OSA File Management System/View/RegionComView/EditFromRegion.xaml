@@ -262,7 +262,7 @@
 
                             <StackPanel Margin="0,15,0,0">
                                 <TextBlock Text="Tracking ID (For Threading)" Style="{StaticResource LabelStyle}" Foreground="#888"/>
-                                <TextBox Text="{Binding Path=EditFromRegionData.TrackingCode, Mode=TwoWay}" Background="#F0F0F0" Foreground="Gray" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Path=EditFromRegionData.TrackingCode, Mode=TwoWay}" Background="White" Foreground="#333"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
