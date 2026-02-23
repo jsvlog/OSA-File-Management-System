@@ -26,8 +26,7 @@ namespace OSA_File_Management_System.Model
 
         private void ConnectToDatabase()
         {
-            string connectionString = "SERVER=172.16.42.118;DATABASE=osasystem;UID=osa_network;PASSWORD=OsaSystem0727;";
-            connection = new MySqlConnection(connectionString);
+            connection = new MySqlConnection(AppConfig.GetConnectionString());
         }
 
 

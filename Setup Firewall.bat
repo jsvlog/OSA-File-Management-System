@@ -42,6 +42,6 @@ echo ====================================
 echo.
 echo You can now:
 echo 1. Run 'start-webserver.bat' to start the web server
-echo 2. Share URL http://172.16.42.118:5000 with coworkers
+echo 2. Share URL http://192.168.1.90:5000 with coworkers
 echo.
 pause
