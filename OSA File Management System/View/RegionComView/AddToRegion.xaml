@@ -27,6 +27,13 @@
             </Setter>
         </Style>
 
+        <Style x:Key="MultilineTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="MinHeight" Value="60"/>
+        </Style>
+
         <Style TargetType="DatePicker">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -164,7 +171,7 @@
 
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Received From" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddToRegionData.ReceivedFrom}"/>
+                                    <TextBox Text="{Binding Path=AddToRegionData.ReceivedFrom}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
@@ -224,12 +231,12 @@
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Receiver" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddToRegionData.Receiver}"/>
+                                    <TextBox Text="{Binding Path=AddToRegionData.Receiver}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4">
                                     <TextBlock Text="Location" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddToRegionData.Location}"/>
+                                    <TextBox Text="{Binding Path=AddToRegionData.Location}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
                             </Grid>
 

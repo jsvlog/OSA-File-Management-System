@@ -26,6 +26,13 @@
             </Setter>
         </Style>
 
+        <Style x:Key="MultilineTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="MinHeight" Value="60"/>
+        </Style>
+
         <Style TargetType="DatePicker">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -150,12 +157,12 @@
 
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Details" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=EditFromRegionData.Details}" Height="40"/>
+                                    <TextBox Text="{Binding Path=EditFromRegionData.Details}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Received From" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=EditFromRegionData.ReceivedFrom}" Height="40"/>
+                                    <TextBox Text="{Binding Path=EditFromRegionData.ReceivedFrom}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
                             </Grid>
 
@@ -193,17 +200,17 @@
 
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Specific Location" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=EditFromRegionData.Location}"/>
+                                    <TextBox Text="{Binding Path=EditFromRegionData.Location}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Addressee" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=EditFromRegionData.Addressee}"/>
+                                    <TextBox Text="{Binding Path=EditFromRegionData.Addressee}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4">
                                     <TextBlock Text="Receiver" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=EditFromRegionData.Receiver}"/>
+                                    <TextBox Text="{Binding Path=EditFromRegionData.Receiver}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
                             </Grid>
 

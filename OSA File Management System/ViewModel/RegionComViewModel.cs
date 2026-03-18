@@ -114,7 +114,53 @@ namespace OSA_File_Management_System.ViewModel
 
         public void LoadAllRegionCom()
         {
-            RegionComList = regionComServices.GetAllRegionCom();
+            RegionComList = SortRegionComList(regionComServices.GetAllRegionCom());
+            FilterDocs();
+        }
+        #endregion
+
+        #region Sorting
+        private ObservableCollection<RegionComModel> SortRegionComList(ObservableCollection<RegionComModel> list)
+        {
+            var sorted = list
+                .OrderByDescending(item => GetControlYear(item.RefNumber))
+                .ThenByDescending(item => GetControlNumber(item.RefNumber))
+                .ThenByDescending(item => item.RefNumber ?? string.Empty)
+                .ToList();
+
+            return new ObservableCollection<RegionComModel>(sorted);
+        }
+
+        private static int GetControlYear(string? refNumber)
+        {
+            if (string.IsNullOrWhiteSpace(refNumber))
+            {
+                return -1;
+            }
+
+            var parts = refNumber.Split('-');
+            if (parts.Length < 3)
+            {
+                return -1;
+            }
+
+            return int.TryParse(parts[1], out var year) ? year : -1;
+        }
+
+        private static int GetControlNumber(string? refNumber)
+        {
+            if (string.IsNullOrWhiteSpace(refNumber))
+            {
+                return -1;
+            }
+
+            var parts = refNumber.Split('-');
+            if (parts.Length < 3)
+            {
+                return -1;
+            }
+
+            return int.TryParse(parts[2], out var number) ? number : -1;
         }
         #endregion
 
