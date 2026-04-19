@@ -1,0 +1,66 @@
+@model List<OSAWebAPI.Models.MonitoringDocType>
+@{
+    ViewData["Title"] = "Monitoring";
+    var docTypeIcons = new Dictionary<string, string>
+    {
+        { "Financial Statement", "M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" },
+        { "Barangay Financial Statement", "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" },
+        { "AOM", "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
+        { "Barangay AOM", "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
+        { "AAR", "M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
+        { "Barangay AAR", "M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }
+    };
+    var colorMap = new Dictionary<string, string>
+    {
+        { "blue", "bg-blue-100 text-blue-600" },
+        { "green", "bg-green-100 text-green-600" },
+        { "purple", "bg-purple-100 text-purple-600" },
+        { "orange", "bg-orange-100 text-orange-600" },
+        { "red", "bg-red-100 text-red-600" },
+        { "pink", "bg-pink-100 text-pink-600" }
+    };
+    var borderColorMap = new Dictionary<string, string>
+    {
+        { "blue", "hover:border-blue-400" },
+        { "green", "hover:border-green-400" },
+        { "purple", "hover:border-purple-400" },
+        { "orange", "hover:border-orange-400" },
+        { "red", "hover:border-red-400" },
+        { "pink", "hover:border-pink-400" }
+    };
+}
+
+<div>
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Monitoring</h1>
+        <p class="text-gray-500 mt-1">Track document submission status by municipality and month</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach (var docType in Model)
+        {
+            var iconPath = docTypeIcons.ContainsKey(docType.Key) ? docTypeIcons[docType.Key] : docTypeIcons["Financial Statement"];
+            var colorClass = colorMap.ContainsKey(docType.Color) ? colorMap[docType.Color] : colorMap["blue"];
+            var borderHover = borderColorMap.ContainsKey(docType.Color) ? borderColorMap[docType.Color] : borderColorMap["blue"];
+
+            <a href="/Monitoring/Status?docType=@Uri.EscapeDataString(docType.Key)" class="block bg-white rounded-xl border border-gray-200 shadow-sm @borderHover transition-all">
+                <div class="p-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-3 @colorClass rounded-xl">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="@iconPath"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900">@docType.DisplayName</h3>
+                            <p class="text-sm text-gray-500 mt-1">View submission status</p>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

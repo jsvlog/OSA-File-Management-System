@@ -8,23 +8,37 @@ namespace OSAWebAPI.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly RegionComService _service;
+    private readonly RegionComService _regionComService;
+    private readonly InventoryService _inventoryService;
+    private readonly MonitoringService _monitoringService;
 
-    public HomeController(ILogger<HomeController> logger, RegionComService service)
+    public HomeController(
+        ILogger<HomeController> logger,
+        RegionComService regionComService,
+        InventoryService inventoryService,
+        MonitoringService monitoringService)
     {
         _logger = logger;
-        _service = service;
+        _regionComService = regionComService;
+        _inventoryService = inventoryService;
+        _monitoringService = monitoringService;
     }
 
     public IActionResult Index()
     {
-        var stats = _service.GetStatistics();
+        var stats = _regionComService.GetStatistics();
+        try
+        {
+            var inventoryCount = _inventoryService.GetAll().Count;
+            ViewBag.InventoryCount = inventoryCount;
+            ViewBag.InventoryYearRange = _inventoryService.GetYearRange();
+        }
+        catch
+        {
+            ViewBag.InventoryCount = 0;
+            ViewBag.InventoryYearRange = "No data";
+        }
         return View(stats);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,166 +1,191 @@
+@model OSAWebAPI.Models.DashboardStats
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="fade-in">
-    <div class="flex items-center space-x-4 mb-10">
-        <div class="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-            <img src="~/images/coa_logo.png" alt="COA Logo" class="w-16 h-16 object-contain" onerror="this.style.display='none'">
-        </div>
-        <div>
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Welcome to OSA Management System</h1>
-            <p class="text-gray-600 dark:text-gray-400 text-lg">Select a module to monitor and manage your documents</p>
-        </div>
+<div>
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p class="text-gray-500 mt-1">Welcome to OSA Management System</p>
     </div>
 
-    <div class="glass-card rounded-2xl shadow-lg p-8 mb-8">
-        <div class="flex items-center mb-8">
-            <div class="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full mr-4"></div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Monitoring</h2>
-        </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-blue-400 dark:border-blue-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                        </svg>
+    <div class="space-y-8">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <a href="/RegionCom" class="flex items-center justify-between group">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-blue-100 rounded-lg">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-900">Region Communications</h2>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Financial Statement</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Monitor municipal financial reports</p>
-                    </div>
-                </div>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
-
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-green-400 dark:border-green-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Barangay Financial Statement</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Monitor barangay financial records</p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-purple-400 dark:border-purple-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">AOM</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Acknowledgement of Memorandum</p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-orange-400 dark:border-orange-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Barangay AOM</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Barangay acknowledgment records</p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-red-400 dark:border-red-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Annual Audit Report</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Monitor annual audit documents</p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ hover: false }" 
-                 @@mouseenter="hover = true" 
-                 @@mouseleave="hover = false"
-                 class="card-hover glass-card rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer"
-                 :class="hover ? 'border-pink-400 dark:border-pink-500 shadow-xl' : ''">
-                <div class="flex items-start space-x-4">
-                    <div :class="hover ? 'scale-110' : ''" class="transition-transform duration-300 p-3 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Barangay AAR</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Barangay annual audit reports</p>
-                    </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <a href="/RegionCom?direction=To+Region" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="flex-shrink-0">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-2xl font-bold text-green-700">@(Model?.ToRegionCount ?? 0)</p>
+                            <p class="text-sm text-green-600">To Region</p>
+                            <p class="text-xs text-green-500">(last 30 days)</p>
+                        </div>
+                    </a>
+                    <a href="/RegionCom?direction=From+Region" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <div class="flex-shrink-0">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-2xl font-bold text-purple-700">@(Model?.FromRegionCount ?? 0)</p>
+                            <p class="text-sm text-purple-600">From Region</p>
+                            <p class="text-xs text-purple-500">(last 30 days)</p>
+                        </div>
+                    </a>
+                    <a href="/RegionCom" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="flex-shrink-0">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-2xl font-bold text-gray-700">@(Model?.TotalRecords ?? 0)</p>
+                            <p class="text-sm text-gray-600">Total Records</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="/RegionCom" class="block group">
-            <div class="card-hover glass-card rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300">
-                <div class="flex items-center space-x-4">
-                    <div class="p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <a href="/Monitoring" class="flex items-center justify-between group">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-green-100 rounded-lg">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-900">Monitoring</h2>
                     </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Region Communications</h2>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">View and search all region communication records</p>
-                    </div>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <a href="/Monitoring/Status?docType=Financial+Statement" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-blue-900">Financial Statement</p>
+                            <p class="text-xs text-blue-600">View status</p>
+                        </div>
+                    </a>
+                    <a href="/Monitoring/Status?docType=Barangay+Financial+Statement" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-green-900">Barangay Financial Statement</p>
+                            <p class="text-xs text-green-600">View status</p>
+                        </div>
+                    </a>
+                    <a href="/Monitoring/Status?docType=AOM" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-purple-100 rounded-lg">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-purple-900">AOM</p>
+                            <p class="text-xs text-purple-600">Audit Observation Memorandum</p>
+                        </div>
+                    </a>
+                    <a href="/Monitoring/Status?docType=Barangay+AOM" class="flex items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-orange-100 rounded-lg">
+                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-orange-900">Barangay AOM</p>
+                            <p class="text-xs text-orange-600">Barangay Audit Observation Memorandum</p>
+                        </div>
+                    </a>
+                    <a href="/Monitoring/Status?docType=AAR" class="flex items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-red-100 rounded-lg">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-red-900">Annual Audit Report</p>
+                            <p class="text-xs text-red-600">View status</p>
+                        </div>
+                    </a>
+                    <a href="/Monitoring/Status?docType=Barangay+AAR" class="flex items-center p-4 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-pink-100 rounded-lg">
+                            <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-pink-900">Barangay AAR</p>
+                            <p class="text-xs text-pink-600">Barangay Annual Audit Report</p>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </a>
-        
-        <a href="/RegionCom/Dashboard" class="block group">
-            <div class="card-hover glass-card rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300">
-                <div class="flex items-center space-x-4">
-                    <div class="p-4 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <a href="/Inventory" class="flex items-center justify-between group">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-purple-100 rounded-lg">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-900">Inventory</h2>
                     </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">Statistics Dashboard</h2>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">View analytics and charts for data insights</p>
-                    </div>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="p-6">
+                <div>
+                    <a href="/Inventory" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="flex-shrink-0">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-2xl font-bold text-gray-700">@ViewBag.InventoryYearRange</p>
+                            <p class="text-sm text-gray-600">Years Covered</p>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </a>
+        </div>
     </div>
 </div>

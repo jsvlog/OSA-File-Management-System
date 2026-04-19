@@ -1,163 +1,155 @@
 @model List<OSAWebAPI.Models.RegionComModel>
 @{
     ViewData["Title"] = "Region Communications";
+    var currentPage = (int)(ViewBag.CurrentPage ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+    var totalRecords = (int)(ViewBag.TotalRecords ?? 0);
+    var selectedDirection = ViewBag.SelectedDirection ?? "All";
+    var selectedYear = ViewBag.SelectedYear;
+    var selectedType = ViewBag.SelectedType;
+    var searchTerm = ViewBag.SearchTerm ?? "";
 }
 
-<div x-data="{
-    year: '@ViewBag.SelectedYear',
-    type: '@ViewBag.SelectedType',
-    search: '@ViewBag.SearchTerm',
-    years: @Json.Serialize(ViewBag.Years),
-    types: @Json.Serialize(ViewBag.Types),
-    isLoading: false
-}" x-cloak class="fade-in">
-    <div class="glass-card rounded-2xl shadow-xl p-6 mb-8">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Search & Filter</h2>
-            <button @@click="applyFilters()" :disabled="isLoading" class="btn-primary px-6 py-3 rounded-xl text-white font-medium flex items-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                <span x-text="isLoading ? 'Searching...' : 'Search'"></span>
-            </button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Region Communications</h1>
+        <p class="text-sm text-gray-500 mt-1">@totalRecords record@(totalRecords != 1 ? "s" : "") found</p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-4 p-4">
+        <div class="flex flex-wrap items-end gap-3">
             <div>
-                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Year</label>
-                <select x-model="year" class="input-field w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Year</label>
+                <select id="filterYear" onchange="applyFilters()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-32">
                     <option value="">All Years</option>
-                    <template x-for="yr in years" :key="yr">
-                        <option :value="yr" x-text="yr"></option>
-                    </template>
+                    @foreach (var yr in ViewBag.Years)
+                    {
+                        @if (selectedYear?.ToString() == yr.ToString())
+                        {
+                            <option value="@yr" selected>@yr</option>
+                        }
+                        else
+                        {
+                            <option value="@yr">@yr</option>
+                        }
+                    }
                 </select>
             </div>
-            
             <div>
-                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Document Type</label>
-                <select x-model="type" class="input-field w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>
+                <select id="filterType" onchange="applyFilters()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48">
                     <option value="">All Types</option>
-                    <template x-for="t in types" :key="t">
-                        <option :value="t" x-text="t"></option>
-                    </template>
+                    @foreach (var t in ViewBag.Types)
+                    {
+                        @if (selectedType?.ToString() == t)
+                        {
+                            <option value="@t" selected>@t</option>
+                        }
+                        else
+                        {
+                            <option value="@t">@t</option>
+                        }
+                    }
                 </select>
             </div>
-            
             <div>
-                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Search</label>
-                <div class="relative">
-                    <input type="text" x-model="search" placeholder="Subject, Ref#, Remarks..." 
-                           class="input-field w-full px-4 py-3 pl-10 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Direction</label>
+                <div class="flex rounded-lg border border-gray-300 overflow-hidden">
+                    <button type="button" onclick="setDirection('All')" id="dirAll" class="direction-btn px-4 py-2 text-sm font-medium @(selectedDirection == "All" ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100")">All</button>
+                    <button type="button" onclick="setDirection('To Region')" id="dirTo" class="direction-btn px-4 py-2 text-sm font-medium border-l border-gray-300 @(selectedDirection == "To Region" ? "bg-green-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100")">To Region</button>
+                    <button type="button" onclick="setDirection('From Region')" id="dirFrom" class="direction-btn px-4 py-2 text-sm font-medium border-l border-gray-300 @(selectedDirection == "From Region" ? "bg-purple-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100")">From Region</button>
                 </div>
             </div>
-            
-            <div class="flex items-end">
-                <button @@click="resetFilters()" 
-                        class="w-full btn-secondary px-4 py-3 rounded-xl text-white font-medium flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Search</label>
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    <span>Reset</span>
+                    <input type="text" id="filterSearch" value="@searchTerm" placeholder="Search subject, ref#, received from, type, date..."
+                           class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <div class="flex items-end space-x-2">
+                <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <span>Search</span>
+                </button>
+                <button onclick="resetFilters()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    Reset
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="flex items-center justify-between mb-4 px-2">
-        <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            <span class="font-medium">@Model.Count</span>
-            <span>records found</span>
-        </div>
-    </div>
-
-    <div class="glass-card rounded-2xl shadow-xl overflow-hidden">
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Ref #</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Subject</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Direction</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Municipality</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Received</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Doc Date</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Particulars</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Control #</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Received From</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Direction</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Remarks</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="bg-white divide-y divide-gray-200">
                     @if (Model.Any())
                     {
                         @foreach (var item in Model)
                         {
-                            <tr class="table-row-hover cursor-pointer">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <span class="font-medium">@item.DateReceived?.ToString("MM/dd/yyyy")</span>
-                                    </div>
+                            <tr class="hover:bg-blue-50 cursor-pointer transition-colors" onclick="window.location='/RegionCom/Details/@item.Id'">
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
+                                    @(item.DateReceived?.ToString("MM-dd-yyyy") ?? "N/A")
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 text-blue-800 dark:text-blue-200">
-                                        @item.RefNumber
-                                    </span>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
+                                    @(item.DocumentDate?.ToString("MM-dd-yyyy") ?? "N/A")
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                    <span class="tag px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">@item.TypeOfDocs</span>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs">@item.TypeOfDocs</span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 max-w-xs truncate" title="@item.SubjectParticulars">
+                                <td class="px-3 py-3 text-sm text-gray-900 max-w-[250px] truncate" title="@item.SubjectParticulars">
                                     @item.SubjectParticulars
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
+                                    @if (!string.IsNullOrEmpty(item.RefNumber))
+                                    {
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-semibold">@item.RefNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-gray-400 text-xs">-</span>
+                                    }
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-700 max-w-[150px] truncate" title="@item.ReceivedFrom">
+                                    @(item.ReceivedFrom ?? "-")
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
                                     @if (item.Direction == "To Region")
                                     {
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-green-400 to-green-500 text-white shadow-md">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                                            </svg>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
                                             To Region
+                                        </span>
+                                    }
+                                    else if (item.Direction == "From Region")
+                                    {
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            From Region
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-400 to-purple-500 text-white shadow-md">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-                                            </svg>
-                                            From Region
-                                        </span>
+                                        <span class="text-gray-400 text-xs">@item.Direction</span>
                                     }
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-medium">
-                                    @item.Municipality
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <a href="/RegionCom/Details/@item.Id" 
-                                           class="flex items-center px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                            </svg>
-                                            View
-                                        </a>
-                                        @if (!string.IsNullOrEmpty(item.ScannedCopy))
-                                        {
-                                            <button @@click="viewPdf('@item.ScannedCopy')" 
-                                                    class="flex items-center px-3 py-1.5 rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/50 transition-all">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                                </svg>
-                                                PDF
-                                            </button>
-                                        }
-                                    </div>
+                                <td class="px-3 py-3 text-sm text-gray-600 max-w-[200px] truncate" title="@item.Remarks">
+                                    @(item.Remarks ?? "-")
                                 </td>
                             </tr>
                         }
@@ -165,15 +157,13 @@
                     else
                     {
                         <tr>
-                            <td colspan="7" class="px-6 py-16">
+                            <td colspan="8" class="px-6 py-12 text-center">
                                 <div class="text-center">
-                                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 mb-4">
-                                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <p class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No records found</p>
-                                    <p class="text-gray-500 dark:text-gray-400">Try adjusting your search filters</p>
+                                    <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <p class="text-lg font-medium text-gray-500">No records found</p>
+                                    <p class="text-sm text-gray-400 mt-1">Try adjusting your search filters</p>
                                 </div>
                             </td>
                         </tr>
@@ -181,27 +171,105 @@
                 </tbody>
             </table>
         </div>
+
+        @if (totalPages > 1)
+        {
+            <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
+                <div class="text-sm text-gray-600">
+                    Showing @((currentPage - 1) * 25 + 1) to @Math.Min(currentPage * 25, totalRecords) of @totalRecords
+                </div>
+                <div class="flex space-x-1">
+                    @if (currentPage > 1)
+                    {
+                        <a href="@BuildPageUrl(1)" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700">First</a>
+                        <a href="@BuildPageUrl(currentPage - 1)" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700">Prev</a>
+                    }
+                    @{
+                        int startPage = Math.Max(1, currentPage - 2);
+                        int endPage = Math.Min(totalPages, currentPage + 2);
+                    }
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <span class="px-3 py-1 text-sm bg-blue-600 text-white rounded-md font-medium">@i</span>
+                        }
+                        else
+                        {
+                            <a href="@BuildPageUrl(i)" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700">@i</a>
+                        }
+                    }
+                    @if (currentPage < totalPages)
+                    {
+                        <a href="@BuildPageUrl(currentPage + 1)" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700">Next</a>
+                        <a href="@BuildPageUrl(totalPages)" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700">Last</a>
+                    }
+                </div>
+            </div>
+        }
     </div>
 </div>
 
+@functions {
+    private string BuildPageUrl(int page)
+    {
+        var queryParams = new List<string>();
+        if (ViewBag.SelectedYear != null) queryParams.Add($"year={ViewBag.SelectedYear}");
+        if (!string.IsNullOrEmpty(ViewBag.SelectedDirection?.ToString()) && ViewBag.SelectedDirection?.ToString() != "All")
+            queryParams.Add($"direction={ViewBag.SelectedDirection}");
+        if (!string.IsNullOrEmpty(ViewBag.SelectedType?.ToString())) queryParams.Add($"type={ViewBag.SelectedType}");
+        if (!string.IsNullOrEmpty(ViewBag.SearchTerm?.ToString())) queryParams.Add($"search={ViewBag.SearchTerm}");
+        queryParams.Add($"page={page}");
+        return "/RegionCom?" + string.Join("&", queryParams);
+    }
+}
+
+@section Scripts {
 <script>
+var currentDirection = '@(selectedDirection)';
+
+function setDirection(dir) {
+    currentDirection = dir;
+    document.querySelectorAll('.direction-btn').forEach(function(btn) {
+        btn.classList.remove('bg-blue-600', 'text-white', 'bg-green-600', 'bg-purple-600');
+        btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+    });
+    if (dir === 'All') {
+        var btn = document.getElementById('dirAll');
+        btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+        btn.classList.add('bg-blue-600', 'text-white');
+    } else if (dir === 'To Region') {
+        var btn = document.getElementById('dirTo');
+        btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+        btn.classList.add('bg-green-600', 'text-white');
+    } else if (dir === 'From Region') {
+        var btn = document.getElementById('dirFrom');
+        btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+        btn.classList.add('bg-purple-600', 'text-white');
+    }
+    applyFilters();
+}
+
 function applyFilters() {
-    this.isLoading = true;
-    const params = new URLSearchParams();
-    if (this.year) params.append('year', this.year);
-    if (this.type) params.append('type', this.type);
-    if (this.search) params.append('search', this.search);
+    var params = new URLSearchParams();
+    var year = document.getElementById('filterYear').value;
+    var type = document.getElementById('filterType').value;
+    var search = document.getElementById('filterSearch').value;
+    if (year) params.append('year', year);
+    if (currentDirection && currentDirection !== 'All') params.append('direction', currentDirection);
+    if (type) params.append('type', type);
+    if (search) params.append('search', search);
     window.location.href = '/RegionCom?' + params.toString();
 }
 
 function resetFilters() {
-    this.year = '';
-    this.type = '';
-    this.search = '';
-    this.applyFilters();
+    window.location.href = '/RegionCom';
 }
 
-function viewPdf(pdfPath) {
-    window.open(pdfPath, '_blank');
-}
+document.getElementById('filterSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        applyFilters();
+    }
+});
 </script>
+}

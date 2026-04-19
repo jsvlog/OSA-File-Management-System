@@ -1,0 +1,135 @@
+@model List<OSAWebAPI.Models.InventoryModel>
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<div>
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Inventory</h1>
+                <p class="text-sm text-gray-500 mt-1">@Model.Count items found</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-4 p-4">
+        <form method="get" action="/Inventory" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Year</label>
+                <select name="year" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Years</option>
+                    @foreach (var yr in ViewBag.Years)
+                    {
+                        @if (ViewBag.SelectedYear?.ToString() == yr.ToString())
+                        {
+                            <option value="@yr" selected>@yr</option>
+                        }
+                        else
+                        {
+                            <option value="@yr">@yr</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>
+                <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Types</option>
+                    @foreach (var t in ViewBag.Types)
+                    {
+                        @if (ViewBag.SelectedType?.ToString() == t)
+                        {
+                            <option value="@t" selected>@t</option>
+                        }
+                        else
+                        {
+                            <option value="@t">@t</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Search</label>
+                <input type="text" name="search" value="@ViewBag.SearchTerm" placeholder="Description, Status, Location..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex items-end space-x-2">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    Search
+                </button>
+                <a href="/Inventory" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-block">
+                    Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Description</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Remarks</th>
+                        <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover:bg-blue-50 cursor-pointer transition-colors" onclick="window.location='/Inventory/Details/@item.Id'">
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
+                                    @(item.Date?.ToString("MM/dd/yyyy") ?? "N/A")
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs">@item.Type</span>
+                                </td>
+                                <td class="px-3 py-3 text-sm text-gray-900 max-w-xs truncate" title="@item.Description">
+                                    @item.Description
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
+                                    @{
+                                        var statusClass = "bg-gray-100 text-gray-700";
+                                        if (item.Status?.ToLower().Contains("complete") == true || item.Status?.ToLower().Contains("done") == true)
+                                            statusClass = "bg-green-100 text-green-800";
+                                        else if (item.Status?.ToLower().Contains("pending") == true || item.Status?.ToLower().Contains("ongoing") == true)
+                                            statusClass = "bg-yellow-100 text-yellow-800";
+                                        else if (item.Status?.ToLower().Contains("missing") == true || item.Status?.ToLower().Contains("lost") == true)
+                                            statusClass = "bg-red-100 text-red-800";
+                                    }
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium @statusClass">@item.Status</span>
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-700">@item.Location</td>
+                                <td class="px-3 py-3 text-sm text-gray-600 max-w-xs truncate" title="@item.Remarks">@item.Remarks</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm">
+                                    <a href="/Inventory/Details/@item.Id" class="text-blue-600 hover:text-blue-800 font-medium" onclick="event.stopPropagation();">View</a>
+                                    @if (!string.IsNullOrEmpty(item.ScannedCopy))
+                                    {
+                                        <span class="mx-1 text-gray-300">|</span>
+                                        <a href="@item.ScannedCopy" target="_blank" class="text-green-600 hover:text-green-800 font-medium" onclick="event.stopPropagation();">PDF</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center">
+                                <p class="text-lg font-medium text-gray-500">No inventory items found</p>
+                                <p class="text-sm text-gray-400 mt-1">Try adjusting your search filters</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

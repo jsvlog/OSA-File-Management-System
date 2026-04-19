@@ -2,52 +2,75 @@ using Microsoft.AspNetCore.Mvc;
 using OSAWebAPI.Models;
 using OSAWebAPI.Services;
 
-namespace OSAWebAPI.Controllers
+namespace OSAWebAPI.Controllers;
+
+public class RegionComController : Controller
 {
-    public class RegionComController : Controller
+    private readonly RegionComService _service;
+
+    public RegionComController(RegionComService service)
     {
-        private readonly RegionComService _service;
-        
-        public RegionComController(RegionComService service)
+        _service = service;
+    }
+
+    public IActionResult Index(int? year, string? type, string? direction, string? search, int? page)
+    {
+        int pageSize = 25;
+        int currentPage = page ?? 1;
+
+        var allRecords = _service.Filter(year, null, search);
+
+        if (!string.IsNullOrEmpty(direction) && direction != "All")
         {
-            _service = service;
+            allRecords = allRecords.Where(r => r.Direction == direction).ToList();
         }
-        
-        public IActionResult Index(int? year, string? type, string? search)
+
+        if (!string.IsNullOrEmpty(type))
         {
-            var records = _service.Filter(year, type, search);
-            var stats = _service.GetStatistics();
-            
-            ViewBag.SelectedYear = year;
-            ViewBag.SelectedType = type;
-            ViewBag.SearchTerm = search;
-            ViewBag.Stats = stats;
-            ViewBag.Years = Enumerable.Range(2018, DateTime.Now.Year - 2018 + 1).Reverse().ToList();
-            ViewBag.Types = records.Select(r => r.TypeOfDocs).Distinct().Where(t => !string.IsNullOrEmpty(t)).OrderBy(t => t).ToList();
-            
-            return View(records);
+            allRecords = allRecords.Where(r => r.TypeOfDocs == type).ToList();
         }
-        
-        public IActionResult Details(int id)
-        {
-            var record = _service.GetById(id);
-            if (record == null)
-                return NotFound();
-            
-            return View(record);
-        }
-        
-        public IActionResult Dashboard()
-        {
-            var stats = _service.GetStatistics();
-            return View(stats);
-        }
-        
-        [HttpGet]
-        public IActionResult GetStats()
-        {
-            var stats = _service.GetStatistics();
-            return Json(stats);
-        }
+
+        int totalRecords = allRecords.Count;
+        int totalPages = totalRecords > 0 ? (int)Math.Ceiling((double)totalRecords / pageSize) : 1;
+
+        var pagedRecords = allRecords
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var allForTypes = _service.GetAll();
+        var types = allForTypes.Select(r => r.TypeOfDocs).Distinct().Where(t => !string.IsNullOrEmpty(t)).OrderBy(t => t).ToList();
+
+        ViewBag.CurrentPage = currentPage;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalRecords = totalRecords;
+        ViewBag.PageSize = pageSize;
+        ViewBag.SelectedYear = year;
+        ViewBag.SelectedType = type;
+        ViewBag.SelectedDirection = direction ?? "All";
+        ViewBag.SearchTerm = search;
+        ViewBag.Years = Enumerable.Range(2018, DateTime.Now.Year - 2018 + 1).Reverse().ToList();
+        ViewBag.Types = types;
+
+        return View(pagedRecords);
+    }
+
+    public IActionResult Details(int id)
+    {
+        var record = _service.GetById(id);
+        if (record == null)
+            return NotFound();
+
+        var relatedDocs = _service.GetRelatedByTrackingCode(record.TrackingCode, id);
+        ViewBag.RelatedDocs = relatedDocs;
+
+        return View(record);
+    }
+
+    [HttpGet]
+    public IActionResult GetStats()
+    {
+        var stats = _service.GetStatistics();
+        return Json(stats);
     }
 }

@@ -54,6 +54,32 @@ namespace OSAWebAPI.Services
             }
             return null;
         }
+
+        public List<RegionComModel> GetRelatedByTrackingCode(string? trackingCode, int excludeId)
+        {
+            var list = new List<RegionComModel>();
+            if (string.IsNullOrEmpty(trackingCode))
+                return list;
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                string query = "SELECT * FROM regioncom WHERE trackingCode = @trackingCode AND id != @excludeId ORDER BY dateReceived DESC";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@trackingCode", trackingCode);
+                    command.Parameters.AddWithValue("@excludeId", excludeId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(MapFromReader(reader));
+                        }
+                    }
+                }
+            }
+            return list;
+        }
         
         public List<RegionComModel> Filter(int? year, string? type, string? searchTerm)
         {
@@ -70,7 +96,7 @@ namespace OSAWebAPI.Services
                     query += " AND typeOfDocs = @type";
                 
                 if (!string.IsNullOrEmpty(searchTerm))
-                    query += " AND (subjectParticulars LIKE @search OR refNumber LIKE @search OR remarks LIKE @search)";
+                    query += " AND (subjectParticulars LIKE @search OR refNumber LIKE @search OR remarks LIKE @search OR receivedFrom LIKE @search OR typeOfDocs LIKE @search OR DATE_FORMAT(dateReceived, '%m-%d-%Y') LIKE @search OR DATE_FORMAT(documentDate, '%m-%d-%Y') LIKE @search)";
                 
                 query += " ORDER BY dateReceived DESC";
                 

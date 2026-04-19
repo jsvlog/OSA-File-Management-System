@@ -1,264 +1,261 @@
 @model OSAWebAPI.Models.RegionComModel
 @{
-    ViewData["Title"] = $"Details - {Model.RefNumber}";
+    ViewData["Title"] = Model.RefNumber ?? "Details";
+    var relatedDocs = ViewBag.RelatedDocs as List<OSAWebAPI.Models.RegionComModel> ?? new List<OSAWebAPI.Models.RegionComModel>();
 }
 
-<div class="fade-in">
+<div>
     <div class="mb-6">
-        <a href="/RegionCom" class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="/RegionCom" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
             Back to List
         </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 space-y-6">
-            <div class="glass-card rounded-2xl shadow-lg p-6 slide-in">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">@Model.RefNumber</h1>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Reference Number</p>
-                        </div>
+    <div class="space-y-6">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">@Model.RefNumber</h1>
+                        <p class="text-sm text-gray-500">Reference Number</p>
                     </div>
-                    @if (Model.Direction == "To Region")
-                    {
-                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-green-400 to-green-500 text-white shadow-lg">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
-                            To Region
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-purple-400 to-purple-500 text-white shadow-lg">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-                            </svg>
-                            From Region
-                        </span>
-                    }
                 </div>
-                
-                @if (Model.ActionableDoc == true)
+                @if (Model.Direction == "To Region")
                 {
-                    <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-l-4 border-red-500 rounded-r-xl p-4 mb-4">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 mt-0.5">
-                                <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-base font-semibold text-red-700 dark:text-red-300">
-                                    Actionable Document
-                                </p>
-                                <p class="text-sm text-red-600 dark:text-red-400 mt-1">
-                                    Deadline: @(Model.DateDeadline?.ToString("MMMM dd, yyyy") ?? "No deadline set")
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">To Region</span>
+                }
+                else
+                {
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">From Region</span>
                 }
             </div>
 
-            <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.1s;">
-                <div class="flex items-center mb-4">
-                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mr-3">
-                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Subject & Details</h2>
-                </div>
-                <div class="space-y-5">
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Subject Particulars</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.SubjectParticulars</p>
-                    </div>
-                    
-                    @if (!string.IsNullOrEmpty(Model.Details))
-                    {
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Details</label>
-                            <p class="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">@Model.Details</p>
-                        </div>
-                    }
-                    
-                    @if (!string.IsNullOrEmpty(Model.Remarks))
-                    {
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Remarks</label>
-                            <p class="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">@Model.Remarks</p>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            @if (!string.IsNullOrEmpty(Model.ScannedCopy))
+            @if (Model.ActionableDoc == true)
             {
-                <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-4">
-                        <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mr-3">
-                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white">Scanned Copy</h2>
-                    </div>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="@Model.ScannedCopy" target="_blank" 
-                           class="btn-primary inline-flex items-center px-6 py-3 rounded-xl text-white font-medium shadow-lg">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Open PDF
-                        </a>
-                        <button onclick="window.print()" 
-                                class="btn-secondary inline-flex items-center px-6 py-3 rounded-xl text-white font-medium shadow-lg">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                            </svg>
-                            Print Page
-                        </button>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <div class="space-y-6">
-            <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.15s;">
-                <div class="flex items-center mb-4">
-                    <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mr-3">
-                        <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Basic Information</h2>
-                </div>
-                <div class="space-y-4">
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date Received</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DateReceived?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Document Date</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DocumentDate?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Document Type</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.TypeOfDocs ?? "N/A"</p>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Tracking Code</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-mono text-sm bg-white dark:bg-gray-900 px-3 py-2 rounded-lg">@Model.TrackingCode ?? "N/A"</p>
-                    </div>
-                </div>
-            </div>
-
-            @if (Model.Direction == "To Region")
-            {
-                <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.25s; border-left-color: #10b981;">
-                    <div class="flex items-center mb-4">
-                        <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mr-3">
-                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white">To Region Details</h2>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Received From</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.ReceivedFrom ?? "N/A"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Number of Copies</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.NumberOfCopies ?? "N/A"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date Signed by SA</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DateSignBySA?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date Sent to Region</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DateSentOutToRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">LBC Reference #</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.LbcRefNumber ?? "N/A"</p>
-                        </div>
-                    </div>
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
+                    <p class="text-sm font-semibold text-red-700">Actionable Document</p>
+                    <p class="text-sm text-red-600 mt-1">Deadline: @(Model.DateDeadline?.ToString("MMMM dd, yyyy") ?? "No deadline set")</p>
                 </div>
             }
 
-            @if (Model.Direction == "From Region")
-            {
-                <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.25s; border-left-color: #8b5cf6;">
-                    <div class="flex items-center mb-4">
-                        <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mr-3">
-                            <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white">From Region Details</h2>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Addressee</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.Addressee ?? "N/A"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Municipality</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.Municipality ?? "N/A"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Barangay</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.Barangay ?? "N/A"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date Sent to Team</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DateSentOutToTeam?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Receiver</label>
-                            <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.Receiver ?? "N/A"</p>
-                        </div>
-                    </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Date Received</label>
+                    <p class="text-sm text-gray-900 font-medium">@(Model.DateReceived?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
                 </div>
-            }
-
-            <div class="detail-card glass-card rounded-2xl shadow-lg p-6 slide-in" style="animation-delay: 0.35s;">
-                <div class="flex items-center mb-4">
-                    <div class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg mr-3">
-                        <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Additional Information</h2>
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Document Date</label>
+                    <p class="text-sm text-gray-900 font-medium">@(Model.DocumentDate?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
                 </div>
-                <div class="space-y-4">
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Location</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@Model.Location ?? "N/A"</p>
-                    </div>
-                    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date Received by Region</label>
-                        <p class="text-gray-900 dark:text-gray-100 font-medium">@(Model.DateReceiveByRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
-                    </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Document Type</label>
+                    <p class="text-sm text-gray-900 font-medium">@Model.TypeOfDocs</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Tracking Code</label>
+                    <p class="text-sm text-gray-900 font-mono">@Model.TrackingCode</p>
                 </div>
             </div>
         </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Subject & Details</h2>
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Subject Particulars</label>
+                    <p class="text-gray-900">@Model.SubjectParticulars</p>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Details))
+                {
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Details</label>
+                        <p class="text-gray-900 whitespace-pre-wrap">@Model.Details</p>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.Remarks))
+                {
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Remarks</label>
+                        <p class="text-gray-900 whitespace-pre-wrap">@Model.Remarks</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model.Direction == "To Region")
+        {
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">To Region Details</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Received From</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.ReceivedFrom</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Number of Copies</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.NumberOfCopies</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Date Signed by SA</label>
+                        <p class="text-sm text-gray-900 font-medium">@(Model.DateSignBySA?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Date Sent to Region</label>
+                        <p class="text-sm text-gray-900 font-medium">@(Model.DateSentOutToRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">LBC Reference #</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.LbcRefNumber</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Location</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Location</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.Direction == "From Region")
+        {
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">From Region Details</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Addressee</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Addressee</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Municipality</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Municipality</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Barangay</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Barangay</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Date Sent to Team</label>
+                        <p class="text-sm text-gray-900 font-medium">@(Model.DateSentOutToTeam?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Receiver</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Receiver</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Location</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Location</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.Direction != "To Region" && Model.Direction != "From Region")
+        {
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Additional Information</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Location</label>
+                        <p class="text-sm text-gray-900 font-medium">@Model.Location</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Date Received by Region</label>
+                        <p class="text-sm text-gray-900 font-medium">@(Model.DateReceiveByRegion?.ToString("MMMM dd, yyyy") ?? "N/A")</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.ScannedCopy))
+        {
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Scanned Copy</h2>
+                <a href="@Model.ScannedCopy" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Open PDF
+                </a>
+            </div>
+        }
+
+        @if (relatedDocs.Any())
+        {
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.299a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                        <h2 class="text-lg font-semibold text-gray-900">Linked Documents (Thread History)</h2>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">@relatedDocs.Count related</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Documents sharing the same tracking code</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Received</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Control #</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Particulars</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Direction</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Received From</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach (var doc in relatedDocs)
+                            {
+                                <tr class="hover:bg-blue-50 transition-colors">
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        @(doc.DateReceived?.ToString("MM-dd-yyyy") ?? "N/A")
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        @if (!string.IsNullOrEmpty(doc.RefNumber))
+                                        {
+                                            <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-semibold">@doc.RefNumber</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-400 text-xs">-</span>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs">@doc.TypeOfDocs</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-900 max-w-[250px] truncate" title="@doc.SubjectParticulars">
+                                        @doc.SubjectParticulars
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        @if (doc.Direction == "To Region")
+                                        {
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">To Region</span>
+                                        }
+                                        else if (doc.Direction == "From Region")
+                                        {
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">From Region</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-400 text-xs">@doc.Direction</span>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 max-w-[150px] truncate" title="@doc.ReceivedFrom">
+                                        @(doc.ReceivedFrom ?? "-")
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <a href="/RegionCom/Details/@doc.Id" class="text-blue-600 hover:text-blue-800 font-medium">View</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
     </div>
 </div>
