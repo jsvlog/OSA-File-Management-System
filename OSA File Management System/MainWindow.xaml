@@ -149,7 +149,7 @@
                     <ListBoxItem Tag="Monitoring">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📊" FontSize="18" Margin="0,0,15,0"/>
-                            <TextBlock Text="Monitoring" VerticalAlignment="Center"/>
+                            <TextBlock Text="FS/AAR/AOM Monitoring" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
