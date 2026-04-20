@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using OSA_File_Management_System.Commands;
 using OSA_File_Management_System.Model;
 using OSA_File_Management_System.View;
+using OSA_File_Management_System.ViewModel;
 
 namespace OSA_File_Management_System.ViewModel
 {
@@ -31,7 +32,7 @@ namespace OSA_File_Management_System.ViewModel
 			set { regionComViewModel = value; }
 		}
 
-        private CertificateViewModel certificateViewModel;
+private CertificateViewModel certificateViewModel;
 
         public CertificateViewModel CertificateViewModel
         {
@@ -39,16 +40,27 @@ namespace OSA_File_Management_System.ViewModel
             set { certificateViewModel = value; }
         }
 
+        private MonitoringViewModel monitoringViewModel;
+
+        public MonitoringViewModel MonitoringViewModel
+        {
+            get { return monitoringViewModel; }
+            set { monitoringViewModel = value; }
+        }
 
 
 
-        public MainViewModel()
+public MainViewModel()
 		{
 			regionComViewModel = new RegionComViewModel();
 			documentViewModel = new DocumentViewModel();
             certificateViewModel = new CertificateViewModel();
+            monitoringViewModel = new MonitoringViewModel();
             backupDatabaseBtn = new RelayCommand(BackupDatabaseCommand);
         }
+
+
+
 
 		#region Backup Database
 		private RelayCommand backupDatabaseBtn;

@@ -6,7 +6,6 @@ namespace OSAWebAPI.Models
         public string? DocumentType { get; set; }
         public string? Municipality { get; set; }
         public int Year { get; set; }
-        public int Month { get; set; }
         public DateTime? DateSubmitted { get; set; }
         public string? Status { get; set; }
         public string? Remarks { get; set; }
@@ -26,19 +25,12 @@ namespace OSAWebAPI.Models
     {
         public string? DocumentType { get; set; }
         public int Year { get; set; }
-        public List<MunicipalityMonthStatus> Municipalities { get; set; } = new();
+        public List<MunicipalityStatus> Municipalities { get; set; } = new();
     }
 
-    public class MunicipalityMonthStatus
+    public class MunicipalityStatus
     {
         public string? Municipality { get; set; }
-        public List<MonthStatus> Months { get; set; } = new();
-    }
-
-    public class MonthStatus
-    {
-        public int Month { get; set; }
-        public string? MonthName { get; set; }
         public string? Status { get; set; }
         public DateTime? DateSubmitted { get; set; }
         public string? Remarks { get; set; }

@@ -9,7 +9,7 @@ Dual-project solution: WPF .NET 8.0 MVVM desktop app + ASP.NET Core 9.0 WebAPI. 
 ### Build
 ```bash
 dotnet build "OSA File Management System.sln"                    # Full solution
-dotnet build "OSA File Management System.sln" -c Release         # Release build
+dotnet build "OSA File Management System.sln" -c Release       # Release build
 dotnet build "OSAWebAPI/OSAWebAPI.csproj"                        # WebAPI only
 dotnet build "OSA File Management System/OSA File Management System.csproj"  # WPF only
 ```
@@ -22,7 +22,7 @@ No test project exists. Create one with:
 ```bash
 dotnet new xunit -n OSAFileManagementTests
 cd OSAFileManagementTests
-dotnet add reference "../OSA\ File\ Management\ System/OSA\ File\ Management\ System.csproj"
+dotnet add reference "../OSA File Management System/OSA File Management System.csproj"
 ```
 After tests exist:
 ```bash
@@ -64,7 +64,8 @@ using OSA_File_Management_System.Model;
 - **Classes/Interfaces/Enums:** `PascalCase`: `Document`, `INotifyPropertyChanged`, `RelayCommand`, `RegionComService`
 - **Methods:** `PascalCase`: `LoadData`, `OnPropertyChanged`, `GetAllDocuments`
 - **Properties:** `PascalCase`: `Id`, `DocumentList`, `SearchTextInventory`
-- **Private Fields:** `camelCase`: `id`, `documentList`, `addFormData`, `_service` (WPF), `_connectionString` (WebAPI)
+- **Private Fields:** `camelCase` (WPF): `regionComViewModel`, `documentServices`, `documentList`
+- **Private Fields:** `_camelCase` (WebAPI): `_connectionString`, `_service`
 - **Commands:** `PascalCase` with "Command" suffix: `ShowAddFormCommand`, `DeleteDocumentCommand`
 - **API Controllers:** `PascalCase` with "Controller" suffix: `RegionComController`
 
@@ -84,18 +85,16 @@ private void OnPropertyChanged(string propertyName) {
 #endregion
 ```
 
-**ViewModels:** Expose `RelayCommand` properties. Initialize in constructor. Use `#region` for features. `INotifyPropertyChanged` for ViewModel properties.
-
-**Views:** Minimal code-behind (only `InitializeComponent`). Set `DataContext` in code-behind or XAML.
-
-**Commands:** Use `RelayCommand` with/without parameter. Null-coalescing for lazy init.
+**ViewModels:** Expose `RelayCommand` properties. Initialize in constructor. Use `#region` for features.
 
 ```csharp
 private RelayCommand addDocument;
 public RelayCommand AddDocument => addDocument ??= new RelayCommand(AddDocumentMethod);
 private void AddDocumentMethod() { /* impl */ }
-private void EditMethod(object param) { /* with param */ }
+private void EditMethod(object parameter) { /* impl with param */ }
 ```
+
+**Views:** Minimal code-behind (only `InitializeComponent`). Set `DataContext` in code-behind or XAML.
 
 ### WebAPI Patterns
 
@@ -109,11 +108,11 @@ public class RegionComController : Controller {
 }
 ```
 
-**Services:** Use `using` statements for connections. `GetConnection()` factory. `MapFromReader` for entity mapping. Query with `@parameters`.
+**Services:** Use `using` statements for connections. `GetConnection()` factory. `MapFromReader` for entity mapping.
 
 ### Database Operations
 
-**WPF:** Check `connection.State == ConnectionState.Closed` before `Open()`. Use `MySqlDataReader` for SELECT, `ExecuteNonQuery` for INSERT/UPDATE/DELETE. Handle `DBNull`.
+**WPF:** Check `connection.State == ConnectionState.Closed` before `Open()`. Use `MySqlDataReader` for SELECT.
 
 ```csharp
 if (connection.State == ConnectionState.Closed) connection.Open();
@@ -122,6 +121,13 @@ cmd.Parameters.AddWithValue("@date", objDocument.Date.Value.Date);
 ```
 
 **WebAPI:** Use `using var connection = GetConnection()`. Parameterized queries.
+
+```csharp
+using (var connection = GetConnection()) {
+    connection.Open();
+    using (var command = new MySqlCommand(query, connection)) { /* impl */ }
+}
+```
 
 ### Error Handling
 Wrap I/O, database, external ops in `try-catch`. Show `MessageBox.Show(ex.Message)` in WPF. Never silently catch.
@@ -132,13 +138,17 @@ catch (Exception ex) { MessageBox.Show(ex.Message); }
 ```
 
 ### Regions and Organization
-Use `#region` extensively. Patterns: `#region INotify`, `#region Notify Property Change`, `#region [Feature Name]`. Group related fields, commands, methods.
+Use `#region` extensively. Patterns: `#region INotify`, `#region Notify Property Change`, `#region [Feature Name]`.
 
 ### Nullability and Type Safety
 `<Nullable>enable</Nullable>`. Use `?` annotation. Check for null. Pattern matching: `if (parameter is Document doc && doc.Type != null)`.
 
+```csharp
+if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+```
+
 ### Collections and LINQ
-`ObservableCollection<T>` for bindable WPF lists. `List<T>` for WebAPI. LINQ for filtering. `StringComparison.OrdinalIgnoreCase`.
+`ObservableCollection<T>` for bindable WPF lists. `List<T>` for WebAPI. LINQ for filtering.
 
 ```csharp
 var filtered = DocumentList.Where(d => d.Date?.Year == 2024).ToList();
@@ -173,7 +183,8 @@ OSA File Management System/
 OSAWebAPI/
 ├── Controllers/    # API controllers
 ├── Models/         # API models
-└── Services/       # Business logic services
+├── Services/       # Business logic services
+└── Program.cs      # WebAPI entry point (port 5000)
 ```
 
 **Root Namespaces:** `OSA_File_Management_System` (WPF), `OSAWebAPI` (WebAPI)

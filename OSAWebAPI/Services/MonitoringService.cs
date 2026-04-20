@@ -28,13 +28,12 @@ namespace OSAWebAPI.Services
                         documentType VARCHAR(100) NOT NULL,
                         municipality VARCHAR(255) NOT NULL,
                         year INT NOT NULL,
-                        month INT NOT NULL,
                         dateSubmitted DATE,
                         status VARCHAR(50) DEFAULT 'Pending',
                         remarks TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        UNIQUE KEY uq_submission (documentType, municipality, year, month)
+                        UNIQUE KEY uq_submission (documentType, municipality, year)
                     )";
                 using (var command = new MySqlCommand(createTable, connection))
                 {
@@ -80,7 +79,6 @@ namespace OSAWebAPI.Services
             };
 
             var municipalities = GetMunicipalities();
-            var monthNames = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
             var submissions = new List<MonitoringSubmission>();
             using (var connection = GetConnection())
@@ -103,21 +101,14 @@ namespace OSAWebAPI.Services
 
             foreach (var muni in municipalities)
             {
-                var muniStatus = new MunicipalityMonthStatus { Municipality = muni };
-                for (int m = 1; m <= 12; m++)
+                var submission = submissions.FirstOrDefault(s => s.Municipality == muni);
+                grid.Municipalities.Add(new MunicipalityStatus
                 {
-                    var submission = submissions.FirstOrDefault(s =>
-                        s.Municipality == muni && s.Month == m);
-                    muniStatus.Months.Add(new MonthStatus
-                    {
-                        Month = m,
-                        MonthName = monthNames[m - 1],
-                        Status = submission?.Status ?? "Not Submitted",
-                        DateSubmitted = submission?.DateSubmitted,
-                        Remarks = submission?.Remarks
-                    });
-                }
-                grid.Municipalities.Add(muniStatus);
+                    Municipality = muni,
+                    Status = submission?.Status ?? "Not Submitted",
+                    DateSubmitted = submission?.DateSubmitted,
+                    Remarks = submission?.Remarks
+                });
             }
 
             return grid;
@@ -144,7 +135,6 @@ namespace OSAWebAPI.Services
                 DocumentType = reader["documentType"]?.ToString(),
                 Municipality = reader["municipality"]?.ToString(),
                 Year = Convert.ToInt32(reader["year"]),
-                Month = Convert.ToInt32(reader["month"]),
                 DateSubmitted = reader["dateSubmitted"] != DBNull.Value ? Convert.ToDateTime(reader["dateSubmitted"]) : null,
                 Status = reader["status"]?.ToString(),
                 Remarks = reader["remarks"]?.ToString(),

@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OSA_File_Management_System.View.RegionComView"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1100">
+             d:DesignHeight="700" d:DesignWidth="1100"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
     <UserControl.Resources>
+        <CollectionViewSource x:Key="RegionComViewSource" Source="{Binding RegionComViewModel.RegionComList}" Filter="RegionComViewSource_Filter"/>
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="10"/>
@@ -74,9 +76,10 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#EAF6F8"/>
                 </Trigger>
-                <DataTrigger Binding="{Binding Visib}" Value="false">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#257180"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
 
@@ -221,14 +224,34 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,5,15,15" Padding="0">
+<Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,5,15,15" Padding="0">
             <DataGrid x:Name="RegionComDataGrid" 
-                      ItemsSource="{Binding RegionComViewModel.RegionComList, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource RegionComViewSource}}"
                       AutoGenerateColumns="False" 
                       CanUserSortColumns="True"
                       IsReadOnly="True"
                       SelectionMode="Single"
-                      SelectionUnit="FullRow">
+                      SelectionUnit="FullRow"
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      EnableRowVirtualization="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#EAF6F8"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#257180"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Date Received" Binding="{Binding DateReceived, StringFormat=MM-dd-yyyy}" Width="1.5*"/>

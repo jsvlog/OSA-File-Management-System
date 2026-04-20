@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 
 using OSA_File_Management_System.ViewModel;
 using OSA_File_Management_System.View;
+using OSA_File_Management_System.View.MonitoringView;
 
 namespace OSA_File_Management_System
 {
@@ -90,6 +91,11 @@ namespace OSA_File_Management_System
                             // Check if your file is named "CertificateOfAppearance"
 
                             ContentArea.Content = new View.CertificateOfAppearance(); // <--- Check this path
+                            break;
+
+                        case "Monitoring":
+                            ContentArea.Content = new MonitoringPage();
+                            MainViewModel.MonitoringViewModel.LoadMonitoringData();
                             break;
                     }
                 }
