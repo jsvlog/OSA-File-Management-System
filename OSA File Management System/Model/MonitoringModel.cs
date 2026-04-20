@@ -67,4 +67,36 @@ namespace OSA_File_Management_System.Model
             set { remarks = value; OnPropertyChanged("Remarks"); }
         }
     }
+
+    class MonitoringGridRow : INotifyPropertyChanged
+    {
+        #region INotify
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        private string? municipality;
+        public string? Municipality
+        {
+            get { return municipality; }
+            set { municipality = value; OnPropertyChanged("Municipality"); }
+        }
+
+        public Dictionary<int, YearStatus> YearStatuses { get; set; } = new Dictionary<int, YearStatus>();
+    }
+
+    class YearStatus
+    {
+        public int SubmissionId { get; set; }
+        public string? Municipality { get; set; }
+        public int Year { get; set; }
+        public string? DocumentType { get; set; }
+        public string? Status { get; set; }
+        public DateTime? DateSubmitted { get; set; }
+        public string? Remarks { get; set; }
+    }
 }

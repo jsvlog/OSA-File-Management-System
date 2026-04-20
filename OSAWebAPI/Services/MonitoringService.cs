@@ -29,7 +29,7 @@ namespace OSAWebAPI.Services
                         municipality VARCHAR(255) NOT NULL,
                         year INT NOT NULL,
                         dateSubmitted DATE,
-                        status VARCHAR(50) DEFAULT 'Pending',
+                        status VARCHAR(50) DEFAULT 'Not Submitted',
                         remarks TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -38,6 +38,20 @@ namespace OSAWebAPI.Services
                 using (var command = new MySqlCommand(createTable, connection))
                 {
                     command.ExecuteNonQuery();
+                }
+
+                string checkColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'month'";
+                using (var checkCmd = new MySqlCommand(checkColumn, connection))
+                {
+                    var result = checkCmd.ExecuteScalar();
+                    if (result != null && Convert.ToInt32(result) > 0)
+                    {
+                        string alterTable = "ALTER TABLE monitoring_submissions DROP COLUMN month";
+                        using (var alterCmd = new MySqlCommand(alterTable, connection))
+                        {
+                            alterCmd.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
         }

@@ -40,7 +40,7 @@ namespace OSA_File_Management_System.Model
                         municipality VARCHAR(255) NOT NULL,
                         year INT NOT NULL,
                         dateSubmitted DATE,
-                        status VARCHAR(50) DEFAULT 'Pending',
+                        status VARCHAR(50) DEFAULT 'Not Submitted',
                         remarks TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -48,6 +48,17 @@ namespace OSA_File_Management_System.Model
                     )";
                 MySqlCommand cmd = new MySqlCommand(createTable, connection);
                 cmd.ExecuteNonQuery();
+
+                string checkColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'month'";
+                MySqlCommand checkCmd = new MySqlCommand(checkColumn, connection);
+                var result = checkCmd.ExecuteScalar();
+                if (result != null && Convert.ToInt32(result) > 0)
+                {
+                    string alterTable = "ALTER TABLE monitoring_submissions DROP COLUMN month";
+                    MySqlCommand alterCmd = new MySqlCommand(alterTable, connection);
+                    alterCmd.ExecuteNonQuery();
+                }
+
                 connection.Close();
             }
             catch (Exception ex)
@@ -67,10 +78,21 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "SELECT * FROM monitoring_submissions WHERE documentType = @documentType AND year = @year";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@documentType", documentType);
-                cmd.Parameters.AddWithValue("@year", year);
+                string query;
+                MySqlCommand cmd;
+                if (year == 0)
+                {
+                    query = "SELECT * FROM monitoring_submissions WHERE documentType = @documentType";
+                    cmd = new MySqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("@documentType", documentType);
+                }
+                else
+                {
+                    query = "SELECT * FROM monitoring_submissions WHERE documentType = @documentType AND year = @year";
+                    cmd = new MySqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("@documentType", documentType);
+                    cmd.Parameters.AddWithValue("@year", year);
+                }
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())

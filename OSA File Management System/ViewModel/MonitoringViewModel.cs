@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -10,7 +10,7 @@ namespace OSA_File_Management_System.ViewModel
 {
     class MonitoringViewModel : INotifyPropertyChanged
     {
-        #region Notify Property Change
+        #region INotify
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
@@ -27,7 +27,7 @@ namespace OSA_File_Management_System.ViewModel
             monitoringServices = new MonitoringServices();
             monitoringServices.EnsureTableExists();
 
-            DocumentTypes = new ObservableCollection<string>
+            DocumentTypes = new List<string>
             {
                 "Financial Statement",
                 "Barangay Financial Statement",
@@ -37,33 +37,24 @@ namespace OSA_File_Management_System.ViewModel
                 "Barangay AAR"
             };
 
-            SelectedDocumentType = DocumentTypes.FirstOrDefault() ?? "";
-            SelectedYear = DateTime.Now.Year;
-
-            YearList = new ObservableCollection<int>();
-            for (int y = DateTime.Now.Year; y >= 2018; y--)
-            {
-                YearList.Add(y);
-            }
-
-            MonitoringList = new ObservableCollection<MonitoringModel>();
-            Municipalities = new ObservableCollection<string>();
+            GridData = new System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow>();
+            MunicipalityList = new System.Collections.ObjectModel.ObservableCollection<string>();
+            GenerateYearColumns();
 
             loadMonitoringData = new RelayCommand(LoadMonitoringData);
             showAddForm = new RelayCommand(OpenAddForm);
             addMonitoring = new RelayCommand(AddMonitoringCommand);
             closeAddForm = new RelayCommand(CloseAddFormCommand);
             updateMonitoring = new RelayCommand(UpdateMonitoringCommand);
-            deleteMonitoring = new RelayCommand(DeleteMonitoringCommand);
-            showEditForm = new RelayCommand(ShowEditFormCommand);
             closeEditForm = new RelayCommand(CloseEditFormCommand);
 
+            selectedDocumentType = DocumentTypes[0];
             LoadMonitoringData();
         }
 
         #region Properties
-        private ObservableCollection<string> documentTypes;
-        public ObservableCollection<string> DocumentTypes
+        private List<string> documentTypes;
+        public List<string> DocumentTypes
         {
             get { return documentTypes; }
             set { documentTypes = value; OnPropertyChanged("DocumentTypes"); }
@@ -73,42 +64,36 @@ namespace OSA_File_Management_System.ViewModel
         public string SelectedDocumentType
         {
             get { return selectedDocumentType; }
-            set { selectedDocumentType = value; OnPropertyChanged("SelectedDocumentType"); }
+            set
+            {
+                selectedDocumentType = value;
+                OnPropertyChanged("SelectedDocumentType");
+                if (YearColumns != null && YearColumns.Count > 0)
+                {
+                    LoadMonitoringData();
+                }
+            }
         }
 
-        private ObservableCollection<int> yearList;
-        public ObservableCollection<int> YearList
+        private List<int> yearColumns;
+        public List<int> YearColumns
         {
-            get { return yearList; }
-            set { yearList = value; OnPropertyChanged("YearList"); }
+            get { return yearColumns; }
+            set { yearColumns = value; OnPropertyChanged("YearColumns"); }
         }
 
-        private int selectedYear;
-        public int SelectedYear
+        private System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow> gridData;
+        public System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow> GridData
         {
-            get { return selectedYear; }
-            set { selectedYear = value; OnPropertyChanged("SelectedYear"); }
+            get { return gridData; }
+            set { gridData = value; OnPropertyChanged("GridData"); }
         }
 
-        private ObservableCollection<MonitoringModel> monitoringList;
-        public ObservableCollection<MonitoringModel> MonitoringList
+        private System.Collections.ObjectModel.ObservableCollection<string> municipalityList;
+        public System.Collections.ObjectModel.ObservableCollection<string> MunicipalityList
         {
-            get { return monitoringList; }
-            set { monitoringList = value; OnPropertyChanged("MonitoringList"); }
-        }
-
-        private ObservableCollection<string> municipalities;
-        public ObservableCollection<string> Municipalities
-        {
-            get { return municipalities; }
-            set { municipalities = value; OnPropertyChanged("Municipalities"); }
-        }
-
-        private MonitoringModel selectedMonitoring;
-        public MonitoringModel SelectedMonitoring
-        {
-            get { return selectedMonitoring; }
-            set { selectedMonitoring = value; OnPropertyChanged("SelectedMonitoring"); }
+            get { return municipalityList; }
+            set { municipalityList = value; OnPropertyChanged("MunicipalityList"); }
         }
 
         private MonitoringModel addFormData;
@@ -138,11 +123,36 @@ namespace OSA_File_Management_System.ViewModel
             get { return editFormStatus; }
             set { editFormStatus = value; OnPropertyChanged("EditFormStatus"); }
         }
+
+        private int addFormYear;
+        public int AddFormYear
+        {
+            get { return addFormYear; }
+            set { addFormYear = value; OnPropertyChanged("AddFormYear"); }
+        }
+
+        private List<int> addFormYearList;
+        public List<int> AddFormYearList
+        {
+            get { return addFormYearList; }
+            set { addFormYearList = value; OnPropertyChanged("AddFormYearList"); }
+        }
+        #endregion
+
+        #region Year Columns
+        private void GenerateYearColumns()
+        {
+            var years = new List<int>();
+            for (int y = 2016; y <= DateTime.Now.Year; y++)
+            {
+                years.Add(y);
+            }
+            YearColumns = years;
+        }
         #endregion
 
         #region Load Data
         private RelayCommand loadMonitoringData;
-
         public RelayCommand LoadMonitoringDataCommand
         {
             get { return loadMonitoringData; }
@@ -152,30 +162,34 @@ namespace OSA_File_Management_System.ViewModel
         {
             try
             {
-                Municipalities = monitoringServices.GetMunicipalities();
-                MonitoringList = monitoringServices.GetAllMonitoring(SelectedDocumentType, SelectedYear);
-                FillMissingMunicipalities();
+                MunicipalityList = monitoringServices.GetMunicipalities();
+                var submissions = monitoringServices.GetAllMonitoring(SelectedDocumentType, 0);
+
+                var rows = new System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow>();
+                foreach (var muni in MunicipalityList)
+                {
+                    var row = new MonitoringGridRow { Municipality = muni };
+                    foreach (var year in YearColumns)
+                    {
+                        var sub = submissions.FirstOrDefault(s => s.Municipality == muni && s.Year == year);
+                        row.YearStatuses[year] = new YearStatus
+                        {
+                            SubmissionId = sub?.Id ?? 0,
+                            Municipality = muni,
+                            Year = year,
+                            DocumentType = SelectedDocumentType,
+                            Status = sub?.Status ?? "Not Submitted",
+                            DateSubmitted = sub?.DateSubmitted,
+                            Remarks = sub?.Remarks
+                        };
+                    }
+                    rows.Add(row);
+                }
+                GridData = rows;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void FillMissingMunicipalities()
-        {
-            var existingMunicipalities = MonitoringList.Select(m => m.Municipality).ToList();
-            var missingMunicipalities = Municipalities.Where(m => !existingMunicipalities.Contains(m)).ToList();
-
-            foreach (var muni in missingMunicipalities)
-            {
-                MonitoringList.Add(new MonitoringModel
-                {
-                    DocumentType = SelectedDocumentType,
-                    Municipality = muni,
-                    Year = SelectedYear,
-                    Status = "Not Submitted"
-                });
             }
         }
         #endregion
@@ -190,16 +204,25 @@ namespace OSA_File_Management_System.ViewModel
         private Window addFormWindow;
         private void OpenAddForm()
         {
+            var yearList = new List<int>();
+            for (int y = 2016; y <= DateTime.Now.Year + 1; y++)
+            {
+                yearList.Add(y);
+            }
+            AddFormYearList = yearList;
+            AddFormYear = DateTime.Now.Year;
+
             addFormData = new MonitoringModel
             {
                 DocumentType = SelectedDocumentType,
-                Year = SelectedYear,
-                Municipality = Municipalities.FirstOrDefault() ?? "",
-                Status = "Pending",
+                Year = DateTime.Now.Year,
+                Municipality = MunicipalityList.FirstOrDefault() ?? "",
+                Status = "Not Submitted",
                 DateSubmitted = DateTime.Now
             };
             OnPropertyChanged("AddFormData");
-            AddFormStatus = "Pending";
+            AddFormStatus = "Not Submitted";
+            OnPropertyChanged("AddFormStatus");
 
             addFormWindow = new View.MonitoringView.AddMonitoringForm();
             addFormWindow.DataContext = this;
@@ -225,8 +248,8 @@ namespace OSA_File_Management_System.ViewModel
                 }
 
                 AddFormData.DocumentType = SelectedDocumentType;
-                AddFormData.Year = SelectedYear;
-                AddFormData.Status = AddFormStatus ?? "Pending";
+                AddFormData.Year = AddFormYear;
+                AddFormData.Status = AddFormStatus ?? "Not Submitted";
 
                 bool isSaved = monitoringServices.AddMonitoring(AddFormData);
                 if (isSaved)
@@ -256,43 +279,73 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-        #region Show Edit Form
-        private RelayCommand showEditForm;
-        public RelayCommand ShowEditForm
-        {
-            get { return showEditForm; }
-        }
-
-        private Window editFormWindow;
-        private void ShowEditFormCommand(object parameter)
-        {
-            if (parameter is MonitoringModel monitoringToEdit)
-            {
-                EditFormData = new MonitoringModel
-                {
-                    Id = monitoringToEdit.Id,
-                    DocumentType = monitoringToEdit.DocumentType,
-                    Municipality = monitoringToEdit.Municipality,
-                    Year = monitoringToEdit.Year,
-                    DateSubmitted = monitoringToEdit.DateSubmitted,
-                    Status = monitoringToEdit.Status,
-                    Remarks = monitoringToEdit.Remarks
-                };
-                OnPropertyChanged("EditFormData");
-                EditFormStatus = monitoringToEdit.Status ?? "Pending";
-
-                editFormWindow = new View.MonitoringView.EditMonitoringForm();
-                editFormWindow.DataContext = this;
-                editFormWindow.ShowDialog();
-            }
-        }
-        #endregion
-
-        #region Update Monitoring
+        #region Edit Monitoring (from context menu)
         private RelayCommand updateMonitoring;
         public RelayCommand UpdateMonitoring
         {
             get { return updateMonitoring; }
+        }
+
+        private Window editFormWindow;
+
+        public void OpenEditForm(YearStatus yearStatus)
+        {
+            if (yearStatus.SubmissionId == 0)
+            {
+                var result = MessageBox.Show(
+                    $"No submission exists for {yearStatus.Municipality} - {yearStatus.Year}.\nWould you like to create one?",
+                    "Create Entry", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    OpenAddFormWith(yearStatus);
+                }
+                return;
+            }
+
+            editFormData = new MonitoringModel
+            {
+                Id = yearStatus.SubmissionId,
+                DocumentType = yearStatus.DocumentType,
+                Municipality = yearStatus.Municipality,
+                Year = yearStatus.Year,
+                DateSubmitted = yearStatus.DateSubmitted,
+                Status = yearStatus.Status,
+                Remarks = yearStatus.Remarks
+            };
+            OnPropertyChanged("EditFormData");
+            EditFormStatus = yearStatus.Status ?? "Not Submitted";
+            OnPropertyChanged("EditFormStatus");
+
+            editFormWindow = new View.MonitoringView.EditMonitoringForm();
+            editFormWindow.DataContext = this;
+            editFormWindow.ShowDialog();
+        }
+
+        private void OpenAddFormWith(YearStatus yearStatus)
+        {
+            var yearList = new List<int>();
+            for (int y = 2016; y <= DateTime.Now.Year + 1; y++)
+            {
+                yearList.Add(y);
+            }
+            AddFormYearList = yearList;
+            AddFormYear = yearStatus.Year;
+
+            addFormData = new MonitoringModel
+            {
+                DocumentType = yearStatus.DocumentType,
+                Year = yearStatus.Year,
+                Municipality = yearStatus.Municipality,
+                Status = "Not Submitted",
+                DateSubmitted = DateTime.Now
+            };
+            OnPropertyChanged("AddFormData");
+            AddFormStatus = "Not Submitted";
+            OnPropertyChanged("AddFormStatus");
+
+            addFormWindow = new View.MonitoringView.AddMonitoringForm();
+            addFormWindow.DataContext = this;
+            addFormWindow.ShowDialog();
         }
 
         private void UpdateMonitoringCommand()
@@ -301,7 +354,7 @@ namespace OSA_File_Management_System.ViewModel
             {
                 if (EditFormData == null) return;
 
-                EditFormData.Status = EditFormStatus ?? "Pending";
+                EditFormData.Status = EditFormStatus ?? "Not Submitted";
 
                 bool isSaved = monitoringServices.UpdateMonitoring(EditFormData);
                 if (isSaved)
@@ -318,36 +371,29 @@ namespace OSA_File_Management_System.ViewModel
         }
         #endregion
 
-        #region Delete Monitoring
-        private RelayCommand deleteMonitoring;
-        public RelayCommand DeleteMonitoring
+        #region Delete Monitoring (from context menu)
+        public void DeleteMonitoring(YearStatus yearStatus)
         {
-            get { return deleteMonitoring; }
-        }
-
-        private void DeleteMonitoringCommand(object parameter)
-        {
-            if (parameter is MonitoringModel monitoringToDelete)
+            if (yearStatus.SubmissionId == 0)
             {
-                if (monitoringToDelete.Id == 0)
-                {
-                    MessageBox.Show("This entry has not been saved to the database yet.", "Cannot Delete", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                MessageBox.Show("No submission exists for this entry.", "Cannot Delete", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-                var result = MessageBox.Show($"Are you sure you want to delete the monitoring entry for {monitoringToDelete.Municipality}?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+            var result = MessageBox.Show($"Are you sure you want to delete the monitoring entry for {yearStatus.Municipality} - {yearStatus.Year}?",
+                "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                var monitoring = new MonitoringModel { Id = yearStatus.SubmissionId };
+                bool isDeleted = monitoringServices.DeleteMonitoring(monitoring);
+                if (isDeleted)
                 {
-                    bool isDeleted = monitoringServices.DeleteMonitoring(monitoringToDelete);
-                    if (isDeleted)
-                    {
-                        MessageBox.Show("Monitoring entry deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadMonitoringData();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error deleting monitoring entry.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MessageBox.Show("Monitoring entry deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    LoadMonitoringData();
+                }
+                else
+                {
+                    MessageBox.Show("Error deleting monitoring entry.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

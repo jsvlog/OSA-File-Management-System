@@ -94,8 +94,9 @@ namespace OSA_File_Management_System
                             break;
 
                         case "Monitoring":
-                            ContentArea.Content = new MonitoringPage();
-                            MainViewModel.MonitoringViewModel.LoadMonitoringData();
+                            var monitoringPage = new MonitoringPage();
+                            monitoringPage.DataContext = MainViewModel.MonitoringViewModel;
+                            ContentArea.Content = monitoringPage;
                             break;
                     }
                 }
