@@ -39,6 +39,7 @@ namespace OSA_File_Management_System.View.MonitoringView
                 if (DataContext is MonitoringViewModel vm)
                 {
                     GenerateColumns(vm);
+                    MonitoringGrid.Items.Refresh();
                 }
             }
         }

@@ -58,12 +58,17 @@ namespace OSA_File_Management_System.Model
                     MySqlCommand alterCmd = new MySqlCommand(alterTable, connection);
                     alterCmd.ExecuteNonQuery();
                 }
-
-                connection.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
         #endregion
@@ -105,14 +110,21 @@ namespace OSA_File_Management_System.Model
                         Year = Convert.ToInt32(reader["year"]),
                         DateSubmitted = reader["dateSubmitted"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSubmitted"]),
                         Status = reader["status"]?.ToString(),
-                        Remarks = reader["remarks"]?.ToString()
+                        Remarks = reader["remarks"] is DBNull ? null : reader["remarks"]?.ToString()
                     });
                 }
-                connection.Close();
+                reader.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
             return monitoringList;
         }
@@ -135,16 +147,22 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@municipality", monitoring.Municipality);
                 cmd.Parameters.AddWithValue("@year", monitoring.Year);
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@status", monitoring.Status);
-                cmd.Parameters.AddWithValue("@remarks", monitoring.Remarks ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");
+                cmd.Parameters.AddWithValue("@remarks", string.IsNullOrEmpty(monitoring.Remarks) ? (object)DBNull.Value : monitoring.Remarks);
                 cmd.ExecuteNonQuery();
-                connection.Close();
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return false;
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
         #endregion
@@ -162,16 +180,22 @@ namespace OSA_File_Management_System.Model
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", monitoring.Id);
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@status", monitoring.Status);
-                cmd.Parameters.AddWithValue("@remarks", monitoring.Remarks ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");
+                cmd.Parameters.AddWithValue("@remarks", string.IsNullOrEmpty(monitoring.Remarks) ? (object)DBNull.Value : monitoring.Remarks);
                 cmd.ExecuteNonQuery();
-                connection.Close();
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return false;
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
         #endregion
@@ -189,13 +213,19 @@ namespace OSA_File_Management_System.Model
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", monitoring.Id);
                 cmd.ExecuteNonQuery();
-                connection.Close();
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return false;
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
         #endregion
@@ -218,11 +248,18 @@ namespace OSA_File_Management_System.Model
                 {
                     municipalities.Add(reader["municipality"]?.ToString() ?? "");
                 }
-                connection.Close();
+                reader.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
 
             if (municipalities.Count == 0)

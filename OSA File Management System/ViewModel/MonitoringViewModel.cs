@@ -217,11 +217,12 @@ namespace OSA_File_Management_System.ViewModel
                 DocumentType = SelectedDocumentType,
                 Year = DateTime.Now.Year,
                 Municipality = MunicipalityList.FirstOrDefault() ?? "",
-                Status = "Not Submitted",
-                DateSubmitted = DateTime.Now
+                Status = "Submitted",
+                DateSubmitted = DateTime.Now,
+                Remarks = ""
             };
             OnPropertyChanged("AddFormData");
-            AddFormStatus = "Not Submitted";
+            AddFormStatus = "Submitted";
             OnPropertyChanged("AddFormStatus");
 
             addFormWindow = new View.MonitoringView.AddMonitoringForm();
@@ -250,6 +251,10 @@ namespace OSA_File_Management_System.ViewModel
                 AddFormData.DocumentType = SelectedDocumentType;
                 AddFormData.Year = AddFormYear;
                 AddFormData.Status = AddFormStatus ?? "Not Submitted";
+                if (AddFormData.Status == "Not Submitted")
+                {
+                    AddFormData.DateSubmitted = null;
+                }
 
                 bool isSaved = monitoringServices.AddMonitoring(AddFormData);
                 if (isSaved)
@@ -336,11 +341,12 @@ namespace OSA_File_Management_System.ViewModel
                 DocumentType = yearStatus.DocumentType,
                 Year = yearStatus.Year,
                 Municipality = yearStatus.Municipality,
-                Status = "Not Submitted",
-                DateSubmitted = DateTime.Now
+                Status = "Submitted",
+                DateSubmitted = DateTime.Now,
+                Remarks = ""
             };
             OnPropertyChanged("AddFormData");
-            AddFormStatus = "Not Submitted";
+            AddFormStatus = "Submitted";
             OnPropertyChanged("AddFormStatus");
 
             addFormWindow = new View.MonitoringView.AddMonitoringForm();
@@ -355,6 +361,10 @@ namespace OSA_File_Management_System.ViewModel
                 if (EditFormData == null) return;
 
                 EditFormData.Status = EditFormStatus ?? "Not Submitted";
+                if (EditFormData.Status == "Not Submitted")
+                {
+                    EditFormData.DateSubmitted = null;
+                }
 
                 bool isSaved = monitoringServices.UpdateMonitoring(EditFormData);
                 if (isSaved)
