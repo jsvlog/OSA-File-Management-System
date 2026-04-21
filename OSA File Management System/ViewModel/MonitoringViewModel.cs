@@ -156,6 +156,25 @@ namespace OSA_File_Management_System.ViewModel
         }
 
         public bool IsBarangayDocumentType => BarangayData.IsBarangayDocumentType(SelectedDocumentType);
+
+        private string selectedFilterMunicipality;
+        public string SelectedFilterMunicipality
+        {
+            get { return selectedFilterMunicipality; }
+            set
+            {
+                selectedFilterMunicipality = value;
+                OnPropertyChanged("SelectedFilterMunicipality");
+                LoadFilteredBarangayGrid();
+            }
+        }
+
+        private ObservableCollection<BarangayMonitoringGridRow> filteredBarangayGridData;
+        public ObservableCollection<BarangayMonitoringGridRow> FilteredBarangayGridData
+        {
+            get { return filteredBarangayGridData; }
+            set { filteredBarangayGridData = value; OnPropertyChanged("FilteredBarangayGridData"); }
+        }
         #endregion
 
         #region Year Columns
@@ -254,6 +273,27 @@ namespace OSA_File_Management_System.ViewModel
                 }
             }
             BarangayGridData = rows;
+            if (string.IsNullOrEmpty(SelectedFilterMunicipality) && MunicipalityList.Count > 0)
+            {
+                SelectedFilterMunicipality = MunicipalityList[0];
+            }
+            LoadFilteredBarangayGrid();
+        }
+
+        private void LoadFilteredBarangayGrid()
+        {
+            if (BarangayGridData == null) return;
+
+            if (string.IsNullOrEmpty(SelectedFilterMunicipality))
+            {
+                FilteredBarangayGridData = new ObservableCollection<BarangayMonitoringGridRow>(
+                    BarangayGridData.Where(r => r.Municipality == MunicipalityList.FirstOrDefault()));
+            }
+            else
+            {
+                FilteredBarangayGridData = new ObservableCollection<BarangayMonitoringGridRow>(
+                    BarangayGridData.Where(r => r.Municipality == SelectedFilterMunicipality));
+            }
         }
         #endregion
 

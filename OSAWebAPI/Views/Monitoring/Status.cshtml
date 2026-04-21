@@ -33,6 +33,24 @@
         </div>
     </div>
 
+    @if (isBarangayType)
+    {
+        <div class="mb-4">
+            <form method="get" action="/Monitoring/Status" class="flex items-center space-x-4">
+                <input type="hidden" name="docType" value="@docType" />
+                <input type="hidden" name="year" value="@ViewBag.SelectedYear" />
+                <label class="text-sm font-medium text-gray-700">Filter by Municipality:</label>
+                <select name="municipality" onchange="this.form.submit()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Municipalities</option>
+                    @foreach (var muni in ViewBag.Municipalities)
+                    {
+                        <option value="@muni" selected="@(ViewBag.SelectedFilterMunicipality == muni)">@muni</option>
+                    }
+                </select>
+            </form>
+        </div>
+    }
+
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full">
@@ -56,7 +74,10 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @if (municipalities.Any())
                     {
-                        @foreach (var muni in municipalities)
+                        var filteredMunicipalities = string.IsNullOrEmpty(ViewBag.SelectedFilterMunicipality)
+                            ? municipalities
+                            : municipalities.Where(m => m.Municipality == ViewBag.SelectedFilterMunicipality).ToList();
+                        @foreach (var muni in filteredMunicipalities)
                         {
                             <tr class="hover:bg-gray-50">
                                 @if (isBarangayType)

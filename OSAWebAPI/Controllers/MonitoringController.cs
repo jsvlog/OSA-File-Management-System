@@ -19,7 +19,7 @@ public class MonitoringController : Controller
         return View(docTypes);
     }
 
-    public IActionResult Status(string docType, int? year)
+    public IActionResult Status(string docType, int? year, string? municipality)
     {
         if (string.IsNullOrEmpty(docType))
         {
@@ -37,6 +37,7 @@ public class MonitoringController : Controller
         ViewBag.Years = years;
         ViewBag.Municipalities = municipalities;
         ViewBag.YearColumns = yearColumns;
+        ViewBag.SelectedFilterMunicipality = municipality;
 
         return View(grid);
     }
