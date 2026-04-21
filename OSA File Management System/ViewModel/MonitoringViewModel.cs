@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -37,8 +38,9 @@ namespace OSA_File_Management_System.ViewModel
                 "Barangay AAR"
             };
 
-            GridData = new System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow>();
-            MunicipalityList = new System.Collections.ObjectModel.ObservableCollection<string>();
+            GridData = new ObservableCollection<MonitoringGridRow>();
+            BarangayGridData = new ObservableCollection<BarangayMonitoringGridRow>();
+            MunicipalityList = new ObservableCollection<string>();
             GenerateYearColumns();
 
             loadMonitoringData = new RelayCommand(LoadMonitoringData);
@@ -68,6 +70,7 @@ namespace OSA_File_Management_System.ViewModel
             {
                 selectedDocumentType = value;
                 OnPropertyChanged("SelectedDocumentType");
+                OnPropertyChanged("IsBarangayDocumentType");
                 if (YearColumns != null && YearColumns.Count > 0)
                 {
                     LoadMonitoringData();
@@ -82,18 +85,32 @@ namespace OSA_File_Management_System.ViewModel
             set { yearColumns = value; OnPropertyChanged("YearColumns"); }
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow> gridData;
-        public System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow> GridData
+        private ObservableCollection<MonitoringGridRow> gridData;
+        public ObservableCollection<MonitoringGridRow> GridData
         {
             get { return gridData; }
             set { gridData = value; OnPropertyChanged("GridData"); }
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<string> municipalityList;
-        public System.Collections.ObjectModel.ObservableCollection<string> MunicipalityList
+        private ObservableCollection<BarangayMonitoringGridRow> barangayGridData;
+        public ObservableCollection<BarangayMonitoringGridRow> BarangayGridData
+        {
+            get { return barangayGridData; }
+            set { barangayGridData = value; OnPropertyChanged("BarangayGridData"); }
+        }
+
+        private ObservableCollection<string> municipalityList;
+        public ObservableCollection<string> MunicipalityList
         {
             get { return municipalityList; }
             set { municipalityList = value; OnPropertyChanged("MunicipalityList"); }
+        }
+
+        private ObservableCollection<string> barangayList;
+        public ObservableCollection<string> BarangayList
+        {
+            get { return barangayList; }
+            set { barangayList = value; OnPropertyChanged("BarangayList"); }
         }
 
         private MonitoringModel addFormData;
@@ -137,6 +154,8 @@ namespace OSA_File_Management_System.ViewModel
             get { return addFormYearList; }
             set { addFormYearList = value; OnPropertyChanged("AddFormYearList"); }
         }
+
+        public bool IsBarangayDocumentType => BarangayData.IsBarangayDocumentType(SelectedDocumentType);
         #endregion
 
         #region Year Columns
@@ -165,17 +184,64 @@ namespace OSA_File_Management_System.ViewModel
                 MunicipalityList = monitoringServices.GetMunicipalities();
                 var submissions = monitoringServices.GetAllMonitoring(SelectedDocumentType, 0);
 
-                var rows = new System.Collections.ObjectModel.ObservableCollection<MonitoringGridRow>();
-                foreach (var muni in MunicipalityList)
+                if (IsBarangayDocumentType)
                 {
-                    var row = new MonitoringGridRow { Municipality = muni };
+                    LoadBarangayGrid(submissions);
+                }
+                else
+                {
+                    LoadMunicipalityGrid(submissions);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void LoadMunicipalityGrid(ObservableCollection<MonitoringModel> submissions)
+        {
+            var rows = new ObservableCollection<MonitoringGridRow>();
+            foreach (var muni in MunicipalityList)
+            {
+                var row = new MonitoringGridRow { Municipality = muni };
+                foreach (var year in YearColumns)
+                {
+                    var sub = submissions.FirstOrDefault(s => s.Municipality == muni && s.Year == year);
+                    row.YearStatuses[year] = new YearStatus
+                    {
+                        SubmissionId = sub?.Id ?? 0,
+                        Municipality = muni,
+                        Year = year,
+                        DocumentType = SelectedDocumentType,
+                        Status = sub?.Status ?? "Not Submitted",
+                        DateSubmitted = sub?.DateSubmitted,
+                        Remarks = sub?.Remarks,
+                        PdfLink = sub?.PdfLink
+                    };
+                }
+                rows.Add(row);
+            }
+            GridData = rows;
+        }
+
+        private void LoadBarangayGrid(ObservableCollection<MonitoringModel> submissions)
+        {
+            var rows = new ObservableCollection<BarangayMonitoringGridRow>();
+            foreach (var muni in MunicipalityList)
+            {
+                var barangays = BarangayData.GetBarangaysForMunicipality(muni);
+                foreach (var barangay in barangays)
+                {
+                    var row = new BarangayMonitoringGridRow { Municipality = muni, Barangay = barangay };
                     foreach (var year in YearColumns)
                     {
-                        var sub = submissions.FirstOrDefault(s => s.Municipality == muni && s.Year == year);
+                        var sub = submissions.FirstOrDefault(s => s.Municipality == muni && s.Barangay == barangay && s.Year == year);
                         row.YearStatuses[year] = new YearStatus
                         {
                             SubmissionId = sub?.Id ?? 0,
                             Municipality = muni,
+                            Barangay = barangay,
                             Year = year,
                             DocumentType = SelectedDocumentType,
                             Status = sub?.Status ?? "Not Submitted",
@@ -186,12 +252,8 @@ namespace OSA_File_Management_System.ViewModel
                     }
                     rows.Add(row);
                 }
-                GridData = rows;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            BarangayGridData = rows;
         }
         #endregion
 
@@ -213,22 +275,54 @@ namespace OSA_File_Management_System.ViewModel
             AddFormYearList = yearList;
             AddFormYear = DateTime.Now.Year;
 
-            addFormData = new MonitoringModel
+            if (IsBarangayDocumentType)
             {
-                DocumentType = SelectedDocumentType,
-                Year = DateTime.Now.Year,
-                Municipality = MunicipalityList.FirstOrDefault() ?? "",
-                Status = "Submitted",
-                DateSubmitted = DateTime.Now,
-                Remarks = ""
-            };
+                var firstMuni = MunicipalityList.FirstOrDefault() ?? "";
+                var barangays = BarangayData.GetBarangaysForMunicipality(firstMuni);
+                BarangayList = new ObservableCollection<string>(barangays);
+
+                addFormData = new MonitoringModel
+                {
+                    DocumentType = SelectedDocumentType,
+                    Year = DateTime.Now.Year,
+                    Municipality = firstMuni,
+                    Barangay = barangays.FirstOrDefault() ?? "",
+                    Status = "Submitted",
+                    DateSubmitted = DateTime.Now,
+                    Remarks = ""
+                };
+            }
+            else
+            {
+                addFormData = new MonitoringModel
+                {
+                    DocumentType = SelectedDocumentType,
+                    Year = DateTime.Now.Year,
+                    Municipality = MunicipalityList.FirstOrDefault() ?? "",
+                    Status = "Submitted",
+                    DateSubmitted = DateTime.Now,
+                    Remarks = ""
+                };
+            }
             OnPropertyChanged("AddFormData");
+            OnPropertyChanged("IsBarangayDocumentType");
             AddFormStatus = "Submitted";
             OnPropertyChanged("AddFormStatus");
 
             addFormWindow = new View.MonitoringView.AddMonitoringForm();
             addFormWindow.DataContext = this;
             addFormWindow.ShowDialog();
+        }
+
+        public void OnMunicipalityChangedForBarangay()
+        {
+            if (IsBarangayDocumentType && addFormData != null)
+            {
+                var barangays = BarangayData.GetBarangaysForMunicipality(addFormData.Municipality ?? "");
+                BarangayList = new ObservableCollection<string>(barangays);
+                addFormData.Barangay = barangays.FirstOrDefault() ?? "";
+                OnPropertyChanged("AddFormData");
+            }
         }
         #endregion
 
@@ -246,6 +340,12 @@ namespace OSA_File_Management_System.ViewModel
                 if (string.IsNullOrEmpty(AddFormData?.Municipality))
                 {
                     MessageBox.Show("Please select a municipality.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (IsBarangayDocumentType && string.IsNullOrEmpty(AddFormData?.Barangay))
+                {
+                    MessageBox.Show("Please select a barangay.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -298,8 +398,11 @@ namespace OSA_File_Management_System.ViewModel
         {
             if (yearStatus.SubmissionId == 0)
             {
+                var locationInfo = IsBarangayDocumentType
+                    ? $"{yearStatus.Barangay} ({yearStatus.Municipality}) - {yearStatus.Year}"
+                    : $"{yearStatus.Municipality} - {yearStatus.Year}";
                 var result = MessageBox.Show(
-                    $"No submission exists for {yearStatus.Municipality} - {yearStatus.Year}.\nWould you like to create one?",
+                    $"No submission exists for {locationInfo}.\nWould you like to create one?",
                     "Create Entry", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -313,6 +416,7 @@ namespace OSA_File_Management_System.ViewModel
                 Id = yearStatus.SubmissionId,
                 DocumentType = yearStatus.DocumentType,
                 Municipality = yearStatus.Municipality,
+                Barangay = yearStatus.Barangay,
                 Year = yearStatus.Year,
                 DateSubmitted = yearStatus.DateSubmitted,
                 Status = yearStatus.Status,
@@ -320,6 +424,7 @@ namespace OSA_File_Management_System.ViewModel
                 PdfLink = yearStatus.PdfLink
             };
             OnPropertyChanged("EditFormData");
+            OnPropertyChanged("IsBarangayDocumentType");
             EditFormStatus = yearStatus.Status ?? "Not Submitted";
             OnPropertyChanged("EditFormStatus");
 
@@ -338,15 +443,34 @@ namespace OSA_File_Management_System.ViewModel
             AddFormYearList = yearList;
             AddFormYear = yearStatus.Year;
 
-            addFormData = new MonitoringModel
+            if (IsBarangayDocumentType)
             {
-                DocumentType = yearStatus.DocumentType,
-                Year = yearStatus.Year,
-                Municipality = yearStatus.Municipality,
-                Status = "Submitted",
-                DateSubmitted = DateTime.Now,
-                Remarks = ""
-            };
+                var barangays = BarangayData.GetBarangaysForMunicipality(yearStatus.Municipality ?? "");
+                BarangayList = new ObservableCollection<string>(barangays);
+
+                addFormData = new MonitoringModel
+                {
+                    DocumentType = yearStatus.DocumentType,
+                    Year = yearStatus.Year,
+                    Municipality = yearStatus.Municipality,
+                    Barangay = yearStatus.Barangay ?? barangays.FirstOrDefault() ?? "",
+                    Status = "Submitted",
+                    DateSubmitted = DateTime.Now,
+                    Remarks = ""
+                };
+            }
+            else
+            {
+                addFormData = new MonitoringModel
+                {
+                    DocumentType = yearStatus.DocumentType,
+                    Year = yearStatus.Year,
+                    Municipality = yearStatus.Municipality,
+                    Status = "Submitted",
+                    DateSubmitted = DateTime.Now,
+                    Remarks = ""
+                };
+            }
             OnPropertyChanged("AddFormData");
             AddFormStatus = "Submitted";
             OnPropertyChanged("AddFormStatus");
@@ -392,7 +516,11 @@ namespace OSA_File_Management_System.ViewModel
                 return;
             }
 
-            var result = MessageBox.Show($"Are you sure you want to delete the monitoring entry for {yearStatus.Municipality} - {yearStatus.Year}?",
+            var locationInfo = IsBarangayDocumentType
+                ? $"{yearStatus.Barangay} ({yearStatus.Municipality}) - {yearStatus.Year}"
+                : $"{yearStatus.Municipality} - {yearStatus.Year}";
+
+            var result = MessageBox.Show($"Are you sure you want to delete the monitoring entry for {locationInfo}?",
                 "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {

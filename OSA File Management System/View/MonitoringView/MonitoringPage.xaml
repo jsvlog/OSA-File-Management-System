@@ -3,8 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:OSA_File_Management_System.View.MonitoringView"
       mc:Ignorable="d"
       d:DesignWidth="1200" d:DesignHeight="800">
+    <UserControl.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid Background="#F5F7FA" Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -59,9 +64,35 @@
             </Button>
         </StackPanel>
 
-        <!-- Data Grid -->
-        <Border Grid.Row="2" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
+        <!-- Data Grid for Municipality-based types (FS, AOM, AAR) -->
+        <Border Grid.Row="2" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1"
+                Visibility="{Binding IsBarangayDocumentType, Converter={StaticResource InverseBoolToVisibilityConverter}}">
             <DataGrid x:Name="MonitoringGrid" ItemsSource="{Binding GridData}" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      AlternatingRowBackground="#F9FAFB"
+                      HeadersVisibility="All"
+                      GridLinesVisibility="All"
+                      BorderThickness="0"
+                      FontSize="12"
+                      RowHeaderWidth="0">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="View Details" Click="ContextMenu_ViewDetails"/>
+                        <MenuItem Header="Edit" Click="ContextMenu_Edit"/>
+                        <MenuItem Header="Delete" Click="ContextMenu_Delete"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </Border>
+
+        <!-- Data Grid for Barangay-based types (Barangay FS, Barangay AOM, Barangay AAR) -->
+        <Border Grid.Row="2" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1"
+                Visibility="{Binding IsBarangayDocumentType, Converter={StaticResource BoolToVisibilityConverter}}">
+            <DataGrid x:Name="BarangayMonitoringGrid" ItemsSource="{Binding BarangayGridData}" 
                       AutoGenerateColumns="False" 
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"

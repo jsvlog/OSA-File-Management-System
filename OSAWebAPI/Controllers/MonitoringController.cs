@@ -29,12 +29,14 @@ public class MonitoringController : Controller
         int selectedYear = year ?? DateTime.Now.Year;
         var grid = _monitoringService.GetStatusGrid(docType, selectedYear);
         var municipalities = _monitoringService.GetMunicipalities();
-        var years = Enumerable.Range(2018, DateTime.Now.Year - 2018 + 1).Reverse().ToList();
+        var yearColumns = _monitoringService.GetYearColumns();
+        var years = Enumerable.Range(2016, DateTime.Now.Year - 2016 + 1).Reverse().ToList();
 
         ViewBag.DocumentType = docType;
         ViewBag.SelectedYear = selectedYear;
         ViewBag.Years = years;
         ViewBag.Municipalities = municipalities;
+        ViewBag.YearColumns = yearColumns;
 
         return View(grid);
     }

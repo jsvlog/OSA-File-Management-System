@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Controls;
+using OSA_File_Management_System.ViewModel;
 
 namespace OSA_File_Management_System.View.MonitoringView
 {
@@ -7,6 +9,14 @@ namespace OSA_File_Management_System.View.MonitoringView
         public AddMonitoringForm()
         {
             InitializeComponent();
+        }
+
+        private void MunicipalityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is MonitoringViewModel vm && MunicipalityComboBox.SelectedItem != null)
+            {
+                vm.OnMunicipalityChangedForBarangay();
+            }
         }
     }
 }

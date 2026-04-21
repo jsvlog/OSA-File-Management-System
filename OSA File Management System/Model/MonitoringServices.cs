@@ -33,11 +33,37 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
+
+                string checkBarangayColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'barangay'";
+                MySqlCommand checkBarangayCmd = new MySqlCommand(checkBarangayColumn, connection);
+                var barangayResult = checkBarangayCmd.ExecuteScalar();
+                if (barangayResult != null && Convert.ToInt32(barangayResult) == 0)
+                {
+                    string alterBarangayTable = "ALTER TABLE monitoring_submissions ADD COLUMN barangay VARCHAR(255)";
+                    MySqlCommand alterBarangayCmd = new MySqlCommand(alterBarangayTable, connection);
+                    alterBarangayCmd.ExecuteNonQuery();
+                }
+
+                string checkOldKey = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND INDEX_NAME = 'uq_submission'";
+                MySqlCommand checkKeyCmd = new MySqlCommand(checkOldKey, connection);
+                var keyResult = checkKeyCmd.ExecuteScalar();
+                if (keyResult != null && Convert.ToInt32(keyResult) > 0)
+                {
+                    string dropKey = "ALTER TABLE monitoring_submissions DROP INDEX uq_submission";
+                    MySqlCommand dropKeyCmd = new MySqlCommand(dropKey, connection);
+                    dropKeyCmd.ExecuteNonQuery();
+                }
+
+                string updateBarangayNull = "UPDATE monitoring_submissions SET barangay = '' WHERE barangay IS NULL";
+                MySqlCommand updateCmd = new MySqlCommand(updateBarangayNull, connection);
+                updateCmd.ExecuteNonQuery();
+
                 string createTable = @"
                     CREATE TABLE IF NOT EXISTS monitoring_submissions (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         documentType VARCHAR(100) NOT NULL,
                         municipality VARCHAR(255) NOT NULL,
+                        barangay VARCHAR(255) NOT NULL DEFAULT '',
                         year INT NOT NULL,
                         dateSubmitted DATE,
                         status VARCHAR(50) DEFAULT 'Not Submitted',
@@ -45,7 +71,7 @@ namespace OSA_File_Management_System.Model
                         pdfLink TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        UNIQUE KEY uq_submission (documentType, municipality, year)
+                        UNIQUE KEY uq_submission (documentType, municipality, year, barangay)
                     )";
                 MySqlCommand cmd = new MySqlCommand(createTable, connection);
                 cmd.ExecuteNonQuery();
@@ -118,6 +144,7 @@ namespace OSA_File_Management_System.Model
                         Id = Convert.ToInt32(reader["id"]),
                         DocumentType = reader["documentType"]?.ToString(),
                         Municipality = reader["municipality"]?.ToString(),
+                        Barangay = reader["barangay"] is DBNull ? null : reader["barangay"]?.ToString(),
                         Year = Convert.ToInt32(reader["year"]),
                         DateSubmitted = reader["dateSubmitted"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSubmitted"]),
                         Status = reader["status"]?.ToString(),
@@ -151,12 +178,13 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO monitoring_submissions (documentType, municipality, year, dateSubmitted, status, remarks, pdfLink) " +
-                               "VALUES (@documentType, @municipality, @year, @dateSubmitted, @status, @remarks, @pdfLink) " +
+                string query = "INSERT INTO monitoring_submissions (documentType, municipality, barangay, year, dateSubmitted, status, remarks, pdfLink) " +
+                               "VALUES (@documentType, @municipality, @barangay, @year, @dateSubmitted, @status, @remarks, @pdfLink) " +
                                "ON DUPLICATE KEY UPDATE dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks, pdfLink = @pdfLink, updatedAt = CURRENT_TIMESTAMP";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@documentType", monitoring.DocumentType);
                 cmd.Parameters.AddWithValue("@municipality", monitoring.Municipality);
+                cmd.Parameters.AddWithValue("@barangay", string.IsNullOrEmpty(monitoring.Barangay) ? "" : monitoring.Barangay);
                 cmd.Parameters.AddWithValue("@year", monitoring.Year);
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");

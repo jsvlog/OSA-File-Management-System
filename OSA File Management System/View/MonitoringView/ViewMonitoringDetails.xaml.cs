@@ -22,6 +22,8 @@ namespace OSA_File_Management_System.View.MonitoringView
 
             DocumentType = yearStatus.DocumentType ?? "";
             Municipality = yearStatus.Municipality ?? "";
+            Barangay = yearStatus.Barangay ?? "";
+            HasBarangay = !string.IsNullOrEmpty(Barangay);
             Year = yearStatus.Year;
             Status = yearStatus.Status ?? "Not Submitted";
             DateSubmitted = yearStatus.DateSubmitted;
@@ -32,6 +34,8 @@ namespace OSA_File_Management_System.View.MonitoringView
 
         public string DocumentType { get; set; }
         public string Municipality { get; set; }
+        public string Barangay { get; set; }
+        public bool HasBarangay { get; set; }
         public int Year { get; set; }
         public string Status { get; set; }
         public DateTime? DateSubmitted { get; set; }

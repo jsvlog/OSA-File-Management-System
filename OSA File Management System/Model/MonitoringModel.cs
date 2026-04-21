@@ -73,6 +73,13 @@ namespace OSA_File_Management_System.Model
             get { return pdfLink; }
             set { pdfLink = value; OnPropertyChanged("PdfLink"); }
         }
+
+        private string? barangay;
+        public string? Barangay
+        {
+            get { return barangay; }
+            set { barangay = value; OnPropertyChanged("Barangay"); }
+        }
     }
 
     public class MonitoringGridRow : INotifyPropertyChanged
@@ -96,10 +103,39 @@ namespace OSA_File_Management_System.Model
         public Dictionary<int, YearStatus> YearStatuses { get; set; } = new Dictionary<int, YearStatus>();
     }
 
+    public class BarangayMonitoringGridRow : INotifyPropertyChanged
+    {
+        #region INotify
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        private string? municipality;
+        public string? Municipality
+        {
+            get { return municipality; }
+            set { municipality = value; OnPropertyChanged("Municipality"); }
+        }
+
+        private string? barangay;
+        public string? Barangay
+        {
+            get { return barangay; }
+            set { barangay = value; OnPropertyChanged("Barangay"); }
+        }
+
+        public Dictionary<int, YearStatus> YearStatuses { get; set; } = new Dictionary<int, YearStatus>();
+    }
+
     public class YearStatus
     {
         public int SubmissionId { get; set; }
         public string? Municipality { get; set; }
+        public string? Barangay { get; set; }
         public int Year { get; set; }
         public string? DocumentType { get; set; }
         public string? Status { get; set; }

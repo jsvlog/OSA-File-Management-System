@@ -1,10 +1,10 @@
 @model OSAWebAPI.Models.MonitoringStatusGrid
 @{
     ViewData["Title"] = ViewBag.DocumentType + " - Monitoring Status";
-    var years = ViewBag.Years as List<int>;
-    var selectedYear = (int)ViewBag.SelectedYear;
-    var municipalities = ViewBag.Municipalities as List<string>;
+    var yearColumns = Model.YearColumns;
+    var municipalities = Model.Municipalities;
     string docType = ViewBag.DocumentType;
+    bool isBarangayType = OSAWebAPI.Models.BarangayData.IsBarangayDocumentType(docType);
     var docTypeDisplayNames = new Dictionary<string, string>
     {
         { "Financial Statement", "Financial Statement" },
@@ -29,23 +29,7 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">@(docTypeDisplayNames.ContainsKey(docType) ? docTypeDisplayNames[docType] : docType)</h1>
-            <p class="text-sm text-gray-500 mt-1">Annual submission status by municipality</p>
-        </div>
-        <div class="flex items-center space-x-2">
-            <label class="text-sm font-medium text-gray-600">Year:</label>
-            <select id="yearSelect" onchange="changeYear()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                @foreach (var yr in years ?? new List<int>())
-                {
-                    @if (yr == selectedYear)
-                    {
-                        <option value="@yr" selected>@yr</option>
-                    }
-                    else
-                    {
-                        <option value="@yr">@yr</option>
-                    }
-                }
-            </select>
+            <p class="text-sm text-gray-500 mt-1">Annual submission status by @(isBarangayType ? "barangay" : "municipality")</p>
         </div>
     </div>
 
@@ -54,53 +38,71 @@
             <table class="min-w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[180px]">Municipality</th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[100px]">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[150px]">Date Submitted</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Remarks</th>
+                        @if (isBarangayType)
+                        {
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[120px] sticky left-0 bg-gray-50 z-10">Municipality</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[150px] sticky left-[120px] bg-gray-50 z-10">Barangay</th>
+                        }
+                        else
+                        {
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[180px] sticky left-0 bg-gray-50 z-10">Municipality</th>
+                        }
+                        @foreach (var year in yearColumns)
+                        {
+                            <th class="px-3 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[50px]">@year</th>
+                        }
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @if (Model.Municipalities.Any())
+                    @if (municipalities.Any())
                     {
-                        @foreach (var muni in Model.Municipalities)
+                        @foreach (var muni in municipalities)
                         {
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">
-                                    @muni.Municipality
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    @if (muni.Status == "Submitted")
-                                    {
-                                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100" title="Submitted@(muni.DateSubmitted.HasValue ? " on " + muni.DateSubmitted.Value.ToString("MM/dd/yyyy") : "")@(muni.Remarks != null ? " - " + muni.Remarks : "")">
-                                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100" title="Not Submitted">
-                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                        </span>
-                                    }
-                                </td>
-                                <td class="px-4 py-3 text-sm text-gray-600">
-                                    @(muni.DateSubmitted.HasValue ? muni.DateSubmitted.Value.ToString("MM/dd/yyyy") : "—")
-                                </td>
-                                <td class="px-4 py-3 text-sm text-gray-600">
-                                    @(muni.Remarks ?? "—")
-                                </td>
+                                @if (isBarangayType)
+                                {
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 sticky left-0 bg-white z-10">@muni.Municipality</td>
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 sticky left-[120px] bg-white z-10">@muni.Barangay</td>
+                                }
+                                else
+                                {
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 sticky left-0 bg-white z-10">@muni.Municipality</td>
+                                }
+                                @foreach (var year in yearColumns)
+                                {
+                                    var status = muni.YearStatuses.ContainsKey(year) ? muni.YearStatuses[year] : null;
+                                    var isSubmitted = status?.Status == "Submitted";
+                                    <td class="px-3 py-3 text-center">
+                                        @if (isSubmitted)
+                                        {
+                                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 cursor-pointer"
+                                                  onclick="showDetails('@muni.Municipality', '@(muni.Barangay ?? "")', @year, '@docType', '@status?.Status', '@(status?.DateSubmitted?.ToString("yyyy-MM-dd") ?? "")', '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(status?.Remarks ?? ""))', '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(status?.PdfLink ?? ""))')"
+                                                  title="Submitted - @muni.Municipality @(muni.Barangay != null ? "(" + muni.Barangay + ")" : "") @year">
+                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 cursor-pointer"
+                                                  onclick="showDetails('@muni.Municipality', '@(muni.Barangay ?? "")', @year, '@docType', '@status?.Status', '@(status?.DateSubmitted?.ToString("yyyy-MM-dd") ?? "")', '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(status?.Remarks ?? ""))', '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(status?.PdfLink ?? ""))')"
+                                                  title="Not Submitted - @muni.Municipality @(muni.Barangay != null ? "(" + muni.Barangay + ")" : "") @year">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </span>
+                                        }
+                                    </td>
+                                }
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center">
-                                <p class="text-gray-500">No municipalities found. Add municipalities in the Region Com records first.</p>
+                            <td colspan="@(yearColumns.Count + (isBarangayType ? 2 : 1))" class="px-6 py-12 text-center">
+                                <p class="text-gray-500">No @(isBarangayType ? "barangays" : "municipalities") found.</p>
                             </td>
                         </tr>
                     }
@@ -126,15 +128,135 @@
             </span>
             <span>Not Submitted</span>
         </div>
+        <div class="text-gray-500">
+            <span class="italic">Click on any cell to view details</span>
+        </div>
+    </div>
+</div>
+
+<div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" onclick="closeModal(event)">
+    <div class="flex items-center justify-center min-h-screen p-4" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-900">Submission Details</h2>
+                <button onclick="closeModal()" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">Document Type</label>
+                    <p id="modalDocType" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500">Municipality</label>
+                        <p id="modalMunicipality" class="mt-1 text-sm text-gray-900"></p>
+                    </div>
+                    <div id="modalBarangayContainer">
+                        <label class="block text-sm font-medium text-gray-500">Barangay</label>
+                        <p id="modalBarangay" class="mt-1 text-sm text-gray-900"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500">Year</label>
+                        <p id="modalYear" class="mt-1 text-sm text-gray-900"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500">Status</label>
+                        <p id="modalStatus" class="mt-1 text-sm text-gray-900"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">Date Submitted</label>
+                    <p id="modalDate" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">Remarks</label>
+                    <p id="modalRemarks" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">PDF Document Link</label>
+                    <p id="modalPdfLink" class="mt-1 text-sm text-gray-900 break-all"></p>
+                    <a id="modalPdfLinkBtn" href="#" target="_blank" class="mt-2 inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 hidden">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                        Open PDF in Browser
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                    Close
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
 <script>
-function changeYear() {
-    const year = document.getElementById('yearSelect').value;
-    const docType = '@Uri.EscapeDataString(docType)';
-    window.location.href = '/Monitoring/Status?docType=' + docType + '&year=' + year;
+function showDetails(municipality, barangay, year, docType, status, dateSubmitted, remarks, pdfLink) {
+    document.getElementById('modalDocType').textContent = docType;
+    document.getElementById('modalMunicipality').textContent = municipality;
+    document.getElementById('modalYear').textContent = year;
+    document.getElementById('modalStatus').textContent = status === 'Submitted' ? 'Submitted' : 'Not Submitted';
+    document.getElementById('modalDate').textContent = dateSubmitted ? formatDate(dateSubmitted) : '—';
+    document.getElementById('modalRemarks').textContent = remarks || '—';
+
+    var barangayContainer = document.getElementById('modalBarangayContainer');
+    var barangayEl = document.getElementById('modalBarangay');
+    if (barangay && barangay.trim() !== '') {
+        barangayContainer.classList.remove('hidden');
+        barangayEl.textContent = barangay;
+    } else {
+        barangayContainer.classList.add('hidden');
+    }
+
+    var pdfLinkEl = document.getElementById('modalPdfLink');
+    var pdfLinkBtn = document.getElementById('modalPdfLinkBtn');
+
+    if (pdfLink && pdfLink.trim() !== '') {
+        pdfLinkEl.textContent = pdfLink;
+        pdfLinkBtn.href = pdfLink;
+        pdfLinkBtn.classList.remove('hidden');
+    } else {
+        pdfLinkEl.textContent = '—';
+        pdfLinkBtn.classList.add('hidden');
+    }
+
+    document.getElementById('detailsModal').classList.remove('hidden');
 }
+
+function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    var parts = dateStr.split('-');
+    if (parts.length === 3) {
+        return parts[1] + '/' + parts[2] + '/' + parts[0];
+    }
+    return dateStr;
+}
+
+function closeModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    document.getElementById('detailsModal').classList.add('hidden');
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
 </script>
 }

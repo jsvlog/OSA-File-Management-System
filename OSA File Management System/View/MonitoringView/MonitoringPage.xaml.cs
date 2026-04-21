@@ -34,12 +34,13 @@ namespace OSA_File_Management_System.View.MonitoringView
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "GridData" || e.PropertyName == "YearColumns")
+            if (e.PropertyName == "GridData" || e.PropertyName == "BarangayGridData" || e.PropertyName == "YearColumns")
             {
                 if (DataContext is MonitoringViewModel vm)
                 {
                     GenerateColumns(vm);
                     MonitoringGrid.Items.Refresh();
+                    BarangayMonitoringGrid.Items.Refresh();
                 }
             }
         }
@@ -47,7 +48,20 @@ namespace OSA_File_Management_System.View.MonitoringView
         private void GenerateColumns(MonitoringViewModel vm)
         {
             MonitoringGrid.Columns.Clear();
+            BarangayMonitoringGrid.Columns.Clear();
 
+            if (vm.IsBarangayDocumentType)
+            {
+                GenerateBarangayColumns(vm);
+            }
+            else
+            {
+                GenerateMunicipalityColumns(vm);
+            }
+        }
+
+        private void GenerateMunicipalityColumns(MonitoringViewModel vm)
+        {
             var municipalityCol = new DataGridTextColumn
             {
                 Header = "Municipality",
@@ -72,6 +86,44 @@ namespace OSA_File_Management_System.View.MonitoringView
                 yearCol.CellTemplate = cellTemplate;
 
                 MonitoringGrid.Columns.Add(yearCol);
+            }
+        }
+
+        private void GenerateBarangayColumns(MonitoringViewModel vm)
+        {
+            var municipalityCol = new DataGridTextColumn
+            {
+                Header = "Municipality",
+                Binding = new Binding("Municipality"),
+                Width = new DataGridLength(120),
+                FontWeight = FontWeights.SemiBold
+            };
+            BarangayMonitoringGrid.Columns.Add(municipalityCol);
+
+            var barangayCol = new DataGridTextColumn
+            {
+                Header = "Barangay",
+                Binding = new Binding("Barangay"),
+                Width = new DataGridLength(150),
+                FontWeight = FontWeights.SemiBold
+            };
+            BarangayMonitoringGrid.Columns.Add(barangayCol);
+
+            if (vm.YearColumns == null) return;
+
+            foreach (var year in vm.YearColumns)
+            {
+                var yearCol = new DataGridTemplateColumn
+                {
+                    Header = year.ToString(),
+                    Width = new DataGridLength(50),
+                    SortMemberPath = $"YearStatuses[{year}].Status"
+                };
+
+                var cellTemplate = CreateCellTemplate(year);
+                yearCol.CellTemplate = cellTemplate;
+
+                BarangayMonitoringGrid.Columns.Add(yearCol);
             }
         }
 
@@ -132,14 +184,34 @@ namespace OSA_File_Management_System.View.MonitoringView
 
         private YearStatus GetClickedYearStatus()
         {
-            if (MonitoringGrid.CurrentItem is MonitoringGridRow row && MonitoringGrid.CurrentColumn != null)
+            if (DataContext is MonitoringViewModel vm)
             {
-                var header = MonitoringGrid.CurrentColumn.Header?.ToString();
-                if (int.TryParse(header, out int year))
+                if (vm.IsBarangayDocumentType)
                 {
-                    if (row.YearStatuses.ContainsKey(year))
+                    if (BarangayMonitoringGrid.CurrentItem is BarangayMonitoringGridRow row && BarangayMonitoringGrid.CurrentColumn != null)
                     {
-                        return row.YearStatuses[year];
+                        var header = BarangayMonitoringGrid.CurrentColumn.Header?.ToString();
+                        if (int.TryParse(header, out int year))
+                        {
+                            if (row.YearStatuses.ContainsKey(year))
+                            {
+                                return row.YearStatuses[year];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (MonitoringGrid.CurrentItem is MonitoringGridRow mRow && MonitoringGrid.CurrentColumn != null)
+                    {
+                        var header = MonitoringGrid.CurrentColumn.Header?.ToString();
+                        if (int.TryParse(header, out int year))
+                        {
+                            if (mRow.YearStatuses.ContainsKey(year))
+                            {
+                                return mRow.YearStatuses[year];
+                            }
+                        }
                     }
                 }
             }
@@ -236,6 +308,40 @@ namespace OSA_File_Management_System.View.MonitoringView
                 }
             }
             return new SolidColorBrush(Colors.Gray);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return boolValue ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class InverseBoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return boolValue ? Visibility.Collapsed : Visibility.Visible;
+            }
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

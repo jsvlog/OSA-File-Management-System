@@ -22,18 +22,55 @@ namespace OSAWebAPI.Services
             using (var connection = GetConnection())
             {
                 connection.Open();
+
+                string checkBarangayColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'barangay'";
+                using (var checkBarangayCmd = new MySqlCommand(checkBarangayColumn, connection))
+                {
+                    var result = checkBarangayCmd.ExecuteScalar();
+                    if (result != null && Convert.ToInt32(result) == 0)
+                    {
+                        string alterBarangayTable = "ALTER TABLE monitoring_submissions ADD COLUMN barangay VARCHAR(255)";
+                        using (var alterBarangayCmd = new MySqlCommand(alterBarangayTable, connection))
+                        {
+                            alterBarangayCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                string checkOldKey = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND INDEX_NAME = 'uq_submission'";
+                using (var checkKeyCmd = new MySqlCommand(checkOldKey, connection))
+                {
+                    var keyResult = checkKeyCmd.ExecuteScalar();
+                    if (keyResult != null && Convert.ToInt32(keyResult) > 0)
+                    {
+                        string dropKey = "ALTER TABLE monitoring_submissions DROP INDEX uq_submission";
+                        using (var dropKeyCmd = new MySqlCommand(dropKey, connection))
+                        {
+                            dropKeyCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                string updateBarangayNull = "UPDATE monitoring_submissions SET barangay = '' WHERE barangay IS NULL";
+                using (var updateCmd = new MySqlCommand(updateBarangayNull, connection))
+                {
+                    updateCmd.ExecuteNonQuery();
+                }
+
                 string createTable = @"
                     CREATE TABLE IF NOT EXISTS monitoring_submissions (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         documentType VARCHAR(100) NOT NULL,
                         municipality VARCHAR(255) NOT NULL,
+                        barangay VARCHAR(255) NOT NULL DEFAULT '',
                         year INT NOT NULL,
                         dateSubmitted DATE,
                         status VARCHAR(50) DEFAULT 'Not Submitted',
                         remarks TEXT,
+                        pdfLink TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        UNIQUE KEY uq_submission (documentType, municipality, year)
+                        UNIQUE KEY uq_submission (documentType, municipality, year, barangay)
                     )";
                 using (var command = new MySqlCommand(createTable, connection))
                 {
@@ -53,7 +90,31 @@ namespace OSAWebAPI.Services
                         }
                     }
                 }
+
+                string checkPdfColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'pdfLink'";
+                using (var checkPdfCmd = new MySqlCommand(checkPdfColumn, connection))
+                {
+                    var result = checkPdfCmd.ExecuteScalar();
+                    if (result != null && Convert.ToInt32(result) == 0)
+                    {
+                        string alterPdfTable = "ALTER TABLE monitoring_submissions ADD COLUMN pdfLink TEXT";
+                        using (var alterPdfCmd = new MySqlCommand(alterPdfTable, connection))
+                        {
+                            alterPdfCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
             }
+        }
+
+        public List<int> GetYearColumns()
+        {
+            var years = new List<int>();
+            for (int y = 2016; y <= DateTime.Now.Year; y++)
+            {
+                years.Add(y);
+            }
+            return years;
         }
 
         public List<string> GetMunicipalities()
@@ -89,20 +150,22 @@ namespace OSAWebAPI.Services
             var grid = new MonitoringStatusGrid
             {
                 DocumentType = documentType,
-                Year = year
+                Year = year,
+                IsBarangayDocumentType = IsBarangayDocumentType(documentType)
             };
 
             var municipalities = GetMunicipalities();
+            var yearColumns = GetYearColumns();
+            grid.YearColumns = yearColumns;
 
             var submissions = new List<MonitoringSubmission>();
             using (var connection = GetConnection())
             {
                 connection.Open();
-                string query = "SELECT * FROM monitoring_submissions WHERE documentType = @docType AND year = @year";
+                string query = "SELECT * FROM monitoring_submissions WHERE documentType = @docType";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@docType", documentType);
-                    command.Parameters.AddWithValue("@year", year);
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -113,16 +176,54 @@ namespace OSAWebAPI.Services
                 }
             }
 
-            foreach (var muni in municipalities)
+            if (IsBarangayDocumentType(documentType))
             {
-                var submission = submissions.FirstOrDefault(s => s.Municipality == muni);
-                grid.Municipalities.Add(new MunicipalityStatus
+                foreach (var muni in municipalities)
                 {
-                    Municipality = muni,
-                    Status = submission?.Status ?? "Not Submitted",
-                    DateSubmitted = submission?.DateSubmitted,
-                    Remarks = submission?.Remarks
-                });
+                    var barangays = BarangayData.GetBarangaysForMunicipality(muni);
+                    foreach (var barangay in barangays)
+                    {
+                        var row = new MunicipalityStatusRow { Municipality = muni, Barangay = barangay };
+                        foreach (var yr in yearColumns)
+                        {
+                            var submission = submissions.FirstOrDefault(s => s.Municipality == muni && s.Barangay == barangay && s.Year == yr);
+                            row.YearStatuses[yr] = new MunicipalityStatus
+                            {
+                                SubmissionId = submission?.Id ?? 0,
+                                Municipality = muni,
+                                Barangay = barangay,
+                                Year = yr,
+                                Status = submission?.Status ?? "Not Submitted",
+                                DateSubmitted = submission?.DateSubmitted,
+                                Remarks = submission?.Remarks,
+                                PdfLink = submission?.PdfLink
+                            };
+                        }
+                        grid.Municipalities.Add(row);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var muni in municipalities)
+                {
+                    var row = new MunicipalityStatusRow { Municipality = muni };
+                    foreach (var yr in yearColumns)
+                    {
+                        var submission = submissions.FirstOrDefault(s => s.Municipality == muni && s.Year == yr);
+                        row.YearStatuses[yr] = new MunicipalityStatus
+                        {
+                            SubmissionId = submission?.Id ?? 0,
+                            Municipality = muni,
+                            Year = yr,
+                            Status = submission?.Status ?? "Not Submitted",
+                            DateSubmitted = submission?.DateSubmitted,
+                            Remarks = submission?.Remarks,
+                            PdfLink = submission?.PdfLink
+                        };
+                    }
+                    grid.Municipalities.Add(row);
+                }
             }
 
             return grid;
@@ -148,13 +249,22 @@ namespace OSAWebAPI.Services
                 Id = Convert.ToInt32(reader["id"]),
                 DocumentType = reader["documentType"]?.ToString(),
                 Municipality = reader["municipality"]?.ToString(),
+                Barangay = reader["barangay"] != DBNull.Value && !string.IsNullOrEmpty(reader["barangay"]?.ToString()) ? reader["barangay"]?.ToString() : null,
                 Year = Convert.ToInt32(reader["year"]),
                 DateSubmitted = reader["dateSubmitted"] != DBNull.Value ? Convert.ToDateTime(reader["dateSubmitted"]) : null,
                 Status = reader["status"]?.ToString(),
                 Remarks = reader["remarks"]?.ToString(),
+                PdfLink = reader["pdfLink"] != DBNull.Value ? reader["pdfLink"]?.ToString() : null,
                 CreatedAt = Convert.ToDateTime(reader["createdAt"]),
                 UpdatedAt = Convert.ToDateTime(reader["updatedAt"])
             };
+        }
+
+        public bool IsBarangayDocumentType(string docType)
+        {
+            return docType == "Barangay Financial Statement" ||
+                   docType == "Barangay AOM" ||
+                   docType == "Barangay AAR";
         }
     }
 }
