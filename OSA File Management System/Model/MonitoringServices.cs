@@ -178,13 +178,34 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO monitoring_submissions (documentType, municipality, barangay, year, dateSubmitted, status, remarks, pdfLink) " +
-                               "VALUES (@documentType, @municipality, @barangay, @year, @dateSubmitted, @status, @remarks, @pdfLink) " +
-                               "ON DUPLICATE KEY UPDATE dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks, pdfLink = @pdfLink, updatedAt = CURRENT_TIMESTAMP";
+
+                string barangayValue = string.IsNullOrEmpty(monitoring.Barangay) ? "" : monitoring.Barangay;
+
+                string checkQuery = @"SELECT COUNT(*) FROM monitoring_submissions 
+                                     WHERE documentType = @documentType 
+                                     AND municipality = @municipality 
+                                     AND barangay = @barangay 
+                                     AND year = @year";
+                MySqlCommand checkCmd = new MySqlCommand(checkQuery, connection);
+                checkCmd.Parameters.AddWithValue("@documentType", monitoring.DocumentType);
+                checkCmd.Parameters.AddWithValue("@municipality", monitoring.Municipality);
+                checkCmd.Parameters.AddWithValue("@barangay", barangayValue);
+                checkCmd.Parameters.AddWithValue("@year", monitoring.Year);
+                var countResult = checkCmd.ExecuteScalar();
+                if (countResult != null && Convert.ToInt32(countResult) > 0)
+                {
+                    MessageBox.Show($"An entry already exists for {monitoring.DocumentType} - {monitoring.Municipality} ({barangayValue}) - {monitoring.Year}.\n\nPlease use Edit instead to update the existing entry.",
+                        "Duplicate Entry", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                string query = @"INSERT INTO monitoring_submissions 
+                                 (documentType, municipality, barangay, year, dateSubmitted, status, remarks, pdfLink) 
+                                 VALUES (@documentType, @municipality, @barangay, @year, @dateSubmitted, @status, @remarks, @pdfLink)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@documentType", monitoring.DocumentType);
                 cmd.Parameters.AddWithValue("@municipality", monitoring.Municipality);
-                cmd.Parameters.AddWithValue("@barangay", string.IsNullOrEmpty(monitoring.Barangay) ? "" : monitoring.Barangay);
+                cmd.Parameters.AddWithValue("@barangay", barangayValue);
                 cmd.Parameters.AddWithValue("@year", monitoring.Year);
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");
@@ -278,19 +299,14 @@ namespace OSA_File_Management_System.Model
             var municipalities = new ObservableCollection<string>();
             try
             {
-                if (connection.State == ConnectionState.Closed)
+                foreach (var key in BarangayData.BarangaysByMunicipality.Keys)
                 {
-                    connection.Open();
+                    municipalities.Add(key);
                 }
-                string query = "SELECT DISTINCT municipality FROM regioncom WHERE municipality IS NOT NULL AND municipality != '' ORDER BY municipality";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                if (!municipalities.Contains("PGOM"))
                 {
-                    municipalities.Add(reader["municipality"]?.ToString() ?? "");
+                    municipalities.Add("PGOM");
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
@@ -308,9 +324,8 @@ namespace OSA_File_Management_System.Model
             {
                 municipalities = new ObservableCollection<string>
                 {
-                    "Buenavista", "Butuan City", "Cabadbaran City", "Carmen", "Jabonga",
-                    "Kitcharao", "Las Nieves", "Magallanes", "Nasipit", "Remedios T. Romualdez",
-                    "Santiago", "Tubay"
+                    "Calapan", "Baco", "San Teodoro", "Puerto Galera", "Naujan", "Victoria", "Socorro", "Pola",
+                    "Pinamalayan", "Gloria", "Bansud", "Bongabong", "Roxas", "Mansalay", "Bulalacao", "PGOM"
                 };
             }
             return municipalities;
