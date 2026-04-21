@@ -120,26 +120,23 @@ namespace OSAWebAPI.Services
         public List<string> GetMunicipalities()
         {
             var municipalities = new List<string>();
-            using (var connection = GetConnection())
+            try
             {
-                connection.Open();
-                string query = "SELECT DISTINCT municipality FROM regioncom WHERE municipality IS NOT NULL AND municipality != '' ORDER BY municipality";
-                using (var command = new MySqlCommand(query, connection))
-                using (var reader = command.ExecuteReader())
+                foreach (var key in BarangayData.BarangaysByMunicipality.Keys)
                 {
-                    while (reader.Read())
-                    {
-                        municipalities.Add(reader["municipality"].ToString() ?? "");
-                    }
+                    municipalities.Add(key);
+                }
+                if (!municipalities.Contains("PGOM"))
+                {
+                    municipalities.Add("PGOM");
                 }
             }
-            if (municipalities.Count == 0)
+            catch
             {
                 municipalities = new List<string>
                 {
-                    "Buenavista", "Butuan City", "Cabadbaran City", "Carmen", "Jabonga",
-                    "Kitcharao", "Las Nieves", "Magallanes", "Nasipit", "Remedios T. Romualdez",
-                    "Santiago", "Tubay"
+                    "Calapan", "Baco", "San Teodoro", "Puerto Galera", "Naujan", "Victoria", "Socorro", "Pola",
+                    "Pinamalayan", "Gloria", "Bansud", "Bongabong", "Roxas", "Mansalay", "Bulalacao", "PGOM"
                 };
             }
             return municipalities;

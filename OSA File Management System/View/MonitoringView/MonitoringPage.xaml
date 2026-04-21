@@ -88,7 +88,9 @@
                       GridLinesVisibility="All"
                       BorderThickness="0"
                       FontSize="12"
-                      RowHeaderWidth="0">
+                      RowHeaderWidth="0"
+                      FrozenColumnCount="1"
+                      ScrollViewer.CanContentScroll="False">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="View Details" Click="ContextMenu_ViewDetails"/>
@@ -102,28 +104,28 @@
         <!-- Data Grid for Barangay-based types (Barangay FS, Barangay AOM, Barangay AAR) -->
         <Border Grid.Row="3" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1"
                 Visibility="{Binding IsBarangayDocumentType, Converter={StaticResource BoolToVisibilityConverter}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <DataGrid x:Name="BarangayMonitoringGrid" ItemsSource="{Binding FilteredBarangayGridData}" 
-                          AutoGenerateColumns="False" 
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          AlternatingRowBackground="#F9FAFB"
-                          HeadersVisibility="All"
-                          GridLinesVisibility="All"
-                          BorderThickness="0"
-                          FontSize="12"
-                          RowHeaderWidth="0">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="View Details" Click="ContextMenu_ViewDetails"/>
-                            <MenuItem Header="Edit" Click="ContextMenu_Edit"/>
-                            <MenuItem Header="Delete" Click="ContextMenu_Delete"/>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                </DataGrid>
-            </ScrollViewer>
+            <DataGrid x:Name="BarangayMonitoringGrid" ItemsSource="{Binding FilteredBarangayGridData}" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      AlternatingRowBackground="#F9FAFB"
+                      HeadersVisibility="All"
+                      GridLinesVisibility="All"
+                      BorderThickness="0"
+                      FontSize="12"
+                      RowHeaderWidth="0"
+                      FrozenColumnCount="2"
+                      ScrollViewer.CanContentScroll="False">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="View Details" Click="ContextMenu_ViewDetails"/>
+                        <MenuItem Header="Edit" Click="ContextMenu_Edit"/>
+                        <MenuItem Header="Delete" Click="ContextMenu_Delete"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
         </Border>
 
         <!-- Legends -->
