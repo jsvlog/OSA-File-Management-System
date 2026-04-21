@@ -180,7 +180,8 @@ namespace OSA_File_Management_System.ViewModel
                             DocumentType = SelectedDocumentType,
                             Status = sub?.Status ?? "Not Submitted",
                             DateSubmitted = sub?.DateSubmitted,
-                            Remarks = sub?.Remarks
+                            Remarks = sub?.Remarks,
+                            PdfLink = sub?.PdfLink
                         };
                     }
                     rows.Add(row);
@@ -315,7 +316,8 @@ namespace OSA_File_Management_System.ViewModel
                 Year = yearStatus.Year,
                 DateSubmitted = yearStatus.DateSubmitted,
                 Status = yearStatus.Status,
-                Remarks = yearStatus.Remarks
+                Remarks = yearStatus.Remarks,
+                PdfLink = yearStatus.PdfLink
             };
             OnPropertyChanged("EditFormData");
             EditFormStatus = yearStatus.Status ?? "Not Submitted";

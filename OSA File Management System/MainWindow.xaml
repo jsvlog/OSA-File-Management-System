@@ -128,21 +128,21 @@
                     <ListBoxItem Tag="RegionCom">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📬" FontSize="18" Margin="0,0,15,0"/>
-                            <TextBlock Text="Communications" VerticalAlignment="Center"/>
+                            <TextBlock Text="Region Communications" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Inventory">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📦" FontSize="18" Margin="0,0,15,0"/>
-                            <TextBlock Text="Inventory System" VerticalAlignment="Center"/>
+                            <TextBlock Text="Inventory" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Certificates">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📜" FontSize="18" Margin="0,0,15,0"/>
-                            <TextBlock Text="Certificates" VerticalAlignment="Center"/>
+                            <TextBlock Text="Certificate of Appearance" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListBoxItem>
 

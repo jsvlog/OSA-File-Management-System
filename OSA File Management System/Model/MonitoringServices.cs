@@ -42,6 +42,7 @@ namespace OSA_File_Management_System.Model
                         dateSubmitted DATE,
                         status VARCHAR(50) DEFAULT 'Not Submitted',
                         remarks TEXT,
+                        pdfLink TEXT,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                         UNIQUE KEY uq_submission (documentType, municipality, year)
@@ -57,6 +58,16 @@ namespace OSA_File_Management_System.Model
                     string alterTable = "ALTER TABLE monitoring_submissions DROP COLUMN month";
                     MySqlCommand alterCmd = new MySqlCommand(alterTable, connection);
                     alterCmd.ExecuteNonQuery();
+                }
+
+                string checkPdfColumn = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'monitoring_submissions' AND COLUMN_NAME = 'pdfLink'";
+                MySqlCommand checkPdfCmd = new MySqlCommand(checkPdfColumn, connection);
+                var pdfResult = checkPdfCmd.ExecuteScalar();
+                if (pdfResult != null && Convert.ToInt32(pdfResult) == 0)
+                {
+                    string alterPdfTable = "ALTER TABLE monitoring_submissions ADD COLUMN pdfLink TEXT";
+                    MySqlCommand alterPdfCmd = new MySqlCommand(alterPdfTable, connection);
+                    alterPdfCmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -110,7 +121,8 @@ namespace OSA_File_Management_System.Model
                         Year = Convert.ToInt32(reader["year"]),
                         DateSubmitted = reader["dateSubmitted"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["dateSubmitted"]),
                         Status = reader["status"]?.ToString(),
-                        Remarks = reader["remarks"] is DBNull ? null : reader["remarks"]?.ToString()
+                        Remarks = reader["remarks"] is DBNull ? null : reader["remarks"]?.ToString(),
+                        PdfLink = reader["pdfLink"] is DBNull ? null : reader["pdfLink"]?.ToString()
                     });
                 }
                 reader.Close();
@@ -139,9 +151,9 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO monitoring_submissions (documentType, municipality, year, dateSubmitted, status, remarks) " +
-                               "VALUES (@documentType, @municipality, @year, @dateSubmitted, @status, @remarks) " +
-                               "ON DUPLICATE KEY UPDATE dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks, updatedAt = CURRENT_TIMESTAMP";
+                string query = "INSERT INTO monitoring_submissions (documentType, municipality, year, dateSubmitted, status, remarks, pdfLink) " +
+                               "VALUES (@documentType, @municipality, @year, @dateSubmitted, @status, @remarks, @pdfLink) " +
+                               "ON DUPLICATE KEY UPDATE dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks, pdfLink = @pdfLink, updatedAt = CURRENT_TIMESTAMP";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@documentType", monitoring.DocumentType);
                 cmd.Parameters.AddWithValue("@municipality", monitoring.Municipality);
@@ -149,6 +161,7 @@ namespace OSA_File_Management_System.Model
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");
                 cmd.Parameters.AddWithValue("@remarks", string.IsNullOrEmpty(monitoring.Remarks) ? (object)DBNull.Value : monitoring.Remarks);
+                cmd.Parameters.AddWithValue("@pdfLink", string.IsNullOrEmpty(monitoring.PdfLink) ? (object)DBNull.Value : monitoring.PdfLink);
                 cmd.ExecuteNonQuery();
                 return true;
             }
@@ -176,12 +189,13 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "UPDATE monitoring_submissions SET dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks WHERE id = @id";
+                string query = "UPDATE monitoring_submissions SET dateSubmitted = @dateSubmitted, status = @status, remarks = @remarks, pdfLink = @pdfLink WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", monitoring.Id);
                 cmd.Parameters.AddWithValue("@dateSubmitted", monitoring.DateSubmitted.HasValue ? monitoring.DateSubmitted.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@status", monitoring.Status ?? "Not Submitted");
                 cmd.Parameters.AddWithValue("@remarks", string.IsNullOrEmpty(monitoring.Remarks) ? (object)DBNull.Value : monitoring.Remarks);
+                cmd.Parameters.AddWithValue("@pdfLink", string.IsNullOrEmpty(monitoring.PdfLink) ? (object)DBNull.Value : monitoring.PdfLink);
                 cmd.ExecuteNonQuery();
                 return true;
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OSA_File_Management_System.Model
 {
-    class MonitoringModel : INotifyPropertyChanged
+    public class MonitoringModel : INotifyPropertyChanged
     {
         #region INotify
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -66,9 +66,16 @@ namespace OSA_File_Management_System.Model
             get { return remarks; }
             set { remarks = value; OnPropertyChanged("Remarks"); }
         }
+
+        private string? pdfLink;
+        public string? PdfLink
+        {
+            get { return pdfLink; }
+            set { pdfLink = value; OnPropertyChanged("PdfLink"); }
+        }
     }
 
-    class MonitoringGridRow : INotifyPropertyChanged
+    public class MonitoringGridRow : INotifyPropertyChanged
     {
         #region INotify
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -89,7 +96,7 @@ namespace OSA_File_Management_System.Model
         public Dictionary<int, YearStatus> YearStatuses { get; set; } = new Dictionary<int, YearStatus>();
     }
 
-    class YearStatus
+    public class YearStatus
     {
         public int SubmissionId { get; set; }
         public string? Municipality { get; set; }
@@ -98,5 +105,6 @@ namespace OSA_File_Management_System.Model
         public string? Status { get; set; }
         public DateTime? DateSubmitted { get; set; }
         public string? Remarks { get; set; }
+        public string? PdfLink { get; set; }
     }
 }

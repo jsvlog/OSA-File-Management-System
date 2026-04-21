@@ -64,7 +64,7 @@ namespace OSA_File_Management_System.View.MonitoringView
                 var yearCol = new DataGridTemplateColumn
                 {
                     Header = year.ToString(),
-                    Width = new DataGridLength(90),
+                    Width = new DataGridLength(50),
                     SortMemberPath = $"YearStatuses[{year}].Status"
                 };
 
@@ -161,6 +161,16 @@ namespace OSA_File_Management_System.View.MonitoringView
             if (yearStatus != null && DataContext is MonitoringViewModel vm)
             {
                 vm.DeleteMonitoring(yearStatus);
+            }
+        }
+
+        private void ContextMenu_ViewDetails(object sender, RoutedEventArgs e)
+        {
+            var yearStatus = GetClickedYearStatus();
+            if (yearStatus != null)
+            {
+            var detailsWindow = new ViewMonitoringDetails(yearStatus);
+            detailsWindow.ShowDialog();
             }
         }
     }
