@@ -166,19 +166,15 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Recent Activity" FontWeight="Bold" Foreground="#888" Margin="0,0,0,10" Grid.ColumnSpan="2"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Latest Transmittal (Region):" Foreground="#555" Margin="0,8"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RegionComViewModel.LatestTransmittalRegion}" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Latest Transmittal (Teams):" Foreground="#555" Margin="0,8"/>
-                    <TextBlock Grid.Row="2" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
-
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Pending Actionable Docs:" Foreground="#555" Margin="0,8"/>
-                    <TextBlock Grid.Row="3" Grid.Column="1" Text="N/A" FontWeight="Bold" Foreground="#D32F2F" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Documents from Region (Current Month):" Foreground="#555" Margin="0,8"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RegionComViewModel.DocsFromRegionCurrentMonth}" FontWeight="Bold" Foreground="#131842" HorizontalAlignment="Right"/>
                 </Grid>
             </Border>
         </Grid>

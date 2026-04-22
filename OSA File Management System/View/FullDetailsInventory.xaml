@@ -1,0 +1,175 @@
+﻿<Window x:Class="OSA_File_Management_System.View.FullDetailsInventory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSA_File_Management_System.View"
+        mc:Ignorable="d"
+        Title="Inventory Item Full Details" Height="650" Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+
+    <Window.Resources>
+        <Style x:Key="LabelTxt" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#777"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+
+        <Style x:Key="ValueTxt" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#131842"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="DetailCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ActionBtn" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                    <Setter Property="BorderBrush" Value="#257180"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="15" Background="#F4F6F9" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.4" Color="Black"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" CornerRadius="15,15,0,0" Background="#257180">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="25,0">
+                        <TextBlock Text="📦" FontSize="20" Margin="0,0,10,0"/>
+                        <TextBlock Text="Inventory Item Full Details" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
+                            Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0"
+                            Click="BtnClose_Click" FontSize="16"/>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" Padding="25" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Inventory Record" Foreground="#888" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding ViewPdfFromFullDetails}" ToolTip="View PDF">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/pdf.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="View PDF"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding ShowEditFromFullDetails}" ToolTip="Edit Document">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/edit.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Edit"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ActionBtn}" Command="{Binding DeleteFromFullDetails}" ToolTip="Delete Document">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/images/icons/delete.png" Width="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Delete" Foreground="#D32F2F"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Style="{StaticResource DetailCard}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Date" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Date, StringFormat=MM-dd-yyyy}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Type" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Type}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Status" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Status}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Location" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Location}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                                <TextBlock Text="Remarks" Style="{StaticResource LabelTxt}"/>
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Remarks}" Style="{StaticResource ValueTxt}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource DetailCard}">
+                        <StackPanel>
+                            <TextBlock Text="Description" Style="{StaticResource LabelTxt}"/>
+                            <Border Background="#FAFAFA" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Padding="10">
+                                <TextBlock Text="{Binding SelectedInventoryDocument.Description}" FontSize="14" TextWrapping="Wrap" Foreground="#131842"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

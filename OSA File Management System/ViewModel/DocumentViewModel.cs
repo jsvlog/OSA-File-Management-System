@@ -60,6 +60,7 @@ namespace OSA_File_Management_System.ViewModel
             regionComViewModel = new RegionComViewModel();
             addFormData = new Document();
             editFormData = new Document();
+            selectedInventoryDocument = new Document();
             documentServices = new DocumentServices();
 
             showAddForm = new RelayCommand(OpenAddDocumentForm);
@@ -74,6 +75,10 @@ namespace OSA_File_Management_System.ViewModel
             btnSearchInventory = new RelayCommand(ExecuteSearch);
             printPreview = new RelayCommand(ShowPrintPreview);
             printDocumentInventory = new RelayCommand(PrintDocument);
+            showFullDetails = new RelayCommand(OpenFullDetailsInventoryForm);
+            viewPdfFromFullDetails = new RelayCommand(ViewPdfFromFullDetailsCommand);
+            showEditFromFullDetails = new RelayCommand(ShowEditFromFullDetailsCommand);
+            deleteFromFullDetails = new RelayCommand(DeleteFromFullDetailsCommand);
 
             // Filter Commands
             showInventoryFilterWindow = new RelayCommand(OpenInventoryFilterWindow);
@@ -260,9 +265,9 @@ namespace OSA_File_Management_System.ViewModel
             popupEditForm = new EditFormInventory();
             popupEditForm.DataContext = this;
 
-            if (parameter is Document documentToDelete)
+            if (parameter is Document documentToEdit)
             {
-                EditFormData = documentToDelete;
+                EditFormData = documentToEdit;
             }
             popupEditForm.ShowDialog();
             LoadData();
@@ -306,6 +311,103 @@ namespace OSA_File_Management_System.ViewModel
         private void CloseEditForms()
         {
             popupEditForm.Close();
+        }
+        #endregion
+
+        #region Show Full Details
+        private Document selectedInventoryDocument;
+        public Document SelectedInventoryDocument
+        {
+            get { return selectedInventoryDocument; }
+            set { selectedInventoryDocument = value; OnPropertyChanged("SelectedInventoryDocument"); }
+        }
+
+        private RelayCommand showFullDetails;
+        public RelayCommand ShowFullDetails
+        {
+            get { return showFullDetails; }
+        }
+
+        private FullDetailsInventory popupFullDetailsInventory;
+
+        private void OpenFullDetailsInventoryForm(object parameter)
+        {
+            if (parameter is Document documentToShow)
+            {
+                SelectedInventoryDocument = documentToShow;
+                popupFullDetailsInventory = new FullDetailsInventory();
+                popupFullDetailsInventory.DataContext = this;
+                popupFullDetailsInventory.ShowDialog();
+                SelectedInventoryDocument = new Document();
+            }
+        }
+
+        private RelayCommand viewPdfFromFullDetails;
+        public RelayCommand ViewPdfFromFullDetails
+        {
+            get { return viewPdfFromFullDetails; }
+        }
+
+        private void ViewPdfFromFullDetailsCommand()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(SelectedInventoryDocument.ScannedCopy))
+                {
+                    Process.Start(new ProcessStartInfo(SelectedInventoryDocument.ScannedCopy) { UseShellExecute = true });
+                }
+                else
+                {
+                    MessageBox.Show("No PDF file uploaded.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private RelayCommand showEditFromFullDetails;
+        public RelayCommand ShowEditFromFullDetails
+        {
+            get { return showEditFromFullDetails; }
+        }
+
+        private void ShowEditFromFullDetailsCommand()
+        {
+            if (popupFullDetailsInventory != null && popupFullDetailsInventory.IsLoaded)
+            {
+                popupFullDetailsInventory.Close();
+            }
+            OpenEditDocumentForm(SelectedInventoryDocument);
+        }
+
+        private RelayCommand deleteFromFullDetails;
+        public RelayCommand DeleteFromFullDetails
+        {
+            get { return deleteFromFullDetails; }
+        }
+
+        private void DeleteFromFullDetailsCommand()
+        {
+            var result = MessageBox.Show($"Are you sure you want to delete this document?", "Delete Confirmation", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                bool isDeleted = documentServices.DeleteDocument(SelectedInventoryDocument);
+                if (isDeleted)
+                {
+                    LoadData();
+                    MessageBox.Show("Document deleted successfully.");
+                    if (popupFullDetailsInventory != null && popupFullDetailsInventory.IsLoaded)
+                    {
+                        popupFullDetailsInventory.Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error deleting document.");
+                }
+            }
         }
         #endregion
 
