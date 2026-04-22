@@ -176,7 +176,7 @@
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Number of Copies" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Text="{Binding Path=AddToRegionData.NumberOfCopies}"/>
+                                    <TextBox Text="{Binding Path=AddToRegionData.NumberOfCopies}" Style="{StaticResource MultilineTextBox}"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
