@@ -5,6 +5,8 @@ namespace OSAWebAPI.Models
         public int TotalRecords { get; set; }
         public int ToRegionCount { get; set; }
         public int FromRegionCount { get; set; }
+        public int ToRegionCurrentMonth { get; set; }
+        public int FromRegionCurrentMonth { get; set; }
         public int ActionableCount { get; set; }
         public int ThisMonthCount { get; set; }
         public List<TypeCount> ByType { get; set; } = new();

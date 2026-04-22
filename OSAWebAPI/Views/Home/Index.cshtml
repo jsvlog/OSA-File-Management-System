@@ -35,9 +35,9 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-2xl font-bold text-green-700">@(Model?.ToRegionCount ?? 0)</p>
+                            <p class="text-2xl font-bold text-green-700">@(Model?.ToRegionCurrentMonth ?? 0)</p>
                             <p class="text-sm text-green-600">To Region</p>
-                            <p class="text-xs text-green-500">(last 30 days)</p>
+                            <p class="text-xs text-green-500">(current month)</p>
                         </div>
                     </a>
                     <a href="/RegionCom?direction=From+Region" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
@@ -47,9 +47,9 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-2xl font-bold text-purple-700">@(Model?.FromRegionCount ?? 0)</p>
+                            <p class="text-2xl font-bold text-purple-700">@(Model?.FromRegionCurrentMonth ?? 0)</p>
                             <p class="text-sm text-purple-600">From Region</p>
-                            <p class="text-xs text-purple-500">(last 30 days)</p>
+                            <p class="text-xs text-purple-500">(current month)</p>
                         </div>
                     </a>
                     <a href="/RegionCom" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
@@ -176,12 +176,12 @@
                     <a href="/Inventory" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                         <div class="flex-shrink-0">
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-2xl font-bold text-gray-700">@ViewBag.InventoryYearRange</p>
-                            <p class="text-sm text-gray-600">Years Covered</p>
+                            <p class="text-2xl font-bold text-gray-700">@ViewBag.InventoryCount</p>
+                            <p class="text-sm text-gray-600">Total Documents</p>
                         </div>
                     </a>
                 </div>

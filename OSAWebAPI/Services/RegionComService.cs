@@ -154,6 +154,16 @@ namespace OSAWebAPI.Services
                 {
                     stats.ThisMonthCount = Convert.ToInt32(cmd.ExecuteScalar());
                 }
+
+                using (var cmd = new MySqlCommand("SELECT COUNT(*) FROM regioncom WHERE direction = 'To Region' AND MONTH(dateReceived) = MONTH(CURDATE()) AND YEAR(dateReceived) = YEAR(CURDATE())", connection))
+                {
+                    stats.ToRegionCurrentMonth = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+
+                using (var cmd = new MySqlCommand("SELECT COUNT(*) FROM regioncom WHERE direction = 'From Region' AND MONTH(dateReceived) = MONTH(CURDATE()) AND YEAR(dateReceived) = YEAR(CURDATE())", connection))
+                {
+                    stats.FromRegionCurrentMonth = Convert.ToInt32(cmd.ExecuteScalar());
+                }
                 
                 stats.ByType = new List<TypeCount>();
                 using (var cmd = new MySqlCommand("SELECT typeOfDocs, COUNT(*) as count FROM regioncom WHERE typeOfDocs IS NOT NULL GROUP BY typeOfDocs ORDER BY count DESC", connection))

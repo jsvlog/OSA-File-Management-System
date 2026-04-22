@@ -13,7 +13,7 @@ public class RegionComController : Controller
         _service = service;
     }
 
-    public IActionResult Index(int? year, string? type, string? direction, string? search, int? page)
+    public IActionResult Index(int? year, string? direction, string? search, int? page, string? sort)
     {
         int pageSize = 25;
         int currentPage = page ?? 1;
@@ -25,9 +25,15 @@ public class RegionComController : Controller
             allRecords = allRecords.Where(r => r.Direction == direction).ToList();
         }
 
-        if (!string.IsNullOrEmpty(type))
+        // Sort: default is Control Number latest at top; toggle on click
+        bool sortByControlDesc = string.IsNullOrEmpty(sort) || sort != "controlAsc";
+        if (sortByControlDesc)
         {
-            allRecords = allRecords.Where(r => r.TypeOfDocs == type).ToList();
+            allRecords = SortByControlNumberDesc(allRecords);
+        }
+        else
+        {
+            allRecords = SortByControlNumberAsc(allRecords);
         }
 
         int totalRecords = allRecords.Count;
@@ -38,21 +44,55 @@ public class RegionComController : Controller
             .Take(pageSize)
             .ToList();
 
-        var allForTypes = _service.GetAll();
-        var types = allForTypes.Select(r => r.TypeOfDocs).Distinct().Where(t => !string.IsNullOrEmpty(t)).OrderBy(t => t).ToList();
-
         ViewBag.CurrentPage = currentPage;
         ViewBag.TotalPages = totalPages;
         ViewBag.TotalRecords = totalRecords;
         ViewBag.PageSize = pageSize;
         ViewBag.SelectedYear = year;
-        ViewBag.SelectedType = type;
         ViewBag.SelectedDirection = direction ?? "All";
         ViewBag.SearchTerm = search;
+        ViewBag.CurrentSort = sortByControlDesc ? "controlDesc" : "controlAsc";
         ViewBag.Years = Enumerable.Range(2018, DateTime.Now.Year - 2018 + 1).Reverse().ToList();
-        ViewBag.Types = types;
 
         return View(pagedRecords);
+    }
+
+    private List<RegionComModel> SortByControlNumberDesc(List<RegionComModel> list)
+    {
+        return list
+            .OrderByDescending(item => GetControlYear(item.RefNumber))
+            .ThenByDescending(item => GetControlNumber(item.RefNumber))
+            .ThenByDescending(item => item.RefNumber ?? string.Empty)
+            .ToList();
+    }
+
+    private List<RegionComModel> SortByControlNumberAsc(List<RegionComModel> list)
+    {
+        return list
+            .OrderBy(item => GetControlYear(item.RefNumber))
+            .ThenBy(item => GetControlNumber(item.RefNumber))
+            .ThenBy(item => item.RefNumber ?? string.Empty)
+            .ToList();
+    }
+
+    private static int GetControlYear(string? refNumber)
+    {
+        if (string.IsNullOrWhiteSpace(refNumber))
+            return 0;
+        var parts = refNumber.Split('-');
+        if (parts.Length >= 2 && int.TryParse(parts[1], out int year))
+            return year;
+        return 0;
+    }
+
+    private static int GetControlNumber(string? refNumber)
+    {
+        if (string.IsNullOrWhiteSpace(refNumber))
+            return 0;
+        var parts = refNumber.Split('-');
+        if (parts.Length >= 3 && int.TryParse(parts[2], out int num))
+            return num;
+        return 0;
     }
 
     public IActionResult Details(int id)

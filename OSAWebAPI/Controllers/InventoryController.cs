@@ -13,11 +13,10 @@ public class InventoryController : Controller
         _inventoryService = inventoryService;
     }
 
-    public IActionResult Index(int? year, string? type, string? search)
+    public IActionResult Index(int? year, string? search)
     {
-        var records = _inventoryService.Filter(year, type, search);
+        var records = _inventoryService.Filter(year, null, search);
         var allYears = _inventoryService.GetDistinctYears();
-        var types = _inventoryService.GetDistinctTypes();
 
         if (allYears.Count == 0)
         {
@@ -25,10 +24,8 @@ public class InventoryController : Controller
         }
 
         ViewBag.SelectedYear = year;
-        ViewBag.SelectedType = type;
         ViewBag.SearchTerm = search;
         ViewBag.Years = allYears;
-        ViewBag.Types = types;
 
         return View(records);
     }
