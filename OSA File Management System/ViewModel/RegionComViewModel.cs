@@ -1467,6 +1467,32 @@ namespace OSA_File_Management_System.ViewModel
             BlockUIContainer imageContainer = new BlockUIContainer(headerImage);
             doc.Blocks.Add(imageContainer); //first Block image header----------------------------->>>>>>>>>>>
 
+            // Title of transmittal
+            Paragraph titleTrans = new Paragraph(new Run("SUMMARY OF ALL TRANSMITTED DOCUMENTS"));
+            titleTrans.TextAlignment = TextAlignment.Center;
+            titleTrans.FontSize = 12;
+            titleTrans.FontWeight = FontWeights.Bold;
+            titleTrans.Margin = new Thickness(0, 5, 0, 10);
+            doc.Blocks.Add(titleTrans);
+
+
+            // Transmittal number centered above table
+            Paragraph transmittalParagraph = new Paragraph(new Run(TransNumber));
+            transmittalParagraph.TextAlignment = TextAlignment.Center;
+            transmittalParagraph.FontSize = 12;
+            transmittalParagraph.FontWeight = FontWeights.Bold;
+            transmittalParagraph.Margin = new Thickness(0, 5, 0, 10);
+            doc.Blocks.Add(transmittalParagraph);
+
+            // Top Note 
+            Paragraph topNoteParagraph = new Paragraph(new Run("Respectfully forwarding the following documents: "));
+            topNoteParagraph.TextAlignment = TextAlignment.Left;
+            topNoteParagraph.FontSize = 9;
+            topNoteParagraph.FontWeight = FontWeights.Bold;
+            topNoteParagraph.Margin = new Thickness(0, 5, 0, 10);
+            doc.Blocks.Add(topNoteParagraph);
+
+
             Table table = new Table();
             table.CellSpacing = 0;
             table.BorderBrush = Brushes.Black;

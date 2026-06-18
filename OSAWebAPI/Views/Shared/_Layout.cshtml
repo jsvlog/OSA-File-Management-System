@@ -57,6 +57,9 @@
                         <a href="/Inventory" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Inventory" ? "bg-gray-100 text-gray-900" : "")">
                             Inventory
                         </a>
+                        <a href="/Visitors" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Visitors" ? "bg-gray-100 text-gray-900" : "")">
+                            Visitor Logs
+                        </a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -80,6 +83,7 @@
                 <a href="/RegionCom" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Region Communications</a>
                 <a href="/Monitoring" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Monitoring</a>
                 <a href="/Inventory" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Inventory</a>
+                <a href="/Visitors" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Visitor Logs</a>
                 <form method="post" asp-controller="Account" asp-action="Logout">
                     <button type="submit" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50">Sign Out</button>
                 </form>

@@ -19,6 +19,7 @@ builder.Services.AddScoped<RegionComService>();
 builder.Services.AddScoped<InventoryService>();
 builder.Services.AddScoped<MonitoringService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<VisitorLogService>();
 
 builder.WebHost.ConfigureKestrel(options =>
 {

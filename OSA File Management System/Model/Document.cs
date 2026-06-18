@@ -37,6 +37,14 @@ namespace OSA_File_Management_System.Model
             set { date = value; OnPropertyChanged("Date"); }
         }
 
+        private string? periodCovered;
+
+        public string? PeriodCovered
+        {
+            get { return periodCovered; }
+            set { periodCovered = value; OnPropertyChanged("PeriodCovered"); }
+        }
+
         private string? type;
 
         public string? Type
@@ -67,6 +75,14 @@ namespace OSA_File_Management_System.Model
         {
             get { return location; }
             set { location = value; OnPropertyChanged("Location"); }
+        }
+
+        private string? crateNumber;
+
+        public string? CrateNumber
+        {
+            get { return crateNumber; }
+            set { crateNumber = value; OnPropertyChanged("CrateNumber"); }
         }
 
         private string? remarks;

@@ -97,23 +97,31 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="15"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="15"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Date Acquired" Style="{StaticResource LabelStyle}"/>
-                                    <DatePicker SelectedDate="{Binding Path=EditFormData.Date, Mode=TwoWay}"/>
+                                <StackPanel Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Text="Period Covered" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.PeriodCovered, Mode=TwoWay}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="2">
+                                <StackPanel Grid.Row="0" Grid.Column="2">
                                     <TextBlock Text="Type / Category" Style="{StaticResource LabelStyle}"/>
                                     <TextBox Text="{Binding Path=EditFormData.Type, Mode=TwoWay}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="4">
+                                <StackPanel Grid.Row="2" Grid.Column="0">
                                     <TextBlock Text="Current Status" Style="{StaticResource LabelStyle}"/>
                                     <TextBox Text="{Binding Path=EditFormData.Status, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2" Grid.Column="2">
+                                    <TextBlock Text="Crate Number" Style="{StaticResource LabelStyle}"/>
+                                    <TextBox Text="{Binding Path=EditFormData.CrateNumber, Mode=TwoWay}"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>

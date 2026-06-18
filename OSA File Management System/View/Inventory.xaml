@@ -220,10 +220,10 @@
                       SelectionUnit="FullRow">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Width="1.5*" Binding="{Binding Date, StringFormat=MM-dd-yyyy}"/>
-                    <DataGridTextColumn Header="Type" Width="1.5*" Binding="{Binding Type}"/>
+                    <DataGridTextColumn Header="Period Covered" Width="1.5*" Binding="{Binding PeriodCovered}"/>
+                    <DataGridTextColumn Header="Type" Width="1.2*" Binding="{Binding Type}"/>
 
-                    <DataGridTemplateColumn Header="Description" Width="5*">
+                    <DataGridTemplateColumn Header="Description" Width="4*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="5,0"/>
@@ -231,9 +231,10 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Status" Width="1.5*" Binding="{Binding Status}"/>
-                    <DataGridTextColumn Header="Location" Width="1.5*" Binding="{Binding Location}"/>
-                    <DataGridTextColumn Header="Remarks" Width="2*" Binding="{Binding Remarks}"/>
+                    <DataGridTextColumn Header="Status" Width="1.2*" Binding="{Binding Status}"/>
+                    <DataGridTextColumn Header="Location" Width="1.2*" Binding="{Binding Location}"/>
+                    <DataGridTextColumn Header="Crate #" Width="0.8*" Binding="{Binding CrateNumber}"/>
+                    <DataGridTextColumn Header="Remarks" Width="1.5*" Binding="{Binding Remarks}"/>
                 </DataGrid.Columns>
 
                 <DataGrid.ContextMenu>

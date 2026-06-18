@@ -46,10 +46,12 @@ namespace OSA_File_Management_System.Model
                         {
                             Id = Convert.ToInt32(reader["id"]),
                             Date = reader["date"] is DBNull ? (DateTime?)null : Convert.ToDateTime(reader["date"]),
+                            PeriodCovered = reader["periodCovered"]?.ToString() ?? string.Empty,
                             Type = reader["type"]?.ToString() ?? string.Empty,
                             Description = reader["description"]?.ToString() ?? string.Empty,
                             Status = reader["status"]?.ToString() ?? string.Empty,
                             Location = reader["location"]?.ToString() ?? string.Empty,
+                            CrateNumber = reader["crateNumber"]?.ToString() ?? string.Empty,
                             Remarks = reader["remarks"]?.ToString() ?? string.Empty,
                             ScannedCopy = reader["scannedCopy"]?.ToString() ?? string.Empty,
                         });
@@ -76,7 +78,7 @@ namespace OSA_File_Management_System.Model
                 {
                     connection.Open();
                 }
-                string query = "INSERT INTO inventorydocs (date, type, description, status, location, remarks, scannedCopy) VALUES (@date, @type, @description, @status, @location, @remarks, @scannedCopy)";
+                string query = "INSERT INTO inventorydocs (date, periodCovered, type, description, status, location, crateNumber, remarks, scannedCopy) VALUES (@date, @periodCovered, @type, @description, @status, @location, @crateNumber, @remarks, @scannedCopy)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 if (objDocument.Date.HasValue)
@@ -89,10 +91,12 @@ namespace OSA_File_Management_System.Model
                     // Handle case where Date is null (you might want to throw an error or set a default)
                     cmd.Parameters.AddWithValue("@date", DBNull.Value); // Or a default DateTime value
                 }
+                cmd.Parameters.AddWithValue("@periodCovered", objDocument.PeriodCovered);
                 cmd.Parameters.AddWithValue("@type", objDocument.Type);
                 cmd.Parameters.AddWithValue("@description", objDocument.Description);
                 cmd.Parameters.AddWithValue("@status", objDocument.Status);
                 cmd.Parameters.AddWithValue("@location", objDocument.Location);
+                cmd.Parameters.AddWithValue("@crateNumber", objDocument.CrateNumber);
                 cmd.Parameters.AddWithValue("@remarks", objDocument.Remarks);
                 cmd.Parameters.AddWithValue("@scannedCopy", objDocument.ScannedCopy);
                 cmd.ExecuteNonQuery();
@@ -146,14 +150,16 @@ namespace OSA_File_Management_System.Model
                     connection.Open();
                 }
 
-                string query = "UPDATE inventorydocs SET date = @date, type = @type, description = @description, status = @status, location = @location, remarks = @remarks, scannedcopy = @scannedcopy WHERE id = @id";
+                string query = "UPDATE inventorydocs SET date = @date, periodCovered = @periodCovered, type = @type, description = @description, status = @status, location = @location, crateNumber = @crateNumber, remarks = @remarks, scannedcopy = @scannedcopy WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", document.Id);
                 cmd.Parameters.AddWithValue("@date", document.Date);
+                cmd.Parameters.AddWithValue("@periodCovered", document.PeriodCovered);
                 cmd.Parameters.AddWithValue("@type", document.Type);
                 cmd.Parameters.AddWithValue("@description", document.Description);
                 cmd.Parameters.AddWithValue("@status", document.Status);
                 cmd.Parameters.AddWithValue("@location", document.Location);
+                cmd.Parameters.AddWithValue("@crateNumber", document.CrateNumber);
                 cmd.Parameters.AddWithValue("@remarks", document.Remarks);
                 cmd.Parameters.AddWithValue("@scannedcopy", document.ScannedCopy);
                 cmd.ExecuteNonQuery();

@@ -1,0 +1,1 @@
+Get-NetFirewallRule -Direction Inbound | Where-Object { ($_ | Get-NetFirewallApplicationFilter).Program -Like '*VisitorLogAPI*' } | Select-Object DisplayName, Action, Enabled, Profile | Format-Table -AutoSize
